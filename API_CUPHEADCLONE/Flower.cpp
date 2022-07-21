@@ -152,8 +152,8 @@ void CFlower::Update_Controller()
 	{
 		if (m_iShootFrameCnt == m_iShootFrameMaxCnt)
 		{
-			CObj* pFlower = CAbstractFactory<CFlower_Bullet>::Create(m_tInfo.fX, (float)m_tRect.top + 20.f , DIR_LEFT);
-			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, pFlower);
+			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CFlower_Bullet>::Create(m_tInfo.fX, (float)m_tRect.top + 20.f, DIR_RIGHT));
+			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CFlower_Bullet>::Create(m_tInfo.fX, (float)m_tRect.top + 20.f, DIR_LEFT));
 		}
 		m_iShootFrameCnt++;
 	}

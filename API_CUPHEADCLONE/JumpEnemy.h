@@ -21,7 +21,7 @@ private:
 	DWORD		m_dwTimer;
 
 	float m_fCurJumpSpeed = 0.f;
-	float m_fMaxAbsJumpSpeed = 41.f;
-	float m_fInitJumpSpeed = 40.f;
+	float m_fMaxAbsJumpSpeed = 44.f;
+	float m_fInitJumpSpeed = 43.f;
 };
 

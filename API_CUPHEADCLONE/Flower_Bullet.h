@@ -17,9 +17,18 @@ public:
 	virtual void Render(HDC hDC) override;
 	virtual void Release(void) override;
 	virtual	void Collision_Event(CObj* _OtherObj, float _fColX, float _fColY) override;
+	void		 Update_Shake(void);
 private:
 	CObj* m_pPlayer;
 
+	//Shake
+	bool m_bScrollShake = true;
+	int m_iShakeCnt = 6;
+	int m_iShakeMaxCnt = 6;
+	DWORD m_dwShaketimer;
+	//~Shake
+
+	bool	m_bIsExploded = false;
 
 	float m_fCurJumpSpeed = 0.f;
 	float m_fMaxAbsJumpSpeed = 25.f;

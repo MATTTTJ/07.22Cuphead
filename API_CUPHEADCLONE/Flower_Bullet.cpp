@@ -58,7 +58,7 @@ int CFlower_Bullet::Update(void)
 		return OBJ_DEAD;
 	}
 
-
+	
 
 	switch (m_eDir)
 	{
@@ -92,8 +92,10 @@ int CFlower_Bullet::Update(void)
 	if (bLineCol && abs(fY - m_tInfo.fY) < m_fMaxAbsJumpSpeed * 1.5f && m_iJumpCnt < m_iJumpMaxCnt)
 	{
 		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CFlower_Bullet_Dead>::Create(m_tInfo.fX, m_tInfo.fY));
+		m_bIsExploded = true;
 		m_bDead = true;
 	}
+	Update_Shake();
 
 	Move_Frame(4);
 	Update_Rect();
@@ -135,6 +137,7 @@ void CFlower_Bullet::Collision_Event(CObj * _OtherObj, float _fColX, float _fCol
 	CMonster* pMonster = dynamic_cast<CMonster*>(_OtherObj);
 	if (pMonster)
 	{
+		m_bIsExploded = true;
 		m_bDead = true;
 		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CFlower_Bullet_Dead>::Create(m_tInfo.fX, m_tInfo.fY));
 
@@ -143,5 +146,19 @@ void CFlower_Bullet::Collision_Event(CObj * _OtherObj, float _fColX, float _fCol
 
 		else if (_fColX < _fColY && m_tInfo.fX < _OtherObj->Get_Info().fX)
 		dynamic_cast<CHit_Effect*>(CObjMgr::Get_Instance()->Get_ObjList(OBJ_EFFECT)->back())->Set_Dir(LOOK_RIGHT);*/
+	}
+}
+
+void CFlower_Bullet::Update_Shake(void)
+{
+	if (m_bIsExploded && m_bScrollShake && m_iShakeCnt < m_iShakeMaxCnt && m_dwShaketimer + 20 < GetTickCount())
+	{
+		float fShakeMount = m_iShakeCnt % 2 == 0 ? -10.f : 10.f;
+		CScrollMgr::Get_Instance()->Set_ScrollX(fShakeMount);
+		m_dwShaketimer = GetTickCount();
+		++m_iShakeCnt;
+
+		if (m_iShakeCnt >= m_iShakeMaxCnt)
+			m_bIsExploded = false;
 	}
 }

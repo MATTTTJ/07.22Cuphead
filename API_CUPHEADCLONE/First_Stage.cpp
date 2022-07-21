@@ -39,16 +39,16 @@ void CFirst_Stage::Initialize(void)
 {
 	CObjMgr::Get_Instance()->Add_Object(OBJ_PLAYER, CAbstractFactory<CPlayer>::Create(150.f, 800.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_UI, CAbstractFactory<CPlayer_UI>::Create(70.f, 770.f));
-	
+
 	//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CPotato>::Create());
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Map/RunandGun/First_Map_1.bmp", L"First_Map");
 	CLineMgr::Get_Instance()->Load_Line(L"../Data/Line_First.dat");
 
-	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CBird>::Create(7600.f, 200.f));
+	/*CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CBird>::Create(7600.f, 200.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CBird>::Create(7300.f, 250.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CBird>::Create(6500.f, 250.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CBird>::Create(5900.f, 250.f));
-	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CBird>::Create(5100.f, 250.f));
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CBird>::Create(5100.f, 250.f));*/
 
 	CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, CAbstractFactory<CPinkBird>::Create(3700.f, 250.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, CAbstractFactory<CPinkBird>::Create(2000.f, 250.f));
@@ -67,6 +67,8 @@ void CFirst_Stage::Initialize(void)
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlower>::Create(4800.f, 500.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlyingMan>::Create(1000.f, 0.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlyingMan>::Create(7500.f, 0.f));
+
+
 }
 
 int CFirst_Stage::Update(void)
@@ -74,8 +76,40 @@ int CFirst_Stage::Update(void)
 	CObjMgr::Get_Instance()->Update();
 	CLineMgr::Get_Instance()->Update();
 
+	if (m_JumpE_Sqawn_One + 3000 < GetTickCount())
+	{
+		CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CJumpEnemy>::Create(2650.f, 1100.f));
+		m_JumpE_Sqawn_One = GetTickCount();
+	}
+	if (m_JumpE_Sqawn_Two + 4000 < GetTickCount())
+	{
+		CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CJumpEnemy>::Create(3700.f, 1100.f));
+		m_JumpE_Sqawn_Two = GetTickCount();
+	}
 
+	if (m_Bird_SqawnTimer + 5000 < GetTickCount())
+	{
+		if (GetTickCount() % 2 == 0)
+			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CBird>::Create(7500.f, 200.f));
+		else
+			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CBird>::Create(7500.f, 300.f));
+		m_Bird_SqawnTimer = GetTickCount();
+	}
 
+	if (m_Pink_Bird_SqawnTimer + 7500 < GetTickCount())
+	{
+		if (GetTickCount() % 2 == 0)
+			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CPinkBird>::Create(7500.f, 300.f));
+		else
+			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CPinkBird>::Create(7500.f, 200.f));
+		m_Pink_Bird_SqawnTimer = GetTickCount();
+	}
+	if (m_FlyingMan_SqawnTimer + 2500 < GetTickCount())
+	{
+		CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlyingMan>::Create((float)(rand() % 7500), 0.f));
+		
+		m_FlyingMan_SqawnTimer = GetTickCount();
+	}
 
 	return 0;
 }
@@ -100,11 +134,30 @@ void CFirst_Stage::Late_Update(void)
 			CSceneMgr::Get_Instance()->Scene_Change(SC_STAGEROOT);
 		}
 	}
-		else
-			m_bIsFirst = false;
+	else
+		m_bIsFirst = false;
+
+
+	if (CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX >= 7100.f &&
+		CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX <= 7500.f)
+
+	{
+		if (!m_bIsFirst)
+		{
+			CObjMgr::Get_Instance()->Add_Object(OBJ_UI, CAbstractFactory<CPress_Z>::
+				Create());
+			m_bIsFirst = true;
+		}
+		if (CKeyMgr::Get_Instance()->Key_Down('Z'))
+		{
+			CSceneMgr::Get_Instance()->Scene_Change(SC_STAGESECOND);
+		}
+	}
+	else
+		m_bIsFirst = false;
 	//m_iUICnt = 0;
 }
-	
+
 
 
 
@@ -115,7 +168,7 @@ void CFirst_Stage::Render(HDC hDC)
 	int	iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 	int	iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-	BitBlt(hDC, iScrollX, iScrollY, 7500  , 1000  , hMemDC, 0, 0, SRCCOPY);
+	BitBlt(hDC, iScrollX, iScrollY, 7500, 1000, hMemDC, 0, 0, SRCCOPY);
 	CObjMgr::Get_Instance()->Render(hDC);
 	//CLineMgr::Get_Instance()->Render(hDC);
 }

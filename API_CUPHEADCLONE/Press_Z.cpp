@@ -90,5 +90,5 @@ void CPress_Z::Release(void)
 void CPress_Z::Update_Info(void)
 {
 	m_tInfo.fX = CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX;
-	m_tInfo.fY = (float)CObjMgr::Get_Instance()->Get_Player()->Get_HRect().top;
+	m_tInfo.fY = (float)CObjMgr::Get_Instance()->Get_Player()->Get_HRect().top - 50.f;
 }

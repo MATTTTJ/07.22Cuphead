@@ -68,6 +68,7 @@ private:
 
 	//Parry
 	bool		m_bIsParry = false;
+	bool		m_bParryShake = false;
 	DWORD		m_dwParry = GetTickCount();
 	float		m_fParryCoolTIme = 0.3f;
 	DWORD		m_dwParryWaitTime;

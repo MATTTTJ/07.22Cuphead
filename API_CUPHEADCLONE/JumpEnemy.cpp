@@ -32,15 +32,18 @@ void CJumpEnemy::Initialize(void)
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Enemy/Jump_Enemy/Jump_Enemy.bmp", L"Jump_Enemy");
 
 	m_pFrameKey = L"Jump_Enemy";
+	m_fMaxAbsJumpSpeed = 41.f;
+	m_fInitJumpSpeed = 40.f;
 
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 19;
 	m_tFrame.iMotion = 0;
-	m_tFrame.dwFrameSpeed = 100;
+	m_tFrame.dwFrameSpeed = 45;
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_dwTimer = GetTickCount();
 
 	m_fCurJumpSpeed = m_fInitJumpSpeed;
+
 	m_eRenderGroup = GAMEOBJECT;
 }
 
@@ -49,18 +52,15 @@ int CJumpEnemy::Update(void)
 	if (m_bDead)
 		return OBJ_DEAD;
 
+
 	m_tInfo.fY -= m_fCurJumpSpeed;
 	m_HInfo.fY -= m_fCurJumpSpeed;
 
-	if (PlayerDetect(500.f))
-	{
-		m_bDetected = true;
-	}
 
 	if (fabs(m_fCurJumpSpeed) < m_fMaxAbsJumpSpeed) // limit max speed
 		m_fCurJumpSpeed -= GRAVITY;
 
-	Move_Frame();
+	Move_Frame(19);
 	Update_Rect();
 
 	return OBJ_NOEVENT;
@@ -68,11 +68,11 @@ int CJumpEnemy::Update(void)
 
 void CJumpEnemy::Late_Update(void)
 {
-	if (m_bDetected && !m_bIsIntro_First)
+	/*if (m_bDetected && !m_bIsIntro_First)
 	{
 		m_fCurJumpSpeed = m_fInitJumpSpeed;
 		m_bIsIntro_First = true;
-	}
+	}*/
 	
 	if (m_tInfo.fY > 1300)
 		m_bDead = true;

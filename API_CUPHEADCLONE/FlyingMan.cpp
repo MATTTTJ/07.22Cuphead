@@ -44,6 +44,8 @@ void CFlyingMan::Initialize(void)
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_dwTimer = GetTickCount();
 
+	srand(unsigned(time(nullptr)));
+
 	m_bIsIntro_First = true;
 	m_eRenderGroup = GAMEOBJECT;
 }
@@ -96,7 +98,7 @@ void CFlyingMan::Render(HDC hDC)
 		(int)m_tInfo.fCY,
 		RGB(250, 250, 250));	// 제거할 픽셀의 색상
 
-	Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
+	//Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
 }
 
 void CFlyingMan::Release(void)

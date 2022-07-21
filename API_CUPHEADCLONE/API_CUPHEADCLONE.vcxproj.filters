@@ -424,7 +424,7 @@
       <Filter>01.Obj\05.Effect\Bullet_Effect</Filter>
     </ClInclude>
     <ClInclude Include="Press_Z.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>01.Obj\06.UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -639,7 +639,7 @@
       <Filter>01.Obj\05.Effect\Bullet_Effect</Filter>
     </ClCompile>
     <ClCompile Include="Press_Z.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>01.Obj\06.UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

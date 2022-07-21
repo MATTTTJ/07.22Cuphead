@@ -203,13 +203,17 @@ void CPlayer::Ground_Check(void)
 
 void CPlayer::Update_Parry(void)
 {
-	if (m_eCurState == PARRY && m_bScrollShake && m_iShakeCnt < m_iShakeMaxCnt && m_dwShaketimer + 20 < GetTickCount())
+	if (m_bParryShake && m_eCurState == PARRY && m_bScrollShake && m_iShakeCnt < m_iShakeMaxCnt && m_dwShaketimer + 20 < GetTickCount())
 	{
 		float fShakeMount = m_iShakeCnt % 2 == 0 ? -10.f : 10.f;
 		CScrollMgr::Get_Instance()->Set_ScrollX(fShakeMount);
 		m_dwShaketimer = GetTickCount();
 		++m_iShakeCnt;
+
+		if(m_iShakeCnt >= m_iShakeMaxCnt)
+			m_bParryShake = false;
 	}
+
 }
 
 
@@ -245,7 +249,7 @@ void CPlayer::Render(HDC hDC)
 		RGB(1, 1, 1));	// 제거할 픽셀의 색상
 
 
-	Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
+//	Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
 }
 
 void CPlayer::Release(void)
@@ -276,8 +280,7 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 				m_iSpecial_Gauge += 1.f;
 				m_fCurJumpSpeed = m_fInitJumpSpeed;
 				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
-			
-
+				m_bParryShake = true;
 			}
 			else
 			{
@@ -298,7 +301,7 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 				m_fCurJumpSpeed = m_fInitJumpSpeed;
 				pParryBF->Kill_Obj();
 				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
-
+				m_bParryShake = true;
 			}
 		}
 
@@ -311,6 +314,7 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 				m_fCurJumpSpeed = m_fInitJumpSpeed;
 				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
 				pParryBird->Kill_Obj();
+				m_bParryShake = true;
 			}
 			else
 			{
@@ -330,13 +334,7 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 				m_iSpecial_Gauge += 1.f;
 				m_fCurJumpSpeed = m_fInitJumpSpeed;
 				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
-				if (m_bScrollShake && m_iShakeCnt < m_iShakeMaxCnt && m_dwShaketimer + 20 < GetTickCount())
-				{
-					float fShakeMount = m_iShakeCnt % 2 == 0 ? -10.f : 10.f;
-					CScrollMgr::Get_Instance()->Set_ScrollX(fShakeMount);
-					m_dwShaketimer = GetTickCount();
-					++m_iShakeCnt;
-				}
+				m_bParryShake = true;
 			}
 			else
 			{
