@@ -25,8 +25,8 @@ COnion::~COnion()
 
 void COnion::Initialize(void)
 {
-	m_tInfo = { 650.f, 450.f, 557.f, 461.f };
-	m_HInfo = { 650.f, 450.f, 370.f, 450.f };
+	m_tInfo = { 950.f, 450.f, 557.f, 461.f };
+	m_HInfo = { 950.f, 450.f, 370.f, 450.f };
 
 	m_fHp = 3.f;
 
@@ -116,7 +116,7 @@ void COnion::Render(HDC hDC)
 	int	iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
 	GdiTransparentBlt(hDC,
-		m_tRect.left,	// 복사 받을 위치의 좌표 전달(x,y 순서)
+		m_tRect.left + iScrollX,	// 복사 받을 위치의 좌표 전달(x,y 순서)
 		m_tRect.top + iScrollY,
 		(int)m_tInfo.fCX,		// 복사 받을 이미지의 길이 전달(가로, 세로순서)
 		(int)m_tInfo.fCY,

@@ -22,8 +22,14 @@ CBird::~CBird()
 
 void CBird::Initialize(void)
 {
-	m_tInfo = { 1000.f, 525.f, 200.f, 200.f };
-	m_HInfo = { 1000.f, 535.f, 150.f, 150.f };
+	m_tInfo.fCX = 200.f;
+	m_tInfo.fCY = 200.f;
+
+	m_HInfo.fCX = 150.f;
+	m_HInfo.fCY = 150.f;
+
+	m_fSpeed = 8.f;
+	m_fDiagonal = 5.f;
 
 	m_fHp = 2.f;
 
@@ -50,12 +56,20 @@ int CBird::Update(void)
 {
 	if (m_bDead)
 	{
-		if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
-		{
 			//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<COnion>::Create());
 			return OBJ_DEAD;
-		}
 	}
+
+	//+m_fDiagonal* cosf(m_fAngle * (PI / 180.f));
+	//-m_fDiagonal * sinf(m_fAngle * (PI / 180.f));
+
+	m_fAngle += m_fSpeed;
+
+	m_tInfo.fX -= m_fSpeed;
+	m_tInfo.fY -= m_fDiagonal* cosf(m_fAngle * (PI / 180.f));
+
+	m_HInfo.fX -= m_fSpeed;
+	m_HInfo.fY -= m_fDiagonal* cosf(m_fAngle * (PI / 180.f));
 
 	Move_Frame();
 	Update_Rect();
@@ -64,6 +78,8 @@ int CBird::Update(void)
 
 void CBird::Late_Update(void)
 {
+	if (m_HRect.right < 0.f)
+		m_bDead = true;
 }
 
 void CBird::Render(HDC hDC)

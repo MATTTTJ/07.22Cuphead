@@ -28,9 +28,9 @@ void CFlyingMan::Initialize(void)
 	m_tInfo.fCX = 300.f;
 	m_tInfo.fCY = 300.f;
 
-	m_HInfo.fCX = 200.f;
-	m_HInfo.fCY = 150.f;
-	m_fSpeed = 6.f;
+	m_HInfo.fCX = 80.f;
+	m_HInfo.fCY = 140.f;
+	m_fSpeed = 4.f;
 	m_fHp = 3.f;
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Enemy/Flying_Man/Flying_Man.bmp", L"Flying_Man"); 
@@ -44,53 +44,23 @@ void CFlyingMan::Initialize(void)
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_dwTimer = GetTickCount();
 
-
+	m_bIsIntro_First = true;
 	m_eRenderGroup = GAMEOBJECT;
 }
 
 int CFlyingMan::Update(void)
 {
-	m_bLineCol = CLineMgr::Get_Instance()->Collision_Line(m_HInfo.fX, m_HInfo.fY, &m_fFootY);
-
-	float fCurFootY = m_HInfo.fY + m_HInfo.fCY * 0.5f;
-
-	switch (m_eState)
-	{
-	case AIR:
-		m_tInfo.fY -= m_fCurJumpSpeed;
-		m_HInfo.fY -= m_fCurJumpSpeed;
-
-		if (fabs(m_fCurJumpSpeed) < m_fMaxAbsJumpSpeed) // limit max speed
-		{
-			m_fCurJumpSpeed -= 1.f;
-		}
-		break;
-
-	case GROUND:
-		m_fCurJumpSpeed = 0.f;
-		m_HInfo.fY = m_fFootY - m_HInfo.fCY * 0.5f;
-		m_tInfo.fY = m_fFootY - m_tInfo.fCY * 0.5f;
-		m_eCurState = WALK;
-		break;
-	}
-
-	fCurFootY = m_HInfo.fY + m_HInfo.fCY * 0.5f;
-
-	if (m_bLineCol && abs(m_fFootY - fCurFootY) < m_fMaxAbsJumpSpeed * 0.8f)
-	{
-		m_eState = GROUND;
-		m_eCurState = WALK;
-	}
-	else
-		m_eState = AIR;
-
 	if (m_eCurState == WALK)
 	{
 		m_tInfo.fX -= m_fSpeed;
 		m_HInfo.fX -= m_fSpeed;
 	}
 
+	if (m_eCurState == LAND && m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
+		m_eCurState = WALK;
 
+
+	Ground_Check();
 
 	Motion_Change();
 	Move_Frame();
@@ -103,7 +73,7 @@ int CFlyingMan::Update(void)
 
 void CFlyingMan::Late_Update(void)
 {
-	if (m_tInfo.fY > 1300)
+	if (m_tInfo.fY > 1300 || m_tInfo.fX < 0)
 		m_bDead = true;
 }
 
@@ -124,7 +94,9 @@ void CFlyingMan::Render(HDC hDC)
 		(int)m_tInfo.fCY * m_tFrame.iMotion,
 		(int)m_tInfo.fCX,			// 복사 할 비트맵 의 가로, 세로 사이즈
 		(int)m_tInfo.fCY,
-		RGB(250, 0, 250));	// 제거할 픽셀의 색상
+		RGB(250, 250, 250));	// 제거할 픽셀의 색상
+
+	Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
 }
 
 void CFlyingMan::Release(void)
@@ -178,8 +150,8 @@ void CFlyingMan::Motion_Change(void)
 			m_pFrameKey = L"Flying_Man";
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 14;
-			m_tFrame.iMotion = 0;
-			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.iMotion = 2;
+			m_tFrame.dwFrameSpeed = 60;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 
@@ -188,4 +160,50 @@ void CFlyingMan::Motion_Change(void)
 		}
 		m_ePreState = m_eCurState;
 	}
+}
+
+void CFlyingMan::Ground_Check(void)
+{
+	m_bLineCol = CLineMgr::Get_Instance()->Collision_Line(m_HInfo.fX, m_HInfo.fY, &m_fFootY);
+
+	float fCurFootY = m_tInfo.fY + m_tInfo.fCY * 0.5f;
+
+	switch (m_eState)
+	{
+	case AIR:
+		m_tInfo.fY -= m_fCurJumpSpeed;
+		m_HInfo.fY -= m_fCurJumpSpeed;
+		m_tInfo.fX -= 2.f;
+		m_HInfo.fX -= 2.f;
+
+		if (fabs(m_fCurJumpSpeed) < m_fMaxAbsJumpSpeed) // limit max speed
+		{
+			m_fCurJumpSpeed -= 0.2f;
+
+		}
+		break;
+
+	case GROUND:
+		m_fCurJumpSpeed = 0.f;
+		m_HInfo.fY = m_fFootY - m_HInfo.fCY * 0.5f;
+		m_tInfo.fY = m_fFootY - m_tInfo.fCY * 0.25f;
+		break;
+	default:
+		break;
+	}
+
+	fCurFootY = m_HInfo.fY + m_HInfo.fCY * 0.5f;
+
+	if (m_bLineCol && abs(m_fFootY - fCurFootY) < m_fMaxAbsJumpSpeed * 0.8f)
+	{
+		m_eState = GROUND;
+
+		if (m_bIsIntro_First)
+		{
+			m_eCurState = LAND;
+			m_bIsIntro_First = false;
+		}
+	}
+	else
+		m_eState = AIR;
 }

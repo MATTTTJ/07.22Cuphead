@@ -29,6 +29,9 @@ void CPinkButterFly::Initialize(void)
 	m_HInfo.fCX = 70.f;
 	m_HInfo.fCY = 70.f;
 
+	m_fDiagonal = 4.f;
+	m_fSpeed = 3.f;
+
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Enemy/ButterFly/BF_Pink.bmp", L"BF_Pink");
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Potato/Potato_Intro.bmp", L"Potato_Intro"); // fCX 526 fCY 512
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Potato/Potato_Idle.bmp", L"Potato_Idle"); // fCX 526 fCY 512
@@ -39,7 +42,7 @@ void CPinkButterFly::Initialize(void)
 	m_pFrameKey = L"BF_Pink";
 
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 23;
+	m_tFrame.iFrameEnd = 22;
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
@@ -56,15 +59,11 @@ int CPinkButterFly::Update(void)
 		return OBJ_DEAD;
 	}
 
-	switch (m_eDir)
-	{
-	case DIR_LEFT:
-		m_tInfo.fX -= m_fSpeed;
-		m_HInfo.fX -= m_fSpeed;
+	m_fAngle += m_fSpeed;
 
+	m_tInfo.fX += m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
+	m_tInfo.fY -= m_fDiagonal * cosf(m_fAngle * (PI / 360.f));
 
-		break;
-	}
 	Move_Frame();
 	Update_Rect();
 	return OBJ_NOEVENT;
@@ -100,9 +99,9 @@ void CPinkButterFly::Release(void)
 
 void CPinkButterFly::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 {
-	CPlayer* pPlayer = dynamic_cast<CPlayer*>(_OtherObj);
-	if (pPlayer)
-	{
-		m_bDead = true;
-	}
+	//CPlayer* pPlayer = dynamic_cast<CPlayer*>(_OtherObj);
+	//if (pPlayer)
+	//{
+	//	m_bDead = true;
+	//}
 }

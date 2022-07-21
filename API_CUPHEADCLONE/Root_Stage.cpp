@@ -28,7 +28,7 @@ void CRoot_Stage::Initialize(void)
 	CObjMgr::Get_Instance()->Add_Object(OBJ_PLAYER, CAbstractFactory<CPlayer>::Create(150.f, 700.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CPotato>::Create());
 	CObjMgr::Get_Instance()->Add_Object(OBJ_UI, CAbstractFactory<CPlayer_UI>::Create(70.f, 770.f));
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Map/Root/Root_BG_0.bmp", L"Root_BG");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Map/Root/Root_BG_1.bmp", L"Root_BG");
 	CLineMgr::Get_Instance()->Load_Line(L"../Data/Line_Root.dat");
 }
 
@@ -56,7 +56,7 @@ void CRoot_Stage::Render(HDC hDC)
 	int	iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 	int	iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-	BitBlt(hDC, 0, 0, WINCX, WINCY, hMemDC, 0, 0, SRCCOPY);
+	BitBlt(hDC, iScrollX, iScrollY, 1600, 1000, hMemDC, 0, 0, SRCCOPY);
 	CObjMgr::Get_Instance()->Render(hDC);
 	//CLineMgr::Get_Instance()->Render(hDC);
 }

@@ -31,7 +31,7 @@ private:
 	void		Ground_Check(void);
 	template<typename T>
 	CObj*		Create_Bullet(float _fX, float _fY, DIR eDir = DIR_END);
-
+	void		Update_Parry(void);
 private:
 	//Jump
 	bool		m_bJump = false;
@@ -45,6 +45,8 @@ private:
 	float		m_fJumpPower = 0.f;
 	float		m_fJumpTime = 0.f;
 	//~Jump
+	bool m_bGround = false;
+	DWORD		m_dwDustTime;
 
 	//Hit
 	bool		m_bIsHit = false;
@@ -71,9 +73,12 @@ private:
 	DWORD		m_dwParryWaitTime;
 	//~Parry
 
-
-
-
+	//Shake
+	bool m_bScrollShake = true;
+	int m_iShakeCnt = 6;
+	int m_iShakeMaxCnt = 6;
+	DWORD m_dwShaketimer;
+	//~Shake
 
 
 	

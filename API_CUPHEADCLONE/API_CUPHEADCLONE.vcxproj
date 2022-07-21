@@ -164,6 +164,8 @@
     <ClInclude Include="Dotori.h" />
     <ClInclude Include="First_Stage.h" />
     <ClInclude Include="Flower.h" />
+    <ClInclude Include="Flower_Bullet.h" />
+    <ClInclude Include="Flower_Bullet_Dead.h" />
     <ClInclude Include="FlyingMan.h" />
     <ClInclude Include="Hit_Effect.h" />
     <ClInclude Include="JumpEnemy.h" />
@@ -212,6 +214,7 @@
     <ClInclude Include="ObjMgr.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Potato.h" />
+    <ClInclude Include="Press_Z.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Root_Stage.h" />
     <ClInclude Include="Sagittarius.h" />
@@ -249,6 +252,8 @@
     <ClCompile Include="Dotori.cpp" />
     <ClCompile Include="First_Stage.cpp" />
     <ClCompile Include="Flower.cpp" />
+    <ClCompile Include="Flower_Bullet.cpp" />
+    <ClCompile Include="Flower_Bullet_Dead.cpp" />
     <ClCompile Include="FlyingMan.cpp" />
     <ClCompile Include="Hit_Effect.cpp" />
     <ClCompile Include="JumpEnemy.cpp" />
@@ -293,6 +298,7 @@
     <ClCompile Include="ObjMgr.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Potato.cpp" />
+    <ClCompile Include="Press_Z.cpp" />
     <ClCompile Include="Root_Stage.cpp" />
     <ClCompile Include="Sagittarius.cpp" />
     <ClCompile Include="Scene.cpp" />

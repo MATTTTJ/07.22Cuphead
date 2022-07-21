@@ -20,8 +20,8 @@
 #define			GRAVITY			1.2f
 #define			EPSILON			0.0001f
 
-#define			STAGE_ROOT_CX		1280.f
-#define			STAGE_ROOT_CY		800.f
+#define			STAGE_ROOT_CX		1600.f
+#define			STAGE_ROOT_CY		1000.f
 
 #define			STAGE_FIRST_CX		7500.f
 #define			STAGE_FIRST_CY		1000.f

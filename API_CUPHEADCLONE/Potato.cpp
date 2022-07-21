@@ -26,8 +26,8 @@ CPotato::~CPotato()
 
 void CPotato::Initialize(void)
 {
-	m_tInfo = { 1000.f, 525.f, 557.f, 461.f };
-	m_HInfo = { 1000.f, 535.f, 262.f, 350.f };
+	m_tInfo = { 1300.f, 675.f, 557.f, 461.f };
+	m_HInfo = { 1300.f, 685.f, 262.f, 350.f };
 
 	m_fHp = 3.f;
 

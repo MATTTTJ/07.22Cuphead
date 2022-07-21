@@ -18,7 +18,7 @@ public:
 private:
 	CObj*		pPlayer;
 
-	//타이머 오류남 도대체 왜 ?
+	
 	CObjTimer	Ani_Change_Timer;
 	bool		m_bIsRed = false;
 

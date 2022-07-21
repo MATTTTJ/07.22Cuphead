@@ -26,7 +26,7 @@ void CLand_Effect::Initialize(void)
 	m_tFrame.dwFrameSpeed = 60;
 	m_tFrame.dwFrameTime = GetTickCount();
 
-	m_eRenderGroup = EFFECT;
+	m_eRenderGroup = GAMEOBJECT;
 }
 
 int CLand_Effect::Update(void)

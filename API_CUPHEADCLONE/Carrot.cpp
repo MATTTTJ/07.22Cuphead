@@ -27,8 +27,8 @@ CCarrot::~CCarrot()
 
 void CCarrot::Initialize(void)
 {
-	m_tInfo = { 650.f, 350.f, 557.f, 461.f };
-	m_HInfo = { 650.f, 350.f, 262.f, 350.f };
+	m_tInfo = { 950.f, 350.f, 557.f, 461.f };
+	m_HInfo = { 950.f, 350.f, 262.f, 350.f };
 
 	m_fHp = 3.f;
 

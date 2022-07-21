@@ -181,6 +181,9 @@
     <Filter Include="01.Obj\05.Effect\Player_Effect">
       <UniqueIdentifier>{08591609-8647-4e81-951b-97252a74015c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Obj\01.Bullet\04.Flower_Bullet">
+      <UniqueIdentifier>{a7383002-929d-4003-9342-30d75e782e7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -396,9 +399,6 @@
     <ClInclude Include="PinkButterFly.h">
       <Filter>01.Obj\02.Monster\03.First_Enemy\01.ButterFly</Filter>
     </ClInclude>
-    <ClInclude Include="Arrow.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Land_Effect.h">
       <Filter>01.Obj\05.Effect\Player_Effect</Filter>
     </ClInclude>
@@ -413,6 +413,18 @@
     </ClInclude>
     <ClInclude Include="Dash_Effect.h">
       <Filter>01.Obj\05.Effect\Player_Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Arrow.h">
+      <Filter>01.Obj\01.Bullet\03.Arrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Flower_Bullet.h">
+      <Filter>01.Obj\01.Bullet\04.Flower_Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Flower_Bullet_Dead.h">
+      <Filter>01.Obj\05.Effect\Bullet_Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Press_Z.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -602,9 +614,6 @@
     <ClCompile Include="PinkButterFly.cpp">
       <Filter>01.Obj\02.Monster\03.First_Enemy\01.ButterFly</Filter>
     </ClCompile>
-    <ClCompile Include="Arrow.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Land_Effect.cpp">
       <Filter>01.Obj\05.Effect\Player_Effect</Filter>
     </ClCompile>
@@ -619,6 +628,18 @@
     </ClCompile>
     <ClCompile Include="Dash_Effect.cpp">
       <Filter>01.Obj\05.Effect\Player_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Arrow.cpp">
+      <Filter>01.Obj\01.Bullet\03.Arrow</Filter>
+    </ClCompile>
+    <ClCompile Include="Flower_Bullet.cpp">
+      <Filter>01.Obj\01.Bullet\04.Flower_Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Flower_Bullet_Dead.cpp">
+      <Filter>01.Obj\05.Effect\Bullet_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Press_Z.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

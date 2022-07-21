@@ -9,6 +9,7 @@
 #include "BmpMgr.h"
 #include "ScrollMgr.h"
 #include "Player.h"
+#include "Flower_Bullet.h"
 
 CFlower::CFlower()
 	: m_eCurState(IDLE), m_ePreState(MOTION_END)
@@ -29,6 +30,14 @@ void CFlower::Initialize(void)
 	m_HInfo.fCX = 140.f;
 	m_HInfo.fCY = 200.f;
 
+
+	ShootTimer.InitLoop(5.1f);
+	//The Potato Bullet Distance 
+	ShootCoolTimer.InitLoop(1.3f);
+
+	ShootStateTimer.InitLoop(5.1f);
+	ShootStateCoolTimer.InitLoop(1.1f);
+
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Enemy/Flower/Flower.bmp", L"Flower");
 	
 	m_pFrameKey = L"Flower";
@@ -40,6 +49,10 @@ void CFlower::Initialize(void)
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_dwTimer = GetTickCount();
 
+	m_iShootCnt = 0;
+	m_iShootMaxCnt = 2;
+	m_iShootFrameCnt = 6;
+	m_iShootFrameMaxCnt = 13;
 	m_eRenderGroup = GAMEOBJECT;
 }
 
@@ -48,14 +61,8 @@ int CFlower::Update(void)
 	if (m_bDead)
 		return OBJ_DEAD;
 
-	if (PlayerDetect(300.f))
-	{
-		m_eCurState = ATTACK;
-		// 플레이어가 왼쪽인지 오른쪽인지 판단하고 그쪽으로 총알 발사구현
-	}
-	else
-		m_eCurState = IDLE;
-
+	
+	Update_Controller();
 	Motion_Change();
 	Move_Frame();
 	Update_Rect();
@@ -105,6 +112,53 @@ void CFlower::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 	}
 }
 
+void CFlower::Update_Controller()
+{
+	if (m_bDead) return;
+
+	if (ShootStateTimer.Check())
+	{
+		m_bShootState = !m_bShootState;
+	}
+
+
+	if (m_bShootState && ShootStateCoolTimer.Check())
+	{
+		m_eCurState = ATTACK;
+
+		if (m_iShootCnt >= m_iShootMaxCnt)
+			m_eCurState = IDLE;
+
+	}
+
+	if (ShootTimer.Check())
+	{
+		m_bShoot_Start = !m_bShoot_Start;
+		m_iShootCnt = 0;
+	}
+
+	if (m_bShoot_Start && ShootCoolTimer.Check())
+	{
+		if (m_iShootCnt < m_iShootMaxCnt)
+		{
+
+			m_iShootFrameCnt = 0;
+			m_iShootCnt++;
+
+		}
+	}
+
+	if (m_iShootFrameCnt <= m_iShootFrameMaxCnt)
+	{
+		if (m_iShootFrameCnt == m_iShootFrameMaxCnt)
+		{
+			CObj* pFlower = CAbstractFactory<CFlower_Bullet>::Create(m_tInfo.fX, (float)m_tRect.top + 20.f , DIR_LEFT);
+			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, pFlower);
+		}
+		m_iShootFrameCnt++;
+	}
+}
+
 void CFlower::Motion_Change(void)
 {
 	if (m_ePreState != m_eCurState)
@@ -116,7 +170,7 @@ void CFlower::Motion_Change(void)
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 15;
 			m_tFrame.iMotion = 0;
-			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.dwFrameSpeed = 80;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 
@@ -124,13 +178,14 @@ void CFlower::Motion_Change(void)
 			m_pFrameKey = L"Flower";
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 13;
-			m_tFrame.iMotion = 0;
-			m_tFrame.dwFrameSpeed = 50;
+			m_tFrame.iMotion = 1;
+			m_tFrame.dwFrameSpeed = 70;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 
 		default:
 			break;
 		}
+		m_eCurState = m_ePreState;
 	}
 }

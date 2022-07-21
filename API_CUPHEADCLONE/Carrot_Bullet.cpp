@@ -81,7 +81,7 @@ int CCarrot_Bullet::Update(void)
 
 void CCarrot_Bullet::Late_Update(void)
 {
-	if (800 <= m_HRect.bottom)
+	if (900 <= m_HRect.bottom)
 	{
 		m_bDead = true;
 		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CCarrot_Splash_Effect>::Create(m_tInfo.fX, m_tInfo.fY));

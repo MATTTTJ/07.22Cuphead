@@ -17,7 +17,7 @@ public:
 	virtual void Release(void) override;
 	virtual void Collision_Event(CObj* _OtherObj, float fColX, float fColY) override;
 	void		Motion_Change(void);
-
+	void		Ground_Check(void);
 private:
 	float		m_fHp;
 	float		m_fMaxHp;

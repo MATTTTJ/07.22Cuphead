@@ -28,6 +28,9 @@ void CButterFly::Initialize(void)
 	m_HInfo.fCX = 70.f;
 	m_HInfo.fCY = 70.f;
 
+	m_fDiagonal = 2.f;
+	m_fSpeed = 2.5f;
+
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Enemy/ButterFly/BF_Puple.bmp", L"BF_Puple");
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Potato/Potato_Intro.bmp", L"Potato_Intro"); // fCX 526 fCY 512
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Potato/Potato_Idle.bmp", L"Potato_Idle"); // fCX 526 fCY 512
@@ -55,15 +58,20 @@ int CButterFly::Update(void)
 		return OBJ_DEAD;
 	}
 
-	switch (m_eDir)
+
+	m_fAngle += m_fSpeed;
+
+	if (GetTickCount() % 2 == 0)
 	{
-	case DIR_LEFT:
-		m_tInfo.fX -= m_fSpeed;
-		m_HInfo.fX -= m_fSpeed;
-
-
-		break;
+		m_tInfo.fX += m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
+		m_tInfo.fY -= m_fDiagonal * cosf(m_fAngle * (PI / 360.f));
 	}
+	else
+	{
+		m_tInfo.fX += m_fDiagonal * sinf(m_fAngle * (PI / 220.f));
+		m_tInfo.fY -= m_fDiagonal * cosf(m_fAngle * (PI / 310.f));
+	}
+
 	Move_Frame();
 	Update_Rect();
 	return OBJ_NOEVENT;

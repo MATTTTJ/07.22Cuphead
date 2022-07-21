@@ -17,6 +17,19 @@
 #include "Onion_Parry_Bullet.h"
 #include "SceneMgr.h"
 #include "Parry_Effect.h"
+#include "Land_Effect.h"
+#include "Hit_Effect.h"	
+#include "Dash_Effect.h"
+#include "Player_Dust.h"
+#include "PinkBird.h"
+#include "PinkButterFly.h"
+#include "Dotori.h"
+#include "FlyingMan.h"
+#include "JumpEnemy.h"
+#include "Flower.h"
+#include "Taurus.h"
+#include "Sagittarius.h"
+#include "Arrow.h"
 
 CPlayer::CPlayer()
 	: m_eCurState(IDLE), m_ePreState(MOTION_END), m_eLookState(LOOK_RIGHT)
@@ -30,7 +43,6 @@ CPlayer::~CPlayer()
 
 void CPlayer::Initialize(void)
 {
-	//m_tInfo = { 200.f, 700.f, 280.f, 280.f };
 	m_tInfo.fCX = 280.f;
 	m_tInfo.fCY = 280.f;
 
@@ -60,7 +72,7 @@ void CPlayer::Initialize(void)
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_fDashSpeed = m_fSpeed * 1.8f;
-
+	m_dwDustTime = GetTickCount();
 
 	m_bDash = false;
 
@@ -71,16 +83,10 @@ void CPlayer::Initialize(void)
 
 int CPlayer::Update(void)
 {
-
 	if (m_bDead)
-	{
-		m_eCurState = DEAD;
-
-		if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
-		{
 			return OBJ_DEAD;
-		}
-	}
+
+	
 
 	if (m_bIsHit && m_dwHitTime + 500 < GetTickCount())
 	{
@@ -95,6 +101,7 @@ int CPlayer::Update(void)
 	Parry();
 	Ground_Check();
 	Dash();
+	Update_Parry();
 	Motion_Change();
 	Move_Frame();
 	Offset();
@@ -107,10 +114,7 @@ void CPlayer::Ground_Check(void)
 {
 	m_bLineCol = CLineMgr::Get_Instance()->Collision_Line(m_HInfo.fX,m_HInfo.fY, &m_fFootY);
 	
-
-
 	float fCurFootY = m_HInfo.fY + m_HInfo.fCY * 0.5f;
-
 
 	switch (m_eState)
 	{
@@ -125,6 +129,7 @@ void CPlayer::Ground_Check(void)
 		{
 			m_fCurJumpSpeed -= GRAVITY;
 			m_bJump = true;
+			m_bGround = true;
 
 			if (!m_bIsParry)
 				m_eCurState = JUMP;
@@ -155,6 +160,25 @@ void CPlayer::Ground_Check(void)
 		break;
 	}
 
+	if (m_eState == GROUND && m_eCurState == RUN && m_eLookState == LOOK_LEFT)
+	{
+		if (m_dwDustTime + 250 < GetTickCount())
+		{
+			CObj* pPlayer_Dust = CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right, m_HInfo.fY);
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pPlayer_Dust);
+			m_dwDustTime = GetTickCount();
+		}
+	}
+	else if (m_eState == GROUND && m_eCurState == RUN && m_eLookState == LOOK_RIGHT)
+	{
+		if (m_dwDustTime + 250 < GetTickCount())
+		{
+			CObj* pPlayer_Dust = CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.left, m_HInfo.fY);
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pPlayer_Dust);
+			m_dwDustTime = GetTickCount();
+		}
+	}
+
 	if (m_bIsHit)
 		m_eCurState = HIT;
 
@@ -163,11 +187,29 @@ void CPlayer::Ground_Check(void)
 	if (m_bLineCol && abs(m_fFootY - fCurFootY) < m_fMaxAbsJumpSpeed * 0.8f)
 	{
 		m_eState = GROUND;
+
+		if (m_bGround)
+		{
+			CObj* pLand_Effect = CAbstractFactory<CLand_Effect>::Create(m_HInfo.fX, (float)m_HRect.bottom);
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pLand_Effect);
+			m_bGround = false;
+		}
 	}
 	else
 		m_eState = AIR;
 
 
+}
+
+void CPlayer::Update_Parry(void)
+{
+	if (m_eCurState == PARRY && m_bScrollShake && m_iShakeCnt < m_iShakeMaxCnt && m_dwShaketimer + 20 < GetTickCount())
+	{
+		float fShakeMount = m_iShakeCnt % 2 == 0 ? -10.f : 10.f;
+		CScrollMgr::Get_Instance()->Set_ScrollX(fShakeMount);
+		m_dwShaketimer = GetTickCount();
+		++m_iShakeCnt;
+	}
 }
 
 
@@ -203,7 +245,7 @@ void CPlayer::Render(HDC hDC)
 		RGB(1, 1, 1));	// 제거할 픽셀의 색상
 
 
-	//Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
+	Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
 }
 
 void CPlayer::Release(void)
@@ -223,10 +265,8 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 
 			m_bIsHit = true;
 			m_dwHitTime = GetTickCount();
-			//m_pFrameKey = L"Hit";
 			m_eCurState = HIT;
 		}
-
 
 		CPotato_Parry_Bullet* pParryBullet = dynamic_cast<CPotato_Parry_Bullet*>(_OtherObj);
 		if (pParryBullet)
@@ -236,6 +276,8 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 				m_iSpecial_Gauge += 1.f;
 				m_fCurJumpSpeed = m_fInitJumpSpeed;
 				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
+			
+
 			}
 			else
 			{
@@ -247,6 +289,38 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			}
 		}
 
+		CPinkButterFly* pParryBF = dynamic_cast<CPinkButterFly*>(_OtherObj);
+		if (pParryBF)
+		{
+			if (m_bIsParry)
+			{
+				m_iSpecial_Gauge += 1.f;
+				m_fCurJumpSpeed = m_fInitJumpSpeed;
+				pParryBF->Kill_Obj();
+				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
+
+			}
+		}
+
+		CPinkBird* pParryBird = dynamic_cast<CPinkBird*>(_OtherObj);
+		if (pParryBird)
+		{
+			if (m_bIsParry)
+			{
+				m_iSpecial_Gauge += 1.f;
+				m_fCurJumpSpeed = m_fInitJumpSpeed;
+				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
+				pParryBird->Kill_Obj();
+			}
+			else
+			{
+				m_tStat.fHp -= pParryBird->Get_Damage();
+				pParryBird->Kill_Obj();
+				m_bIsHit = true;
+				m_dwHitTime = GetTickCount();
+				m_eCurState = HIT;
+			}
+		}
 
 		COnion_Parry_Bullet* pOParryBullet = dynamic_cast<COnion_Parry_Bullet*>(_OtherObj);
 		if (pOParryBullet)
@@ -255,6 +329,14 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			{
 				m_iSpecial_Gauge += 1.f;
 				m_fCurJumpSpeed = m_fInitJumpSpeed;
+				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
+				if (m_bScrollShake && m_iShakeCnt < m_iShakeMaxCnt && m_dwShaketimer + 20 < GetTickCount())
+				{
+					float fShakeMount = m_iShakeCnt % 2 == 0 ? -10.f : 10.f;
+					CScrollMgr::Get_Instance()->Set_ScrollX(fShakeMount);
+					m_dwShaketimer = GetTickCount();
+					++m_iShakeCnt;
+				}
 			}
 			else
 			{
@@ -266,6 +348,77 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			}
 		}
 
+
+		CDotori* pDotori = dynamic_cast<CDotori*>(_OtherObj);
+		
+		if (pDotori)
+		{
+			m_tStat.fHp -= pDotori->Get_Damage();
+
+			m_bIsHit = true;
+			m_dwHitTime = GetTickCount();
+			m_eCurState = HIT;
+		}
+
+		CFlower* pFlower = dynamic_cast<CFlower*>(_OtherObj);
+		if (pFlower)
+		{
+			m_tStat.fHp -= pFlower->Get_Damage();
+
+			m_bIsHit = true;
+			m_dwHitTime = GetTickCount();
+			m_eCurState = HIT;
+		}
+
+		CJumpEnemy* pJumpE = dynamic_cast<CJumpEnemy*>(_OtherObj);
+		if (pJumpE)
+		{
+			m_tStat.fHp -= pJumpE->Get_Damage();
+
+			m_bIsHit = true;
+			m_dwHitTime = GetTickCount();
+			m_eCurState = HIT;
+		}
+
+		CFlyingMan* pFlying = dynamic_cast<CFlyingMan*>(_OtherObj);
+		if (pFlying)
+		{
+			m_tStat.fHp -= pFlying->Get_Damage();
+
+			m_bIsHit = true;
+			m_dwHitTime = GetTickCount();
+			m_eCurState = HIT;
+		}
+		
+		CTaurus* pTau = dynamic_cast<CTaurus*>(_OtherObj);
+		if (pTau)
+		{
+			m_tStat.fHp -= pTau->Get_Damage();
+
+			m_bIsHit = true;
+			m_dwHitTime = GetTickCount();
+			m_eCurState = HIT;
+		}
+
+		CSagittarius* pSa = dynamic_cast<CSagittarius*>(_OtherObj);
+		if (pSa)
+		{
+			m_tStat.fHp -= pSa->Get_Damage();
+
+			m_bIsHit = true;
+			m_dwHitTime = GetTickCount();
+			m_eCurState = HIT;
+		}
+
+		CArrow* pArrow = dynamic_cast<CArrow*>(_OtherObj);
+		if (pArrow)
+		{
+			m_tStat.fHp -= pArrow->Get_Damage();
+
+			m_bIsHit = true;
+			m_dwHitTime = GetTickCount();
+			m_eCurState = HIT;
+		}
 
 	if (m_tStat.fHp <= EPSILON)
 	{
@@ -300,6 +453,9 @@ void CPlayer::Key_Input(void)
 		m_eCurState = RUN;
 		m_eLookState = LOOK_RIGHT;
 
+
+	
+
 		if (CKeyMgr::Get_Instance()->Key_Down('C'))
 		{
 			if (m_eState == GROUND)
@@ -329,6 +485,8 @@ void CPlayer::Key_Input(void)
 			if (!m_bDash)
 			{
 				m_bDash = true;
+				CObj* pPlayer_Dash = CAbstractFactory<CDash_Effect>::Create(m_tInfo.fX, m_tInfo.fY);
+				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pPlayer_Dash);
 				m_dwDashWaitTime = GetTickCount();
 			}
 		}
@@ -403,6 +561,8 @@ void CPlayer::Key_Input(void)
 			if (!m_bDash)
 			{
 				m_bDash = true;
+				CObj* pPlayer_Dash = CAbstractFactory<CDash_Effect>::Create(m_tInfo.fX, m_tInfo.fY);
+				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pPlayer_Dash);
 				m_dwDashWaitTime = GetTickCount();
 			}
 		}
@@ -728,6 +888,8 @@ void CPlayer::Motion_Change(void)
 				m_tFrame.iMotion = 6;
 				m_tFrame.dwFrameSpeed = 50;
 				m_tFrame.dwFrameTime = GetTickCount();
+				m_iShakeCnt = 0;
+				m_dwShaketimer = GetTickCount();
 			}
 			else
 			{
@@ -737,6 +899,8 @@ void CPlayer::Motion_Change(void)
 				m_tFrame.iMotion = 6;
 				m_tFrame.dwFrameSpeed = 50;
 				m_tFrame.dwFrameTime = GetTickCount();
+				m_iShakeCnt = 0;
+				m_dwShaketimer = GetTickCount();
 
 			}
 			break;
@@ -859,6 +1023,8 @@ void CPlayer::Motion_Change(void)
 					m_tFrame.iMotion = 1;
 					m_tFrame.dwFrameSpeed = 40;
 					m_tFrame.dwFrameTime = GetTickCount();
+					CObj* pHit_Effect = CAbstractFactory<CHit_Effect>::Create(m_HInfo.fX, (float)m_HRect.top);
+					CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pHit_Effect);
 				}
 				else
 				{
@@ -868,6 +1034,8 @@ void CPlayer::Motion_Change(void)
 					m_tFrame.iMotion = 1;
 					m_tFrame.dwFrameSpeed = 40;
 					m_tFrame.dwFrameTime = GetTickCount();
+					CObj* pHit_Effect = CAbstractFactory<CHit_Effect>::Create(m_HInfo.fX, (float)m_HRect.top);
+					CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pHit_Effect);
 				}
 			}
 			else
