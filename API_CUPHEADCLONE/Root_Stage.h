@@ -18,5 +18,7 @@ private:
 	bool	m_bIsPotatoDead = false;
 	bool	m_bIsOnionDead = false;
 	bool	m_bIsCarrotDead = false;
+
+	bool m_bIsFirst = false;
 };
 

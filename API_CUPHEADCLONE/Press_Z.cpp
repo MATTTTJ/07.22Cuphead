@@ -57,8 +57,6 @@ int CPress_Z::Update(void)
 
 void CPress_Z::Late_Update(void)
 {
-
-
 	if (CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX < 900.f ||
 		CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX > 1100.f)
 		m_bDead = true;
@@ -86,6 +84,7 @@ void CPress_Z::Render(HDC hDC)
 
 void CPress_Z::Release(void)
 {
+	///CObjMgr::Get_Instance()->Destroy_Instance();
 }
 
 void CPress_Z::Update_Info(void)

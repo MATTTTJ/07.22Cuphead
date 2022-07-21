@@ -12,7 +12,8 @@
 #include "CollisionMgr.h"
 #include "Player_UI.h"
 #include "KeyMgr.h"
-
+#include "SceneMgr.h"
+#include "Press_Z.h"
 CRoot_Stage::CRoot_Stage()
 {
 }
@@ -36,8 +37,31 @@ int CRoot_Stage::Update(void)
 {
 	CObjMgr::Get_Instance()->Update();
 	
+	/*if (CObjMgr::Get_Instance()->Get_ObjList(OBJ_MONSTER)->size() == 0)
+	{
+		if (CKeyMgr::Get_Instance()->Key_Down('Z'))
+		{
+			CSceneMgr::Get_Instance()->Scene_Change(SC_STAGEFIRST);
+		}
+	}*/
 
-	
+	if (CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX >= 200.f &&
+		CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX <= 400.f && CObjMgr::Get_Instance()->Get_ObjList(OBJ_MONSTER)->size() == 0)
+
+	{
+		if (!m_bIsFirst)
+		{
+			CObjMgr::Get_Instance()->Add_Object(OBJ_UI, CAbstractFactory<CPress_Z>::
+				Create());
+			m_bIsFirst = true;
+		}
+		if (CKeyMgr::Get_Instance()->Key_Down('Z'))
+		{
+			CSceneMgr::Get_Instance()->Scene_Change(SC_STAGEFIRST);
+		}
+	}
+	else
+		m_bIsFirst = false;
 	return 0;
 }
 

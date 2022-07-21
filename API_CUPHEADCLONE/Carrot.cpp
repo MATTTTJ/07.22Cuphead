@@ -11,7 +11,7 @@
 #include "Carrot_Bullet.h"
 #include "Carrot_Splash_Effect.h"
 #include "Carrot_Beam.h"
-
+#include "SceneMgr.h"
 
 
 CCarrot::CCarrot()

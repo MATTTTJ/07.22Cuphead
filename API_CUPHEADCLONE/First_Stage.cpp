@@ -55,16 +55,18 @@ void CFirst_Stage::Initialize(void)
 
 	CObjMgr::Get_Instance()->Add_Object(OBJ_UI, CAbstractFactory<CButterFly>::Create(1500.f, 500.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, CAbstractFactory<CPinkButterFly>::Create(1500.f, 500.f));
-	
+	CObjMgr::Get_Instance()->Add_Object(OBJ_UI, CAbstractFactory<CButterFly>::Create(4800.f, 400.f));
+	CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, CAbstractFactory<CPinkButterFly>::Create(4800.f, 500.f));
+
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CDotori>::Create(1000.f, 500.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CDotori>::Create(1500.f, 500.f));
 
 
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlower>::Create(2300.f, 530.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlower>::Create(6500.f, 830.f));
-
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlower>::Create(4800.f, 500.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlyingMan>::Create(1000.f, 0.f));
-
+	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlyingMan>::Create(7500.f, 0.f));
 }
 
 int CFirst_Stage::Update(void)
