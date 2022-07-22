@@ -80,11 +80,11 @@ int CTaurus::Update(void)
 
 		float fOrgAngle = m_fAngle;
 
-		/*m_tInfo.fX += m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
+		m_tInfo.fX += m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
 		m_tInfo.fY -= m_fDiagonal * cosf(m_fAngle * (PI / 360.f));
 
 		m_HInfo.fX += m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
-		m_HInfo.fY -= m_fDiagonal * cosf(m_fAngle * (PI / 360.f));*/
+		m_HInfo.fY -= m_fDiagonal * cosf(m_fAngle * (PI / 360.f));
 
 		if (m_dwDustTime + 100 < GetTickCount())
 		{

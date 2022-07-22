@@ -1,12 +1,13 @@
 #pragma once
 #include <functional>
+#include "Obj.h"
 
 class CDeadEventMgr
 {
 private:
 	CDeadEventMgr();
 	virtual ~CDeadEventMgr();
-	typedef std::function<void()> bindtype;
+	typedef std::function<void(CObj*)> bindtype;
 
 public:
 	static CDeadEventMgr* Get_Instance()
@@ -16,15 +17,15 @@ public:
 	}
 
 public:
-	void broadcast()
+	void broadcast(CObj* pCloud)
 	{
 		for (auto d : m_vecBinds)
-			d.second();
+			d.second(pCloud);
 	}
 	template<typename T>
-	void bind(void(T::*method)(), T* obj) //브로드캐스트가 실행됐을 때 이 함수를 실행해주세요. 하는 함수 
+	void bind(void(T::*method)(CObj*), T* obj) //브로드캐스트가 실행됐을 때 이 (위임된)함수를 실행해주세요. 하는 함수 
 	{
-		m_vecBinds.push_back(std::make_pair(obj, std::bind(method, obj)));
+		m_vecBinds.push_back(std::make_pair(obj, std::bind(method, obj, std::placeholders::_1)));
 	}
 
 	template<typename T>

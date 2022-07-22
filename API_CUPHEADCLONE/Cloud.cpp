@@ -44,10 +44,12 @@ int CCloud::Update(void)
 
 	if (m_bDead)
 	{
-		CDeadEventMgr::Get_Instance()->broadcast();
+		CDeadEventMgr::Get_Instance()->broadcast(this);
 //		CObjMgr::Get_Instance()->Add_Object(OBJ_CLOUD, CAbstractFactory<CRed_Cloud>::Create(m_tInfo.fX, m_tInfo.fY));
 		return OBJ_DEAD;
 	}
+
+	return OBJ_NOEVENT;
 }
 
 void CCloud::Late_Update(void)

@@ -110,9 +110,23 @@ void CSecond_Stage::Release(void)
 	CLineMgr::Get_Instance()->Destroy_Instance();
 }
 
-void CSecond_Stage::CheckCloudDead()
+void CSecond_Stage::CheckCloudDead(CObj* pCloud)
 {
+	tagFPoint ObjCloudPoint = tagFPoint(pCloud->Get_Info().fX, pCloud->Get_Info().fY);
 	for (int i = 0; i < 3; ++i)
+	{
+		tagFPoint& tmp = m_CloudPoints[i];
+
+		if (fabs(tmp.fX - ObjCloudPoint.fX) < EPSILON
+			&& fabs(tmp.fY - ObjCloudPoint.fY) < EPSILON)
+		{
+			m_bCloudAlive[i] = false;
+			m_dwCloudTimer[i] = GetTickCount();
+			break;
+		}
+	}
+
+	/*for (int i = 0; i < 3; ++i)
 		m_bCloudAlive[i] = false;
 
 	for (auto& pCloud : *CObjMgr::Get_Instance()->Get_ObjList(OBJ_CLOUD))
@@ -138,5 +152,5 @@ void CSecond_Stage::CheckCloudDead()
 			m_dwCloudTimer[i] = GetTickCount();
 
 		cout << i << " : " << m_bCloudAlive[i] << endl;
-	}
+	}*/
 }

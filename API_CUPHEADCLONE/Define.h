@@ -30,5 +30,7 @@
 #define			STAGE_SECOND_CX		7500.f
 #define			STAGE_SECOND_CY		2000.f
 
+
+
 extern			HWND		g_hWnd;
 //extern			bool		g_TransparentObj = false;

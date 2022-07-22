@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "Obj.h"
 
 struct tagFPoint
 {
@@ -23,8 +24,8 @@ public:
 	virtual void Render(HDC hDC) override;
 	virtual void Release(void) override;
 
-private:
-	void CheckCloudDead();
+	void CheckCloudDead(CObj* pCloud);
+
 
 private:
 	bool	m_bFirst_Sqawn = false;
