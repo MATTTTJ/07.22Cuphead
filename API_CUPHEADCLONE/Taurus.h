@@ -17,7 +17,7 @@ public:
 	virtual void Release(void) override;
 	virtual void Collision_Event(CObj* _OtherObj, float fColX, float fColY) override;
 	virtual void Update_Controller();
-
+	void		 Dash_Attack();
 private:
 	void		Motion_Change(void);
 	void		Taurus_Intro_Star(void);
@@ -25,16 +25,17 @@ private:
 
 	float		m_fHp;
 	float		m_fMaxHp;
+	float		fDash_Speed;
 
-
-
+	float		fOrgAngle = 0.f;
 
 	TAURUSSTATE		m_eCurState;
 	TAURUSSTATE		m_ePreState;
 
 	bool			m_bShootState = false;
 	DWORD			m_dwTimer;
-
+	DWORD			m_dwDustTime = GetTickCount();
+	DWORD			m_dwDashTime = GetTickCount();
 
 };
 

@@ -30,10 +30,10 @@ CMainGame::~CMainGame()
 void CMainGame::Initialize(void)
 {
 	m_hDC = GetDC(g_hWnd);
-	
+	srand(unsigned(time(NULL)));
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Back/BackGround.bmp", L"Back");
-	CSceneMgr::Get_Instance()->Scene_Change(SC_STAGEWORLD);
+	CSceneMgr::Get_Instance()->Scene_Change(SC_STAGESECOND);
 	CSoundMgr::Get_Instance()->Initialize();
 
 #ifdef _DEBUG

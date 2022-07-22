@@ -33,6 +33,7 @@ int CObjMgr::Update(void)
 		{
 			int iEvent = (*iter)->Update();
 
+
 			if (OBJ_DEAD == iEvent)
 			{
 				Safe_Delete<CObj*>(*iter);

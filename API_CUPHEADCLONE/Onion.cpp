@@ -66,7 +66,6 @@ void COnion::Initialize(void)
 	m_iShootFrameMaxCnt = 4;
 	m_iShootCnt = 0;
 	m_iShootMaxCnt = 10;
-	srand(unsigned(time(nullptr)));
 	m_eRenderGroup = GAMEOBJECT;
 }
 

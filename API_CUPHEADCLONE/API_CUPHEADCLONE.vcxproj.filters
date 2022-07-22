@@ -184,6 +184,9 @@
     <Filter Include="01.Obj\01.Bullet\04.Flower_Bullet">
       <UniqueIdentifier>{a7383002-929d-4003-9342-30d75e782e7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Obj\05.Effect\CreatEffect">
+      <UniqueIdentifier>{42fb81f5-5959-4f0d-a391-dc49b83d8e00}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -426,6 +429,15 @@
     <ClInclude Include="Press_Z.h">
       <Filter>01.Obj\06.UI</Filter>
     </ClInclude>
+    <ClInclude Include="Monster_Dead_Effect.h">
+      <Filter>01.Obj\05.Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Red_Cloud.h">
+      <Filter>01.Obj\02.Monster\04.Second_Enemy\00.Cloud</Filter>
+    </ClInclude>
+    <ClInclude Include="Cloud_Birth.h">
+      <Filter>01.Obj\05.Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -640,6 +652,15 @@
     </ClCompile>
     <ClCompile Include="Press_Z.cpp">
       <Filter>01.Obj\06.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster_Dead_Effect.cpp">
+      <Filter>01.Obj\05.Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Red_Cloud.cpp">
+      <Filter>01.Obj\02.Monster\04.Second_Enemy\00.Cloud</Filter>
+    </ClCompile>
+    <ClCompile Include="Cloud_Birth.cpp">
+      <Filter>01.Obj\05.Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

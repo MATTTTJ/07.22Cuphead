@@ -44,7 +44,6 @@ void CFlyingMan::Initialize(void)
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_dwTimer = GetTickCount();
 
-	srand(unsigned(time(nullptr)));
 
 	m_bIsIntro_First = true;
 	m_eRenderGroup = GAMEOBJECT;

@@ -8,7 +8,10 @@
 #include "SoundMgr.h"
 #include "BmpMgr.h"
 #include "ScrollMgr.h"
-
+#include "Sagittarius.h"
+#include "Player.h"
+#include "Player_Dust.h"
+#include "Monster_Dead_Effect.h"
 
 CTaurus::CTaurus()
 	: m_eCurState(INTRO_STAR), m_ePreState(INTRO_STAR)
@@ -26,23 +29,25 @@ void CTaurus::Initialize(void)
 	m_tInfo.fCX = 700.f;
 	m_tInfo.fCY = 700.f;
 
-	m_HInfo.fCX = 700.f;
-	m_HInfo.fCY = 700.f;
+	m_HInfo.fCX = 330.f;
+	m_HInfo.fCY = 250.f;
 	
 
 	m_fHp = 3.f;
 
 	//When the Potato Bullet Create
-	ShootTimer.InitLoop(5.1f);
-	//The Potato Bullet Distance 
-	ShootCoolTimer.InitLoop(1.3f);
+	//ShootTimer.InitLoop(9.1f);
+	////The Potato Bullet Distance 
+	//ShootCoolTimer.InitLoop(1.3f);
 
-	ShootStateTimer.InitLoop(5.1f);
-	ShootStateCoolTimer.InitLoop(1.1f);
-
+	ShootStateTimer.InitLoop(4.f);
+	//ShootStateCoolTimer.InitLoop(1.1f);
+	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Idle_Pink.bmp", L"Taurus_Idle_Pink");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Idle.bmp", L"Taurus_Idle"); 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Attack.bmp", L"Taurus_Attack"); 
 
+	m_fDiagonal = 7.f;
+	m_fSpeed = 2.5f;
 
 	m_pFrameKey = L"Taurus_Idle";
 
@@ -53,6 +58,7 @@ void CTaurus::Initialize(void)
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_dwTimer = GetTickCount();
 
+	fDash_Speed = m_fSpeed * 10.f;
 	m_bIsIntro_First = true;
 
 
@@ -62,12 +68,49 @@ void CTaurus::Initialize(void)
 int CTaurus::Update(void)
 {
 	if (m_bDead)
+	{
+		CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CSagittarius>::Create(6500.f, 1500.f));
 		return OBJ_DEAD;
+	}
+	if (m_eCurState == IDLE)
+	{
+		m_fAngle += m_fSpeed;
+
+		float fOrgAngle = m_fAngle;
+
+		m_tInfo.fX += m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
+		m_tInfo.fY -= m_fDiagonal * cosf(m_fAngle * (PI / 360.f));
+
+		m_HInfo.fX += m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
+		m_HInfo.fY -= m_fDiagonal * cosf(m_fAngle * (PI / 360.f));
+
+		if (m_dwDustTime + 100 < GetTickCount())
+		{
+			//CObj* pTaurus_Dust = CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right, m_tInfo.fY - 50.f);
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 50.f));
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 50.f, m_tInfo.fY ));
+			m_dwDustTime = GetTickCount();
+		}
+	}
+	else if (m_eCurState == ATTACK)
+	{
+		m_tInfo.fX -= fDash_Speed;
+		m_HInfo.fX -= fDash_Speed;
+
+		if (m_dwDashTime + 3000 < GetTickCount())
+		{
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 40.f));
+			//CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 20.f));
+			m_dwDashTime = GetTickCount();
+		}
+	}
+	m_pTarget = CObjMgr::Get_Instance()->Get_Player();
 
 
 	Taurus_Intro();
 	Taurus_Intro_Star();
 
+	Dash_Attack();
 	Update_Controller();
 	Motion_Change();
 	Move_Frame();
@@ -80,6 +123,14 @@ int CTaurus::Update(void)
 
 void CTaurus::Late_Update(void)
 {
+	/*if (m_tInfo.fX >= WINCX)
+	{
+		this->Set_Pos(0, 0);
+	}*/
+	//if (m_tInfo.fX <= 6000)
+	//{
+	//	this->Set_Pos(6300.f, 1100.f);
+	//}
 }
 
 void CTaurus::Render(HDC hDC)
@@ -129,30 +180,54 @@ void CTaurus::Update_Controller()
 
 	if (ShootStateTimer.Check())
 	{
-		m_bShootState = !m_bShootState;
+		m_bShootState = true;
 	}
 
+	//else
+		//m_eCurState = IDLE;
 
-	if (m_bShootState && ShootStateCoolTimer.Check())
+	//if (ShootTimer.Check())
+	//{
+	//	m_bShoot_Start = !m_bShoot_Start;
+	//}
+
+	//if (m_bShoot_Start && ShootCoolTimer.Check())
+	//{
+	//	//m_tInfo.fX = m_pTarget->Get_Info().fX 
+
+	//	// X값은 변하지 않고 Y값만 이동, Y값이 같아지면 공격
+	//	if (m_tInfo.fY == m_pTarget->Get_Info().fY)
+	//	{
+	//	
+	//		Dash_Attack();
+	//	}
+	//}
+
+}
+
+void CTaurus::Dash_Attack()
+{
+	
+	if (fabs(m_pTarget->Get_Info().fY - m_tInfo.fY) < 30.f)
 	{
-		m_eCurState = ATTACK;
-
-		if (m_iShootCnt >= m_iShootMaxCnt)
-			m_eCurState = IDLE;
-
+		if (m_bShootState)
+		{
+			m_eCurState = ATTACK;
+			/*CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 40.f));
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 20.f));*/
+		}
 	}
-
-	if (ShootTimer.Check())
+	if (m_eCurState == ATTACK && m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
 	{
-		m_bShoot_Start = !m_bShoot_Start;
-		m_iShootCnt = 0;
+		this->Set_Pos(6800.f, 1100.f);
+		m_fAngle = fOrgAngle;
 	}
 
-	if (m_bShoot_Start && ShootCoolTimer.Check())
+	if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
 	{
-		// 돌진 구현하기 
+		m_bShootState = false;
+		m_eCurState = IDLE;
 	}
-
 }
 
 void CTaurus::Motion_Change(void)
@@ -180,6 +255,9 @@ void CTaurus::Motion_Change(void)
 			break;
 
 		case IDLE:
+			m_tInfo.fCX = 700.f;
+			m_tInfo.fCY = 700.f;
+
 			m_pFrameKey = L"Taurus_Idle";   
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 15;
@@ -195,7 +273,7 @@ void CTaurus::Motion_Change(void)
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 20;
 			m_tFrame.iMotion = 0;
-			m_tFrame.dwFrameSpeed = 70;
+			m_tFrame.dwFrameSpeed = 10;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		}

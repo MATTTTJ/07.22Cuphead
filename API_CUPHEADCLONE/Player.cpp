@@ -203,6 +203,9 @@ void CPlayer::Ground_Check(void)
 
 void CPlayer::Update_Parry(void)
 {
+	if (m_bParryShake)
+	{
+	}
 	if (m_bParryShake && m_eCurState == PARRY && m_bScrollShake && m_iShakeCnt < m_iShakeMaxCnt && m_dwShaketimer + 20 < GetTickCount())
 	{
 		float fShakeMount = m_iShakeCnt % 2 == 0 ? -10.f : 10.f;
@@ -210,8 +213,13 @@ void CPlayer::Update_Parry(void)
 		m_dwShaketimer = GetTickCount();
 		++m_iShakeCnt;
 
-		if(m_iShakeCnt >= m_iShakeMaxCnt)
+		if (m_iShakeCnt >= m_iShakeMaxCnt)
+		{
+			CSoundMgr::Get_Instance()->PlaySounD(L"sfx_player_parry_slap_01.wav", SOUND_EFFECT, 1.f);
+			cout << "A" << endl;
+
 			m_bParryShake = false;
+		}
 	}
 
 }
@@ -223,7 +231,7 @@ void CPlayer::Late_Update(void)
 #ifdef _DEBUG
 
 	//system("cls");
-	cout << "플레이어 좌표 : " << m_tInfo.fX << "\t" << m_tInfo.fY << endl;
+	//cout << "플레이어 좌표 : " << m_tInfo.fX << "\t" << m_tInfo.fY << endl;
 
 #endif // _DEBUG	
 
@@ -405,7 +413,7 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 
 			m_bIsHit = true;
 			m_dwHitTime = GetTickCount();
-			m_eCurState = HIT;
+			m_eCurState = HIT;    
 		}
 
 		CArrow* pArrow = dynamic_cast<CArrow*>(_OtherObj);

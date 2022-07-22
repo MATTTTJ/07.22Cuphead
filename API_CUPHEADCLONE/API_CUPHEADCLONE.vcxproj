@@ -160,6 +160,7 @@
     <ClInclude Include="Carrot_Bullet.h" />
     <ClInclude Include="Carrot_Splash_Effect.h" />
     <ClInclude Include="Cloud.h" />
+    <ClInclude Include="Cloud_Birth.h" />
     <ClInclude Include="Dash_Effect.h" />
     <ClInclude Include="Dotori.h" />
     <ClInclude Include="First_Stage.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="JumpEnemy.h" />
     <ClInclude Include="Land_Effect.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="Monster_Dead_Effect.h" />
     <ClInclude Include="ObjTimer.h" />
     <ClInclude Include="Onion_Bullet.h" />
     <ClInclude Include="Onion_Bullet_Effect.h" />
@@ -215,6 +217,9 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Potato.h" />
     <ClInclude Include="Press_Z.h" />
+    <ClInclude Include="Red_Cloud.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Root_Stage.h" />
     <ClInclude Include="Sagittarius.h" />
@@ -248,6 +253,7 @@
     <ClCompile Include="Carrot_Bullet.cpp" />
     <ClCompile Include="Carrot_Splash_Effect.cpp" />
     <ClCompile Include="Cloud.cpp" />
+    <ClCompile Include="Cloud_Birth.cpp" />
     <ClCompile Include="Dash_Effect.cpp" />
     <ClCompile Include="Dotori.cpp" />
     <ClCompile Include="First_Stage.cpp" />
@@ -259,6 +265,7 @@
     <ClCompile Include="JumpEnemy.cpp" />
     <ClCompile Include="Land_Effect.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Monster_Dead_Effect.cpp" />
     <ClCompile Include="ObjTimer.cpp" />
     <ClCompile Include="Onion_Bullet.cpp" />
     <ClCompile Include="Onion_Bullet_Effect.cpp" />
@@ -299,6 +306,9 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Potato.cpp" />
     <ClCompile Include="Press_Z.cpp" />
+    <ClCompile Include="Red_Cloud.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Root_Stage.cpp" />
     <ClCompile Include="Sagittarius.cpp" />
     <ClCompile Include="Scene.cpp" />

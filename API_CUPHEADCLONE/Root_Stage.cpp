@@ -31,6 +31,7 @@ void CRoot_Stage::Initialize(void)
 	CObjMgr::Get_Instance()->Add_Object(OBJ_UI, CAbstractFactory<CPlayer_UI>::Create(70.f, 770.f));
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Map/Root/Root_BG_1.bmp", L"Root_BG");
 	CLineMgr::Get_Instance()->Load_Line(L"../Data/Line_Root.dat");
+	CSoundMgr::Get_Instance()->PlayBGM(L"Stage_Root.wav", 0.8f);
 }
 
 int CRoot_Stage::Update(void)
@@ -91,4 +92,5 @@ void CRoot_Stage::Release(void)
 	CScrollMgr::Get_Instance()->Destroy_Instance();
 	CObjMgr::Get_Instance()->Release();
 	CLineMgr::Get_Instance()->Destroy_Instance();
+	CSoundMgr::Get_Instance()->Destroy_Instance();
 }

@@ -68,14 +68,15 @@ void CFirst_Stage::Initialize(void)
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlyingMan>::Create(1000.f, 0.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlyingMan>::Create(7500.f, 0.f));
 
+	
 
 }
 
 int CFirst_Stage::Update(void)
-{
+{	//CSoundMgr::Get_Instance()->PlaySound(L"Success.wav", SOUND_EFFECT, g_fSound);
 	CObjMgr::Get_Instance()->Update();
 	CLineMgr::Get_Instance()->Update();
-
+	
 	if (m_JumpE_Sqawn_One + 3000 < GetTickCount())
 	{
 		CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CJumpEnemy>::Create(2650.f, 1100.f));
@@ -99,9 +100,9 @@ int CFirst_Stage::Update(void)
 	if (m_Pink_Bird_SqawnTimer + 7500 < GetTickCount())
 	{
 		if (GetTickCount() % 2 == 0)
-			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CPinkBird>::Create(7500.f, 300.f));
+			CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, CAbstractFactory<CPinkBird>::Create(7500.f, 300.f));
 		else
-			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CPinkBird>::Create(7500.f, 200.f));
+			CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, CAbstractFactory<CPinkBird>::Create(7500.f, 200.f));
 		m_Pink_Bird_SqawnTimer = GetTickCount();
 	}
 	if (m_FlyingMan_SqawnTimer + 2500 < GetTickCount())
@@ -132,6 +133,7 @@ void CFirst_Stage::Late_Update(void)
 		if (CKeyMgr::Get_Instance()->Key_Down('Z'))
 		{
 			CSceneMgr::Get_Instance()->Scene_Change(SC_STAGEROOT);
+			
 		}
 	}
 	else
@@ -179,4 +181,5 @@ void CFirst_Stage::Release(void)
 	CScrollMgr::Get_Instance()->Destroy_Instance();
 	CObjMgr::Get_Instance()->Release();
 	CLineMgr::Get_Instance()->Destroy_Instance();
+	
 }

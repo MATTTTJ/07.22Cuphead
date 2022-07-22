@@ -1,5 +1,14 @@
 #pragma once
 #include "Scene.h"
+
+struct tagFPoint
+{
+	float fX;
+	float fY;
+	tagFPoint() : fX(0.f), fY(0.f) {}
+	tagFPoint(float _fX, float _fY) : fX(_fX), fY(_fY) {}
+};
+
 class CSecond_Stage :
 	public CScene
 {
@@ -15,6 +24,10 @@ public:
 	virtual void Release(void) override;
 
 private:
+	bool	m_bFirst_Sqawn = false;
 
+	tagFPoint m_CloudPoints[3];
+	bool m_bCloudAlive[3];
+	DWORD m_dwCloudTimer[3];
 };
 
