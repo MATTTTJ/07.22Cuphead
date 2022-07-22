@@ -24,6 +24,9 @@ public:
 	virtual void Release(void) override;
 
 private:
+	void CheckCloudDead();
+
+private:
 	bool	m_bFirst_Sqawn = false;
 
 	tagFPoint m_CloudPoints[3];

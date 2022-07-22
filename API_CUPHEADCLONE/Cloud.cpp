@@ -6,6 +6,7 @@
 #include "ObjMgr.h"
 #include "AbstractFactory.h"
 #include "LineMgr.h"
+#include "DeadEventMgr.h"
 //#include "Red_Cloud.h"
 CCloud::CCloud()
 {
@@ -24,6 +25,9 @@ void CCloud::Initialize(void)
 	m_tInfo.fCX = 344.f;
 	m_tInfo.fCY = 186.f;
 
+	m_HInfo.fCX = 344.f;
+	m_HInfo.fCY = 186.f;
+
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 0;
 	m_tFrame.iMotion = 0;
@@ -40,6 +44,7 @@ int CCloud::Update(void)
 
 	if (m_bDead)
 	{
+		CDeadEventMgr::Get_Instance()->broadcast();
 //		CObjMgr::Get_Instance()->Add_Object(OBJ_CLOUD, CAbstractFactory<CRed_Cloud>::Create(m_tInfo.fX, m_tInfo.fY));
 		return OBJ_DEAD;
 	}

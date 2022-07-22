@@ -399,11 +399,18 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 		CTaurus* pTau = dynamic_cast<CTaurus*>(_OtherObj);
 		if (pTau)
 		{
-			m_tStat.fHp -= pTau->Get_Damage();
+			if (m_bIsParry)
+			{
+				//m_tStat.fHp -= pTau->Get_Damage();
 
-			m_bIsHit = true;
-			m_dwHitTime = GetTickCount();
-			m_eCurState = HIT;
+				//m_bIsHit = true;
+				//m_dwHitTime = GetTickCount();
+				m_fCurJumpSpeed = m_fInitJumpSpeed;
+				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
+				m_bParryShake = true;
+				pTau->Kill_Obj();
+				//m_eCurState = HIT;
+			}
 		}
 
 		CSagittarius* pSa = dynamic_cast<CSagittarius*>(_OtherObj);
@@ -425,6 +432,8 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			m_dwHitTime = GetTickCount();
 			m_eCurState = HIT;
 		}
+
+	
 
 	if (m_tStat.fHp <= EPSILON)
 	{

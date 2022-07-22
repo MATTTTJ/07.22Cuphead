@@ -23,6 +23,9 @@ private:
 	void		Taurus_Intro_Star(void);
 	void		Taurus_Intro(void);
 
+	bool		m_bRed = false;
+
+
 	float		m_fHp;
 	float		m_fMaxHp;
 	float		fDash_Speed;

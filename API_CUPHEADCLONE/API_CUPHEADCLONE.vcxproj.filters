@@ -438,6 +438,9 @@
     <ClInclude Include="Cloud_Birth.h">
       <Filter>01.Obj\05.Effect</Filter>
     </ClInclude>
+    <ClInclude Include="DeadEventMgr.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -661,6 +664,9 @@
     </ClCompile>
     <ClCompile Include="Cloud_Birth.cpp">
       <Filter>01.Obj\05.Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="DeadEventMgr.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

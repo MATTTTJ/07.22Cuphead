@@ -12,7 +12,8 @@
 #include "Player.h"
 #include "Player_Dust.h"
 #include "Monster_Dead_Effect.h"
-
+#include "Cloud.h"
+#include "Red_Cloud.h"
 CTaurus::CTaurus()
 	: m_eCurState(INTRO_STAR), m_ePreState(INTRO_STAR)
 {
@@ -30,8 +31,8 @@ void CTaurus::Initialize(void)
 	m_tInfo.fCY = 700.f;
 
 	m_HInfo.fCX = 330.f;
-	m_HInfo.fCY = 250.f;
-	
+	m_HInfo.fCY = 130.f;
+
 
 	m_fHp = 3.f;
 
@@ -42,9 +43,10 @@ void CTaurus::Initialize(void)
 
 	ShootStateTimer.InitLoop(4.f);
 	//ShootStateCoolTimer.InitLoop(1.1f);
-	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Idle_Pink.bmp", L"Taurus_Idle_Pink");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Idle.bmp", L"Taurus_Idle"); 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Attack.bmp", L"Taurus_Attack"); 
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Idle_Pink.bmp", L"Taurus_Idle_Pink");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Attack_Pink.bmp", L"Taurus_Attack_Pink");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Idle.bmp", L"Taurus_Idle");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Attack.bmp", L"Taurus_Attack");
 
 	m_fDiagonal = 7.f;
 	m_fSpeed = 2.5f;
@@ -78,17 +80,17 @@ int CTaurus::Update(void)
 
 		float fOrgAngle = m_fAngle;
 
-		m_tInfo.fX += m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
+		/*m_tInfo.fX += m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
 		m_tInfo.fY -= m_fDiagonal * cosf(m_fAngle * (PI / 360.f));
 
 		m_HInfo.fX += m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
-		m_HInfo.fY -= m_fDiagonal * cosf(m_fAngle * (PI / 360.f));
+		m_HInfo.fY -= m_fDiagonal * cosf(m_fAngle * (PI / 360.f));*/
 
 		if (m_dwDustTime + 100 < GetTickCount())
 		{
 			//CObj* pTaurus_Dust = CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right, m_tInfo.fY - 50.f);
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 50.f));
-			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 50.f, m_tInfo.fY ));
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 50.f, m_tInfo.fY));
 			m_dwDustTime = GetTickCount();
 		}
 	}
@@ -172,6 +174,30 @@ void CTaurus::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 	{
 		m_bDead = true;
 	}
+
+	CCloud*		pCloud = dynamic_cast<CCloud*>(_OtherObj);
+	if (pCloud)
+	{
+		if (m_eCurState == ATTACK)
+			pCloud->Kill_Obj();
+
+	}
+
+	CRed_Cloud*		pRCloud = dynamic_cast<CRed_Cloud*>(_OtherObj);
+	if (pRCloud)
+	{
+		if (m_eCurState == ATTACK && !lstrcmp(m_pFrameKey, L"Taurus_Attack"))
+		{
+			pRCloud->Kill_Obj();
+
+			m_pFrameKey = L"Taurus_Attack_Pink";
+
+			m_bRed = true;
+		}
+
+	}
+
+
 }
 
 void CTaurus::Update_Controller()
@@ -207,7 +233,7 @@ void CTaurus::Update_Controller()
 
 void CTaurus::Dash_Attack()
 {
-	
+
 	if (fabs(m_pTarget->Get_Info().fY - m_tInfo.fY) < 30.f)
 	{
 		if (m_bShootState)
@@ -237,7 +263,6 @@ void CTaurus::Motion_Change(void)
 		switch (m_eCurState)
 		{
 		case INTRO_STAR:
-			m_pFrameKey = L"Taurus_Idle";
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 7;
 			m_tFrame.iMotion = 0;
@@ -246,7 +271,6 @@ void CTaurus::Motion_Change(void)
 			break;
 
 		case INTRO:
-			m_pFrameKey = L"Taurus_Idle";  
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 15;
 			m_tFrame.iMotion = 1;
@@ -255,10 +279,17 @@ void CTaurus::Motion_Change(void)
 			break;
 
 		case IDLE:
+			if (m_bRed)
+				m_pFrameKey = L"Taurus_Idle_Pink";
+			else
+				m_pFrameKey = L"Taurus_Idle";
+
 			m_tInfo.fCX = 700.f;
 			m_tInfo.fCY = 700.f;
+			m_HInfo.fCX = 330.f;
+			m_HInfo.fCY = 130.f;
 
-			m_pFrameKey = L"Taurus_Idle";   
+
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 15;
 			m_tFrame.iMotion = 2;
@@ -267,9 +298,15 @@ void CTaurus::Motion_Change(void)
 			break;
 
 		case ATTACK:
+			if (m_bRed)
+				m_pFrameKey = L"Taurus_Attack_Pink";
+			else
+				m_pFrameKey = L"Taurus_Attack";
 			m_tInfo.fCX = 1200.f;
 			m_tInfo.fCY = 500.f;
-			m_pFrameKey = L"Taurus_Attack";
+			m_HInfo.fCX = 1200.f;
+			m_HInfo.fCY = 110.f;
+
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 20;
 			m_tFrame.iMotion = 0;

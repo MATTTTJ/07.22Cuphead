@@ -162,6 +162,7 @@
     <ClInclude Include="Cloud.h" />
     <ClInclude Include="Cloud_Birth.h" />
     <ClInclude Include="Dash_Effect.h" />
+    <ClInclude Include="DeadEventMgr.h" />
     <ClInclude Include="Dotori.h" />
     <ClInclude Include="First_Stage.h" />
     <ClInclude Include="Flower.h" />
@@ -255,6 +256,7 @@
     <ClCompile Include="Cloud.cpp" />
     <ClCompile Include="Cloud_Birth.cpp" />
     <ClCompile Include="Dash_Effect.cpp" />
+    <ClCompile Include="DeadEventMgr.cpp" />
     <ClCompile Include="Dotori.cpp" />
     <ClCompile Include="First_Stage.cpp" />
     <ClCompile Include="Flower.cpp" />
