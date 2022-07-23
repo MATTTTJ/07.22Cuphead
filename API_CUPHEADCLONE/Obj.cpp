@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Obj.h"
-
+#include "ScrollMgr.h"
 
 CObj::CObj()
 	: m_eDir(DIR_END), m_bDead(false), m_pFrameKey(L""), m_eRenderGroup(RENDER_END)
@@ -17,6 +17,8 @@ CObj::CObj()
 CObj::~CObj()
 {
 }
+
+
 
 void CObj::Update_Rect(void)
 {

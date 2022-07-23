@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ObjMgr.h"
 #include "CollisionMgr.h"
+#include "ScrollMgr.h"
 
 CObjMgr*	CObjMgr::m_pInstance = nullptr;
 
@@ -71,7 +72,7 @@ void CObjMgr::Late_Update(void)
 	CCollisionMgr::Collision_HRect(m_ObjList[OBJ_PLAYER], m_ObjList[OBJ_MONSTER]);
 	//CCollisionMgr::Collision_Sphere(m_ObjList[OBJ_BULLET], m_ObjList[OBJ_MONSTER]);
 
-	//CCollisionMgr::Collision_RectEx(m_ObjList[OBJ_MONSTER], m_ObjList[OBJ_PLAYER]);
+	//CCollisionMgr::Collision_RectEx(m_ObjList[OBJ_PLAYER], m_ObjList[OBJ_CLOUD]);
 }
 
 
@@ -134,5 +135,18 @@ CObj* CObjMgr::Get_Target(OBJID eID, CObj* pObj)
 		}
 	}
 	return pTarget;
+}
+
+void CObjMgr::Shake_Window(void)
+{
+	
+		/*if (m_bScrollShake && m_iShakeCnt < m_iShakeMaxCnt && m_dwShaketimer + 20 < GetTickCount())
+		{
+			float fShakeMount = m_iShakeCnt % 2 == 0 ? -10.f : 10.f;
+			CScrollMgr::Get_Instance()->Set_ScrollX(fShakeMount);
+			m_dwShaketimer = GetTickCount();
+			++m_iShakeCnt;
+		}*/
+	
 }
 

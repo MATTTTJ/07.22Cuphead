@@ -25,7 +25,8 @@ public:
 	CObj*			Get_PlayerWorld() { return m_ObjList[OBJ_PLAYER_WORLD].front(); }
 	list<CObj*>*	Get_ObjList(OBJID eID){	return &m_ObjList[eID];	}
 	CObj*			Get_Target(OBJID eID, CObj* pObj);
-
+	void		    Shake_Window(void);
+	
 
 public:
 	static CObjMgr*		Get_Instance()
@@ -50,6 +51,10 @@ private:
 	list<CObj*>		m_ObjList[OBJ_END];
 	list<CObj*>		m_RenderSort[RENDER_END];
 
-
+protected:
+	bool m_bScrollShake = true;
+	int m_iShakeCnt = 6;
+	int m_iShakeMaxCnt = 6;
+	DWORD m_dwShaketimer;
 };
 

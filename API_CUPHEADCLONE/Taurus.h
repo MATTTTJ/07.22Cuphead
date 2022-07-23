@@ -18,13 +18,14 @@ public:
 	virtual void Collision_Event(CObj* _OtherObj, float fColX, float fColY) override;
 	virtual void Update_Controller();
 	void		 Dash_Attack();
+	void		Shake_Window(void);
 private:
 	void		Motion_Change(void);
 	void		Taurus_Intro_Star(void);
 	void		Taurus_Intro(void);
 
 	bool		m_bRed = false;
-
+	bool		m_bIsColl = false;
 
 	float		m_fHp;
 	float		m_fMaxHp;

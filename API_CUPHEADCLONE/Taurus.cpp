@@ -56,7 +56,7 @@ void CTaurus::Initialize(void)
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 7;
 	m_tFrame.iMotion = 0;
-	m_tFrame.dwFrameSpeed = 100;
+	m_tFrame.dwFrameSpeed = 200;
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_dwTimer = GetTickCount();
 
@@ -112,8 +112,11 @@ int CTaurus::Update(void)
 	Taurus_Intro();
 	Taurus_Intro_Star();
 
+
 	Dash_Attack();
 	Update_Controller();
+
+	Shake_Window();
 	Motion_Change();
 	Move_Frame();
 
@@ -166,7 +169,7 @@ void CTaurus::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 	CBullet*	pBullet = dynamic_cast<CBullet*>(_OtherObj);
 	if (pBullet)
 	{
-		m_fHp -= pBullet->Get_Damage();
+		//m_fHp -= pBullet->Get_Damage();
 
 	}
 
@@ -179,7 +182,10 @@ void CTaurus::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 	if (pCloud)
 	{
 		if (m_eCurState == ATTACK)
+		{
 			pCloud->Kill_Obj();
+			m_bIsColl = true;
+		}
 
 	}
 
@@ -234,7 +240,7 @@ void CTaurus::Update_Controller()
 void CTaurus::Dash_Attack()
 {
 
-	if (fabs(m_pTarget->Get_Info().fY - m_tInfo.fY) < 30.f)
+	if (fabs(m_pTarget->Get_HInfo().fY - m_HInfo.fY) < 30.f)
 	{
 		if (m_bShootState)
 		{
@@ -254,6 +260,18 @@ void CTaurus::Dash_Attack()
 		m_bShootState = false;
 		m_eCurState = IDLE;
 	}
+}
+
+void CTaurus::Shake_Window(void)
+{
+	if (m_bIsColl && m_bScrollShake && m_iShakeCnt < m_iShakeMaxCnt && m_dwShaketimer + 20 < GetTickCount())
+	{
+		float fShakeMount = m_iShakeCnt % 2 == 0 ? -10.f : 10.f;
+		CScrollMgr::Get_Instance()->Set_ScrollX(fShakeMount);
+		m_dwShaketimer = GetTickCount();
+		++m_iShakeCnt;
+	}
+	m_bIsColl = false;
 }
 
 void CTaurus::Motion_Change(void)
@@ -288,7 +306,7 @@ void CTaurus::Motion_Change(void)
 			m_tInfo.fCY = 700.f;
 			m_HInfo.fCX = 330.f;
 			m_HInfo.fCY = 130.f;
-
+			m_iShakeCnt = 0;
 
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 15;
@@ -306,7 +324,7 @@ void CTaurus::Motion_Change(void)
 			m_tInfo.fCY = 500.f;
 			m_HInfo.fCX = 1200.f;
 			m_HInfo.fCY = 110.f;
-
+			m_iShakeCnt = 0;
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 20;
 			m_tFrame.iMotion = 0;

@@ -112,9 +112,6 @@
     <Filter Include="01.Obj\02.Monster\00.Potato">
       <UniqueIdentifier>{57a21eb9-50fe-4034-82da-5f1a2fc0088f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Obj\02.Monster\00.Potato\00.Potato_HitBox">
-      <UniqueIdentifier>{cd39ce55-f569-4400-a0d6-c075d4b094fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Obj\01.Bullet\00.Potato_Bullet">
       <UniqueIdentifier>{4ac2095e-92b2-4a5d-bb5f-7c8f32bdbe2c}</UniqueIdentifier>
     </Filter>
@@ -186,6 +183,9 @@
     </Filter>
     <Filter Include="01.Obj\05.Effect\CreatEffect">
       <UniqueIdentifier>{42fb81f5-5959-4f0d-a391-dc49b83d8e00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Obj\05.Effect\CloudEffect">
+      <UniqueIdentifier>{796ab7f8-7a14-4a2b-8718-04fadc5b87bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -308,9 +308,6 @@
     </ClInclude>
     <ClInclude Include="Root_Stage.h">
       <Filter>02.Scene\03.Stage\02.Root_Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Potato_HitBox.h">
-      <Filter>01.Obj\02.Monster\00.Potato\00.Potato_HitBox</Filter>
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>01.Obj\02.Monster</Filter>
@@ -435,10 +432,13 @@
     <ClInclude Include="Red_Cloud.h">
       <Filter>01.Obj\02.Monster\04.Second_Enemy\00.Cloud</Filter>
     </ClInclude>
-    <ClInclude Include="Cloud_Birth.h">
-      <Filter>01.Obj\05.Effect</Filter>
-    </ClInclude>
     <ClInclude Include="DeadEventMgr.h">
+      <Filter>98.Design</Filter>
+    </ClInclude>
+    <ClInclude Include="Cloud_Birth.h">
+      <Filter>01.Obj\05.Effect\CloudEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Cloud_Dead.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -535,9 +535,6 @@
     </ClCompile>
     <ClCompile Include="Root_Stage.cpp">
       <Filter>02.Scene\03.Stage\02.Root_Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Potato_HitBox.cpp">
-      <Filter>01.Obj\02.Monster\00.Potato\00.Potato_HitBox</Filter>
     </ClCompile>
     <ClCompile Include="Monster.cpp">
       <Filter>01.Obj\02.Monster</Filter>
@@ -662,10 +659,13 @@
     <ClCompile Include="Red_Cloud.cpp">
       <Filter>01.Obj\02.Monster\04.Second_Enemy\00.Cloud</Filter>
     </ClCompile>
-    <ClCompile Include="Cloud_Birth.cpp">
-      <Filter>01.Obj\05.Effect</Filter>
-    </ClCompile>
     <ClCompile Include="DeadEventMgr.cpp">
+      <Filter>98.Design</Filter>
+    </ClCompile>
+    <ClCompile Include="Cloud_Birth.cpp">
+      <Filter>01.Obj\05.Effect\CloudEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Cloud_Dead.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

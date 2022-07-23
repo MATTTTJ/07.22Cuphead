@@ -26,8 +26,8 @@ void CSagittarius::Initialize(void)
 	m_tInfo.fCX = 1000.f;
 	m_tInfo.fCY = 1000.f;
 
-	m_HInfo.fCX = 700.f;
-	m_HInfo.fCY = 700.f;
+	m_HInfo.fCX = 100.f;
+	m_HInfo.fCY = 200.f;
 
 
 	m_fHp = 3.f;
@@ -42,7 +42,7 @@ void CSagittarius::Initialize(void)
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Sagittarius/Sagittarius_Intro.bmp", L"Sagittarius_Intro");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Sagittarius/Sagittarius_Idle.bmp", L"Sagittarius_Idle");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Sagittarius/Sagittarius_Attack.bmp", L"Sagittarius_Attack");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Sagittarius/Sagittarius_Attack_0.bmp", L"Sagittarius_Attack");
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Sagittarius/Taurus_Attack.bmp", L"Taurus_Attack");
 
 
@@ -116,7 +116,7 @@ void CSagittarius::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 	CBullet*	pBullet = dynamic_cast<CBullet*>(_OtherObj);
 	if (pBullet)
 	{
-		m_fHp -= pBullet->Get_Damage();
+		//m_fHp -= pBullet->Get_Damage();
 
 	}
 

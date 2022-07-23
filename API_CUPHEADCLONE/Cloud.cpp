@@ -5,7 +5,7 @@
 #include "Cloud.h"
 #include "ObjMgr.h"
 #include "AbstractFactory.h"
-#include "LineMgr.h"
+
 #include "DeadEventMgr.h"
 //#include "Red_Cloud.h"
 CCloud::CCloud()
@@ -15,6 +15,7 @@ CCloud::CCloud()
 
 CCloud::~CCloud()
 {
+	Release();
 }
 
 void CCloud::Initialize(void)
@@ -34,7 +35,19 @@ void CCloud::Initialize(void)
 	m_tFrame.dwFrameSpeed = 50;
 	m_tFrame.dwFrameTime = GetTickCount();
 
-	m_eRenderGroup = GAMEOBJECT;
+
+	Update_Rect();
+
+	CLOUDPOINT	tCloudLinePt[2] = {
+		{ (float)m_HRect.left , m_HInfo.fY - 1.f },
+		{ (float)m_HRect.right, m_HInfo.fY - 1.f }
+	};
+
+
+	CLineMgr::Get_Instance()->Get_LineList()->push_back(new CLine(tCloudLinePt[0], tCloudLinePt[1]));
+
+
+	m_eRenderGroup = BOSSSTAGE;
 }
 
 int CCloud::Update(void)
@@ -42,12 +55,14 @@ int CCloud::Update(void)
 	Move_Frame();
 	Update_Rect();
 
+	
 	if (m_bDead)
 	{
 		CDeadEventMgr::Get_Instance()->broadcast(this);
-//		CObjMgr::Get_Instance()->Add_Object(OBJ_CLOUD, CAbstractFactory<CRed_Cloud>::Create(m_tInfo.fX, m_tInfo.fY));
 		return OBJ_DEAD;
 	}
+
+	
 
 	return OBJ_NOEVENT;
 }
@@ -78,4 +93,22 @@ void CCloud::Render(HDC hDC)
 
 void CCloud::Release(void)
 {
+	CLOUDPOINT	tCloudLinePt[2] = {
+		{ (float)m_HRect.left , m_HInfo.fY - 1.f },
+		{ (float)m_HRect.right, m_HInfo.fY - 1.f }
+
+	};
+	CLineMgr::Get_Instance()->Delete_Line_Cloud(CLine(tCloudLinePt[0], tCloudLinePt[1]));
 }
+
+void CCloud::Creat_Line_Cloud(void)
+{//리스트에 안들어가고 뻑남 
+	/*CLOUDPOINT	tCloudLinePt[2] = {
+		{ (float)m_HRect.left , m_HInfo.fY },
+		{ (float)m_HRect.right, m_HInfo.fY }
+	};
+
+	m_pLineList->push_back(new CLine(tCloudLinePt[0], tCloudLinePt[1]));*/
+}
+
+

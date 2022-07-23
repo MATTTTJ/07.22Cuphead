@@ -99,7 +99,7 @@ void CSecond_Stage::Render(HDC hDC)
 
 	BitBlt(hDC, iScrollX, iScrollY, 7500, 2000, hMemDC, 0, 0, SRCCOPY);
 	CObjMgr::Get_Instance()->Render(hDC);
-	//CLineMgr::Get_Instance()->Render(hDC);
+	CLineMgr::Get_Instance()->Render(hDC);
 }
 
 void CSecond_Stage::Release(void)

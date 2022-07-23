@@ -71,36 +71,38 @@ void CCollisionMgr::Collision_RectEx(list<CObj*> _Dest, list<CObj*> _Sour)
 		{
 			float		fX = 0.f, fY = 0.f;
 
-			if (Check_Rect(Dest, Sour, &fX, &fY))
+			if (Check_HRect(Dest, Sour, &fX, &fY))
 			{
 				// 상.하 충돌
 				if (fX > fY)
 				{
 					// 하 충돌
-					if (Dest->Get_Info().fY > Sour->Get_Info().fY)
-						Dest->Set_PosY(fY);
+					//if (Dest->Get_Info().fY > Sour->Get_Info().fY)
+					//	Dest->Set_PosY(fY);
 
-					// 상 충돌
-					else
-						Dest->Set_PosY(-fY);
-
+					//// 상 충돌
+					//else
+					if (Dest->Get_HInfo().fY < Sour->Get_HInfo().fY)
+					{
+						Dest->Set_tPosY(Sour->Get_HInfo().fY);
+					}
 				}
 
 				// 좌.우 충돌
-				else
-				{
-					// 우 충돌
-					if (Dest->Get_Info().fX > Sour->Get_Info().fX)
-						Dest->Set_PosX(fX);
+				//else
+				//{
+				//	// 우 충돌
+				//	if (Dest->Get_Info().fX > Sour->Get_Info().fX)
+				//		Dest->Set_PosX(fX);
 
-					// 좌 충돌
-					else
-						Dest->Set_PosX(-fX);
+				//	// 좌 충돌
+				//	else
+				//		Dest->Set_PosX(-fX);
 				}
 			}
 		}
 	}
-}
+
 
 bool CCollisionMgr::Check_Rect(CObj * pDest, CObj * pSour, float * pX, float * pY)
 {

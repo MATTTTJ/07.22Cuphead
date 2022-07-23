@@ -19,38 +19,6 @@ CLineMgr::~CLineMgr()
 
 bool CLineMgr::Collision_Line(float& fX, float& fY, float* pY)
 {
-
-	/* Y - y1 = ((y2 - y1) / (x2 - x1)) * (X - x1)
-
-	 Y  = ((y2 - y1) / (x2 - x1)) * (X - x1) + y1*/
-
-
-	/*if (m_LineList.empty())
-		return false;
-
-	CLine*		pTarget = nullptr;
-
-	for (auto& iter : m_LineList)
-	{
-		if ( fX >= iter->Get_LineInfo().tLeftPt.fX  &&
-			 fX <= iter->Get_LineInfo().tRightPt.fX ) 
-		{
-			pTarget = iter;
-		}
-	}
-
-	if (!pTarget)
-		return false;
-
-	float x1 = pTarget->Get_LineInfo().tLeftPt.fX;
-	float x2 = pTarget->Get_LineInfo().tRightPt.fX;
-	float y1 = pTarget->Get_LineInfo().tLeftPt.fY;
-	float y2 = pTarget->Get_LineInfo().tRightPt.fY;
-	
-	*pY = ((y2 - y1) / (x2 - x1)) * (fX - x1) + y1;
-
-	return true;*/
-
 	if (m_LineList.empty())
 		return false;
 
@@ -195,19 +163,6 @@ int CLineMgr::Update(void)
 		}
 
 	}
-
-/*
-	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LEFT))
-		CScrollMgr::Get_Instance()->Set_ScrollX(5.f);
-
-	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
-		CScrollMgr::Get_Instance()->Set_ScrollX(-5.f);*/
-
-	//if (CKeyMgr::Get_Instance()->Key_Down('S'))
-	//	Save_Line();
-
-	/*if (CKeyMgr::Get_Instance()->Key_Down('L'))
-		Load_Line();*/
 	
 	return 0;
 }
@@ -227,4 +182,31 @@ void CLineMgr::Release(void)
 {
 	for_each(m_LineList.begin(), m_LineList.end(), CDeleteObj());
 	m_LineList.clear();
+}
+
+void CLineMgr::Create_Line_Cloud(void)
+{
+	/*CLOUDPOINT	tCloudLinePt[2] = {
+		{ (float)m_HRect.left , m_HInfo.fY },
+		{ (float)m_HRect.right, m_HInfo.fY }
+	};
+
+	m_LineList->push_back(new CLine(tCloudLinePt[0], tCloudLinePt[1]));
+}*/
+}
+
+void CLineMgr::Delete_Line_Cloud(CLine & ToDeleteLine)
+{
+	for (auto iter = m_LineList.begin(); iter != m_LineList.end(); )
+	{
+		CLine* TmpLine = (*iter);
+
+		if (TmpLine->Get_LineInfo() == ToDeleteLine.Get_LineInfo())
+		{
+			Safe_Delete<CLine*>(*iter);
+			iter = m_LineList.erase(iter);
+		}
+		else
+			++iter;
+	}
 }

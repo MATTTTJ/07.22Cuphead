@@ -14,6 +14,7 @@ CLine::CLine(LINEPOINT & tLeftPt, LINEPOINT& tRightPt)
 {
 }
 
+
 CLine::CLine(LINE& rLine)
 	: m_tInfo(rLine)
 {

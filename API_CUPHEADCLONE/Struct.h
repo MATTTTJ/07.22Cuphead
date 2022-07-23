@@ -30,7 +30,7 @@ typedef struct tagPoint
 
 	}
 
-}LINEPOINT;
+}LINEPOINT, CLOUDPOINT;
 
 typedef struct tagLine
 {
@@ -44,6 +44,11 @@ typedef struct tagLine
 
 	}
 
+	bool operator==	(const tagLine& rhs) const
+	{
+		return tLeftPt.fX == rhs.tLeftPt.fX && tLeftPt.fY == rhs.tLeftPt.fY
+			&& tRightPt.fX == rhs.tRightPt.fX && tRightPt.fY == rhs.tRightPt.fY;
+	}
 
 }LINE;
 

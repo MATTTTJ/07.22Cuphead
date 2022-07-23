@@ -161,6 +161,7 @@
     <ClInclude Include="Carrot_Splash_Effect.h" />
     <ClInclude Include="Cloud.h" />
     <ClInclude Include="Cloud_Birth.h" />
+    <ClInclude Include="Cloud_Dead.h" />
     <ClInclude Include="Dash_Effect.h" />
     <ClInclude Include="DeadEventMgr.h" />
     <ClInclude Include="Dotori.h" />
@@ -188,10 +189,6 @@
     <ClInclude Include="Player_UI.h" />
     <ClInclude Include="Potato_Bullet.h" />
     <ClInclude Include="Potato_Bullet_Effect.h" />
-    <ClInclude Include="Potato_HitBox.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Onion.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Bullet_Effect.h" />
@@ -255,6 +252,7 @@
     <ClCompile Include="Carrot_Splash_Effect.cpp" />
     <ClCompile Include="Cloud.cpp" />
     <ClCompile Include="Cloud_Birth.cpp" />
+    <ClCompile Include="Cloud_Dead.cpp" />
     <ClCompile Include="Dash_Effect.cpp" />
     <ClCompile Include="DeadEventMgr.cpp" />
     <ClCompile Include="Dotori.cpp" />
@@ -282,10 +280,6 @@
     <ClCompile Include="Player_UI.cpp" />
     <ClCompile Include="Potato_Bullet.cpp" />
     <ClCompile Include="Potato_Bullet_Effect.cpp" />
-    <ClCompile Include="Potato_HitBox.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Onion.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Bullet_Effect.cpp" />

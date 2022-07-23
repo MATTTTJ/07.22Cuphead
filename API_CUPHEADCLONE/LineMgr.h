@@ -2,6 +2,7 @@
 
 #include "Line.h"
 #include "Wall.h"
+
 class CLineMgr
 {
 private:
@@ -13,7 +14,7 @@ public:
 
 	void		Save_Line(void);
 	void		Load_Line(const TCHAR* _szFileName);
-
+	list<CLine*>*		Get_LineList() { return &m_LineList; }
 
 public:
 	void		Initialize(void);
@@ -22,7 +23,9 @@ public:
 
 	void		Render(HDC hDC);
 	void		Release(void);
-	
+	void		Create_Line_Cloud(void);
+	void		Delete_Line_Cloud(CLine& ToDeleteLine);
+
 public:
 	static CLineMgr*		Get_Instance()
 	{
@@ -39,6 +42,8 @@ public:
 			m_pInstance = nullptr;
 		}
 	}
+
+
 
 private:
 	LINEPOINT				m_tLinePoint[END];

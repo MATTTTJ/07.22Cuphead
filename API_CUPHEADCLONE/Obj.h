@@ -19,15 +19,15 @@ public:
 	}
 
 	void		Set_PosX(float _fX) { m_tInfo.fX += _fX; }
-	void		Set_PosY(float _fY) { m_tInfo.fY += _fY; }
-
+	void		Set_tPosY(float _fY) { m_tInfo.fY = _fY; }
+	void		Set_hPosY(float _fY) { m_HInfo.fY = _fY; }
 
 	void		Set_Dir(DIR eDir)			{ m_eDir = eDir; }
 	void		Set_Angle(float _fAngle)	{ m_fAngle = _fAngle; }
 
 	void		Set_Target(CObj* _pTarget)  { m_pTarget = _pTarget; }
 	void		Set_FrameKey(TCHAR* pFrameKey) { m_pFrameKey = pFrameKey; }
-
+	
 	const RECT&			Get_Rect(void) const { return m_tRect; }
 
 	const RECT&			Get_HRect(void) const { return m_HRect; }
@@ -56,6 +56,7 @@ protected:
 	void			Update_Rect(void);
 	void			Move_Frame(int _InitFrame = 0);
 
+
 protected:
 	INFO		m_tInfo;
 	INFO		m_HInfo;
@@ -80,6 +81,11 @@ protected:
 	TCHAR*		m_pFrameKey;
 
 	list<CObj*>		m_ObjList[OBJ_END];
+
+	bool m_bScrollShake = true;
+	int m_iShakeCnt = 6;
+	int m_iShakeMaxCnt = 6;
+	DWORD m_dwShaketimer;
 
 };
 
