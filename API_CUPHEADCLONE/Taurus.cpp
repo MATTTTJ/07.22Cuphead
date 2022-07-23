@@ -90,7 +90,7 @@ int CTaurus::Update(void)
 		{
 			//CObj* pTaurus_Dust = CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right, m_tInfo.fY - 50.f);
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 50.f));
-			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 50.f, m_tInfo.fY));
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right + 30.f, m_tInfo.fY));
 			m_dwDustTime = GetTickCount();
 		}
 	}
@@ -101,7 +101,7 @@ int CTaurus::Update(void)
 
 		if (m_dwDashTime + 3000 < GetTickCount())
 		{
-			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 40.f));
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HInfo.fX - 50.f, m_HInfo.fY - 40.f));
 			//CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 20.f));
 			m_dwDashTime = GetTickCount();
 		}

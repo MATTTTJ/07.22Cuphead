@@ -439,7 +439,7 @@
       <Filter>01.Obj\05.Effect\CloudEffect</Filter>
     </ClInclude>
     <ClInclude Include="Cloud_Dead.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>01.Obj\05.Effect\CloudEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -666,7 +666,7 @@
       <Filter>01.Obj\05.Effect\CloudEffect</Filter>
     </ClCompile>
     <ClCompile Include="Cloud_Dead.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>01.Obj\05.Effect\CloudEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@
 #include "Cloud.h"
 #include "ObjMgr.h"
 #include "AbstractFactory.h"
-
+#include "Cloud_Dead.h"
 #include "DeadEventMgr.h"
 //#include "Red_Cloud.h"
 CCloud::CCloud()
@@ -58,6 +58,7 @@ int CCloud::Update(void)
 	
 	if (m_bDead)
 	{
+		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CCloud_Dead>::Create(m_tInfo.fX, m_tInfo.fY));
 		CDeadEventMgr::Get_Instance()->broadcast(this);
 		return OBJ_DEAD;
 	}
