@@ -441,11 +441,11 @@
     <ClInclude Include="Cloud_Dead.h">
       <Filter>01.Obj\05.Effect\CloudEffect</Filter>
     </ClInclude>
-    <ClInclude Include="BasicBullet.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Basic_Bullet_Dead.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicBullet.h">
+      <Filter>01.Obj\01.Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -674,11 +674,11 @@
     <ClCompile Include="Cloud_Dead.cpp">
       <Filter>01.Obj\05.Effect\CloudEffect</Filter>
     </ClCompile>
-    <ClCompile Include="BasicBullet.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Basic_Bullet_Dead.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicBullet.cpp">
+      <Filter>01.Obj\01.Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

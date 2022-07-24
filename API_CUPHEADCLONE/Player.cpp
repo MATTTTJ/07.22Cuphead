@@ -287,7 +287,8 @@ void CPlayer::Update_Parry(void)
 
 		if (m_iShakeCnt >= m_iShakeMaxCnt)
 		{
-			CSoundMgr::Get_Instance()->PlaySounD(L"sfx_player_parry_slap_01.wav", SOUND_EFFECT, 1.f);
+			
+			//CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_parry_slap_01.wav", SOUND_EFFECT, 1.f);
 			cout << "A" << endl;
 
 			m_bParryShake = false;
@@ -342,6 +343,7 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 
 	if (m_bIsHit) return;
 
+	
 	CBullet* pBullet = dynamic_cast<CBullet*>(_OtherObj);
 	if (pBullet)
 	{
@@ -350,6 +352,17 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 		m_bIsHit = true;
 		m_dwHitTime = GetTickCount();
 		m_eCurState = HIT;
+		CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+		if(GetTickCount() % 5 == 0)
+		CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_01.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 1)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_02.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 2)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_03.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 3)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_04.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 4)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_05.wav", SOUND_PLAYER, 1.f);
 	}
 
 	CPotato_Parry_Bullet* pParryBullet = dynamic_cast<CPotato_Parry_Bullet*>(_OtherObj);
@@ -361,6 +374,8 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			m_fCurJumpSpeed = m_fInitJumpSpeed;
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
 			m_bParryShake = true;
+			CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_parry_slap_01.wav", SOUND_EFFECT, 1.f);
 		}
 		else
 		{
@@ -369,6 +384,17 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			m_bIsHit = true;
 			m_dwHitTime = GetTickCount();
 			m_eCurState = HIT;
+			CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+			if (GetTickCount() % 5 == 0)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_01.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 1)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_02.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 2)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_03.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 3)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_04.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 4)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_05.wav", SOUND_PLAYER, 1.f);
 		}
 	}
 
@@ -382,6 +408,8 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			pParryBF->Kill_Obj();
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
 			m_bParryShake = true;
+			CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_parry_slap_01.wav", SOUND_EFFECT, 1.f);
 		}
 	}
 
@@ -395,6 +423,8 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
 			pParryBird->Kill_Obj();
 			m_bParryShake = true;
+			CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_parry_slap_01.wav", SOUND_EFFECT, 1.f);
 		}
 		else
 		{
@@ -403,6 +433,17 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			m_bIsHit = true;
 			m_dwHitTime = GetTickCount();
 			m_eCurState = HIT;
+			CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+			if (GetTickCount() % 5 == 0)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_01.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 1)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_02.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 2)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_03.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 3)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_04.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 4)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_05.wav", SOUND_PLAYER, 1.f);
 		}
 	}
 
@@ -415,6 +456,8 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			m_fCurJumpSpeed = m_fInitJumpSpeed;
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
 			m_bParryShake = true;
+			CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_parry_slap_01.wav", SOUND_EFFECT, 1.f);
 		}
 		else
 		{
@@ -423,6 +466,17 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			m_bIsHit = true;
 			m_dwHitTime = GetTickCount();
 			m_eCurState = HIT;
+			CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+			if (GetTickCount() % 5 == 0)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_01.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 1)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_02.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 2)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_03.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 3)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_04.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 4)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_05.wav", SOUND_PLAYER, 1.f);
 		}
 	}
 
@@ -436,6 +490,17 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 		m_bIsHit = true;
 		m_dwHitTime = GetTickCount();
 		m_eCurState = HIT;
+		CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+		if (GetTickCount() % 5 == 0)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_01.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 1)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_02.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 2)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_03.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 3)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_04.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 4)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_05.wav", SOUND_PLAYER, 1.f);
 	}
 
 	CFlower* pFlower = dynamic_cast<CFlower*>(_OtherObj);
@@ -446,6 +511,17 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 		m_bIsHit = true;
 		m_dwHitTime = GetTickCount();
 		m_eCurState = HIT;
+		CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+		if (GetTickCount() % 5 == 0)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_01.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 1)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_02.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 2)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_03.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 3)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_04.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 4)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_05.wav", SOUND_PLAYER, 1.f);
 	}
 
 	CJumpEnemy* pJumpE = dynamic_cast<CJumpEnemy*>(_OtherObj);
@@ -456,6 +532,18 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 		m_bIsHit = true;
 		m_dwHitTime = GetTickCount();
 		m_eCurState = HIT;
+
+		CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+		if (GetTickCount() % 5 == 0)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_01.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 1)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_02.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 2)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_03.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 3)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_04.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 4)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_05.wav", SOUND_PLAYER, 1.f);
 	}
 
 	CFlyingMan* pFlying = dynamic_cast<CFlyingMan*>(_OtherObj);
@@ -466,6 +554,17 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 		m_bIsHit = true;
 		m_dwHitTime = GetTickCount();
 		m_eCurState = HIT;
+		CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+		if (GetTickCount() % 5 == 0)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_01.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 1)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_02.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 2)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_03.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 3)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_04.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 4)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_05.wav", SOUND_PLAYER, 1.f);
 	}
 
 	CTaurus* pTau = dynamic_cast<CTaurus*>(_OtherObj);
@@ -480,6 +579,8 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			m_fCurJumpSpeed = m_fInitJumpSpeed;
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
 			m_bParryShake = true;
+			CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_parry_slap_01.wav", SOUND_EFFECT, 1.f);
 			pTau->Kill_Obj();
 			//m_eCurState = HIT;
 		}
@@ -493,6 +594,17 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 		m_bIsHit = true;
 		m_dwHitTime = GetTickCount();
 		m_eCurState = HIT;
+		CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+		if (GetTickCount() % 5 == 0)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_01.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 1)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_02.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 2)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_03.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 3)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_04.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 4)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_05.wav", SOUND_PLAYER, 1.f);
 	}
 
 	CArrow* pArrow = dynamic_cast<CArrow*>(_OtherObj);
@@ -503,6 +615,17 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 		m_bIsHit = true;
 		m_dwHitTime = GetTickCount();
 		m_eCurState = HIT;
+		CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+		if (GetTickCount() % 5 == 0)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_01.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 1)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_02.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 2)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_03.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 3)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_04.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 5 == 4)
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_05.wav", SOUND_PLAYER, 1.f);
 	}
 
 
@@ -540,8 +663,14 @@ void CPlayer::Key_Input(void)
 		m_eCurState = RUN;
 		m_eLookState = LOOK_RIGHT;
 
-
-
+		//CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+		if (m_eState == GROUND)
+		{
+			if (GetTickCount() % 2 == 0)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_land_ground_01.wav", SOUND_PLAYER, 1.f);
+			else
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_land_ground_02.wav", SOUND_PLAYER, 1.f);
+		}
 
 		if (CKeyMgr::Get_Instance()->Key_Down('C'))
 		{
@@ -552,6 +681,15 @@ void CPlayer::Key_Input(void)
 					m_fCurJumpSpeed = m_fInitJumpSpeed;
 					m_eState = AIR;
 					m_eCurState = JUMP;
+					CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+					if (GetTickCount() % 3 == 0)
+						CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_jump_01.wav", SOUND_PLAYER, 1.f);
+					else if (GetTickCount() % 3 == 1)
+						CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_jump_02.wav", SOUND_PLAYER, 1.f);
+					else if (GetTickCount() % 3 == 2)
+						CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_jump_03.wav", SOUND_PLAYER, 1.f);
+					
+				
 				}
 			}
 
@@ -575,14 +713,40 @@ void CPlayer::Key_Input(void)
 				CObj* pPlayer_Dash = CAbstractFactory<CDash_Effect>::Create(m_tInfo.fX, m_tInfo.fY);
 				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pPlayer_Dash);
 				m_dwDashWaitTime = GetTickCount();
+				CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+				if (GetTickCount() % 3 == 0)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_dash_01.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 3 == 1)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_dash_02.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 3 == 2)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_dash_03.wav", SOUND_PLAYER, 1.f);
 			}
 		}
 
-		else if (m_dwAttack + 200 < GetTickCount() && CKeyMgr::Get_Instance()->Key_Down('X') && CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
+		else if (m_dwAttack + 200 < GetTickCount() && GetAsyncKeyState('X') && CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
 		{
 			m_eCurState = RUNNING_ATTACK_HOR;
 			m_bRun_Shoot = true;
 			m_bBulletCnt = true;
+			if (m_bDefault_Bullet)
+			{
+				CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+				CSoundMgr::Get_Instance()->PlaySound(L"player_default_fire.mp3", SOUND_PLAYER, 1.f);
+			}
+			else if (m_bBounce_Bullet)
+			{
+				CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+				if (GetTickCount() % 5 == 0)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_001.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 5 == 1)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_002.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 5 == 2)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_003.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 5 == 3)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_004.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 5 == 4)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_005.wav", SOUND_PLAYER, 1.f);
+			}
 		}
 	}
 
@@ -612,7 +776,13 @@ void CPlayer::Key_Input(void)
 		m_pFrameKey = L"Player_Left";
 		m_eCurState = RUN;
 		m_eLookState = LOOK_LEFT;
-
+		if (m_eState == GROUND)
+		{
+			if (GetTickCount() % 2 == 0)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_land_ground_01.wav", SOUND_PLAYER, 1.f);
+			else
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_land_ground_02.wav", SOUND_PLAYER, 1.f);
+		}
 		if (CKeyMgr::Get_Instance()->Key_Down('C'))
 		{
 			if (m_eState == GROUND)
@@ -622,6 +792,13 @@ void CPlayer::Key_Input(void)
 					m_fCurJumpSpeed = m_fInitJumpSpeed;
 					m_eState = AIR;
 					m_eCurState = JUMP;
+					CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+					if (GetTickCount() % 3 == 0)
+						CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_jump_01.wav", SOUND_PLAYER, 1.f);
+					else if (GetTickCount() % 3 == 1)
+						CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_jump_02.wav", SOUND_PLAYER, 1.f);
+					else if (GetTickCount() % 3 == 2)
+						CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_jump_03.wav", SOUND_PLAYER, 1.f);
 				}
 			}
 
@@ -641,6 +818,25 @@ void CPlayer::Key_Input(void)
 			m_eCurState = RUNNING_ATTACK_HOR;
 			m_bRun_Shoot = true;
 			m_bBulletCnt = true;
+			if (m_bDefault_Bullet)
+			{
+				CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+				CSoundMgr::Get_Instance()->PlaySound(L"player_default_fire.mp3", SOUND_PLAYER, 1.f);
+			}
+			else if (m_bBounce_Bullet)
+			{
+				CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+				if (GetTickCount() % 5 == 0)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_001.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 5 == 1)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_002.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 5 == 2)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_003.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 5 == 3)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_004.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 5 == 4)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_005.wav", SOUND_PLAYER, 1.f);
+			}
 		}
 
 		else if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
@@ -651,6 +847,13 @@ void CPlayer::Key_Input(void)
 				CObj* pPlayer_Dash = CAbstractFactory<CDash_Effect>::Create(m_tInfo.fX, m_tInfo.fY);
 				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pPlayer_Dash);
 				m_dwDashWaitTime = GetTickCount();
+				CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+				if (GetTickCount() % 3 == 0)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_dash_01.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 3 == 1)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_dash_02.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 3 == 2)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_dash_03.wav", SOUND_PLAYER, 1.f);
 			}
 		}
 	}
@@ -665,6 +868,13 @@ void CPlayer::Key_Input(void)
 				m_fCurJumpSpeed = m_fInitJumpSpeed;
 				m_eState = AIR;
 				m_eCurState = JUMP;
+				CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+				if (GetTickCount() % 3 == 0)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_jump_01.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 3 == 1)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_jump_02.wav", SOUND_PLAYER, 1.f);
+				else if (GetTickCount() % 3 == 2)
+					CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_jump_03.wav", SOUND_PLAYER, 1.f);
 			}
 		}
 
@@ -683,6 +893,25 @@ void CPlayer::Key_Input(void)
 	{
 		m_bShoot = true;
 		m_bBulletCnt = true;
+		if (m_bDefault_Bullet)
+		{
+			CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+				CSoundMgr::Get_Instance()->PlaySound(L"player_default_fire.mp3", SOUND_PLAYER, 1.f);
+		}
+		else if (m_bBounce_Bullet) 
+		{
+			CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+			if (GetTickCount() % 5 == 0)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_001.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 1)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_002.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 2)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_003.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 3)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_004.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 4)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_005.wav", SOUND_PLAYER, 1.f);
+		}
 	}
 
 	else if (m_dwAttack + 300 < GetTickCount() && CKeyMgr::Get_Instance()->Key_Pressing('E'))
@@ -1148,6 +1377,8 @@ void CPlayer::Motion_Change(void)
 					m_tFrame.iMotion = 1;
 					m_tFrame.dwFrameSpeed = 40;
 					m_tFrame.dwFrameTime = GetTickCount();
+					CObj* pHit_Effect = CAbstractFactory<CHit_Effect>::Create(m_HInfo.fX, (float)m_HRect.top);
+					CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pHit_Effect);
 				}
 				else
 				{
@@ -1157,6 +1388,8 @@ void CPlayer::Motion_Change(void)
 					m_tFrame.iMotion = 1;
 					m_tFrame.dwFrameSpeed = 40;
 					m_tFrame.dwFrameTime = GetTickCount();
+					CObj* pHit_Effect = CAbstractFactory<CHit_Effect>::Create(m_HInfo.fX, (float)m_HRect.top);
+					CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pHit_Effect);
 				}
 			}
 			break;

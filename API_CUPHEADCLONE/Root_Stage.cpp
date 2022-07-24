@@ -92,5 +92,6 @@ void CRoot_Stage::Release(void)
 	CScrollMgr::Get_Instance()->Destroy_Instance();
 	CObjMgr::Get_Instance()->Release();
 	CLineMgr::Get_Instance()->Destroy_Instance();
-	CSoundMgr::Get_Instance()->Destroy_Instance();
+	CSoundMgr::Get_Instance()->StopAll();
+//	CSoundMgr::Get_Instance()->Destroy_Instance();
 }

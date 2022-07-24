@@ -11,7 +11,7 @@
 #include "Arrow.h"
 #include "Star.h"
 #include "Player_Dust.h"
-
+#include "BasicBullet.h"
 
 CSagittarius::CSagittarius()
 	: m_eCurState(INTRO_STAR), m_ePreState(INTRO_STAR)
@@ -33,7 +33,7 @@ void CSagittarius::Initialize(void)
 	m_HInfo.fCY = 200.f;
 
 
-	m_fMaxHp = 30.f;
+	m_fMaxHp = 4.f;
 
 	m_fHp = m_fMaxHp;
 
@@ -75,6 +75,9 @@ void CSagittarius::Initialize(void)
 	m_bPhaseTwo = false;
 	m_bPhaseThree = false;
 
+	m_iStarCnt = 0;
+	m_iStarMaxCnt = 13;
+
 	m_eRenderGroup = GAMEOBJECT;
 }
 
@@ -113,7 +116,25 @@ int CSagittarius::Update(void)
 
 	if (m_bPhaseTwo)
 	{
+		if (m_iStarCnt < m_iStarMaxCnt)
+		{
+			m_iStarCnt++;
 
+			if (m_dwStarCoolTime + 300 < GetTickCount())
+			{
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CStar>::Create(m_tInfo.fX,m_tInfo.fY));
+			}
+		}
+
+		m_dwStarCoolTime = GetTickCount();
+	
+
+		/*if (CObjMgr::Get_Instance()->Get_ObjList(OBJ_PARRY)->size() == 0)
+		{
+			m_bPhaseThree = true;
+			m_bPhaseOne = false;
+			m_bPhaseTwo = false;
+		}*/
 	}
 	/*else if (m_eCurState == ATTACK)
 	{*/
@@ -125,8 +146,11 @@ int CSagittarius::Update(void)
 		//}
 	//}
 
+	if (m_bPhaseOne || m_bPhaseThree)
+	{
+		Update_Controller();
+	}
 
-	Update_Controller();
 	Motion_Change();
 	Move_Frame();
 
@@ -147,17 +171,20 @@ void CSagittarius::Render(HDC hDC)
 	int	iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 	int	iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-	GdiTransparentBlt(hDC,
-		m_tRect.left + iScrollX,	// 복사 받을 위치의 좌표 전달(x,y 순서)
-		m_tRect.top + iScrollY,
-		(int)m_tInfo.fCX,		// 복사 받을 이미지의 길이 전달(가로, 세로순서)
-		(int)m_tInfo.fCY,
-		hMemDC,					// 비트맵을 가지고 있는 dc
-		(int)m_tInfo.fCX * m_tFrame.iFrameStart,						// 출력할 비트맵 시작 좌표(x,y 순서)
-		(int)m_tInfo.fCY * m_tFrame.iMotion,
-		(int)m_tInfo.fCX,			// 복사 할 비트맵 의 가로, 세로 사이즈
-		(int)m_tInfo.fCY,
-		RGB(1, 1, 1));	// 제거할 픽셀의 색상
+	if (m_bPhaseOne || m_bPhaseThree)
+	{
+		GdiTransparentBlt(hDC,
+			m_tRect.left + iScrollX,	// 복사 받을 위치의 좌표 전달(x,y 순서)
+			m_tRect.top + iScrollY,
+			(int)m_tInfo.fCX,		// 복사 받을 이미지의 길이 전달(가로, 세로순서)
+			(int)m_tInfo.fCY,
+			hMemDC,					// 비트맵을 가지고 있는 dc
+			(int)m_tInfo.fCX * m_tFrame.iFrameStart,						// 출력할 비트맵 시작 좌표(x,y 순서)
+			(int)m_tInfo.fCY * m_tFrame.iMotion,
+			(int)m_tInfo.fCX,			// 복사 할 비트맵 의 가로, 세로 사이즈
+			(int)m_tInfo.fCY,
+			RGB(1, 1, 1));	// 제거할 픽셀의 색상
+	}
 }
 
 void CSagittarius::Release(void)
@@ -167,9 +194,11 @@ void CSagittarius::Release(void)
 void CSagittarius::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 {
 	CBullet*	pBullet = dynamic_cast<CBullet*>(_OtherObj);
+	
 	if (pBullet)
 	{
-		m_fHp -= pBullet->Get_Damage();
+		if (pBullet->Get_Dead()) return;
+ 		m_fHp -= pBullet->Get_Damage();
 
 	}
 	if (m_fHp < m_fMaxHp * 0.5f)
@@ -229,7 +258,7 @@ void CSagittarius::Update_Controller()
 	{
 		if (m_iShootFrameCnt == m_iShootFrameMaxCnt)
 		{
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CArrow>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LEFT));
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CArrow>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LEFT));
 
 			// 2페이즈 화살 쏠 때 별도 같이 쏘기
 			//	/*CObj* pPotato = CAbstractFactory<CPotato_Bullet>::Create(m_HInfo.fX - 150, m_HInfo.fY + 160, DIR_LEFT);

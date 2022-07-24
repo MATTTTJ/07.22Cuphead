@@ -60,8 +60,8 @@ int CBird::Update(void)
 			return OBJ_DEAD;
 	}
 
-	//+m_fDiagonal* cosf(m_fAngle * (PI / 180.f));
-	//-m_fDiagonal * sinf(m_fAngle * (PI / 180.f));
+	//
+	//
 
 	m_fAngle += m_fSpeed;
 

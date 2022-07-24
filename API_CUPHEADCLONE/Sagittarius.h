@@ -33,12 +33,17 @@ private:
 	bool		m_bPhaseThree = false;
 
 
+	int			m_iStarCnt = 0;
+	int			m_iStarMaxCnt = 0;
+
+
 	SAGITTARIUSSTATE		m_eCurState;
 	SAGITTARIUSSTATE		m_ePreState;
 
 	bool			m_bShootState = false;
 	DWORD			m_dwTimer;
 	DWORD			m_dwDustTime = GetTickCount();
+	DWORD			m_dwStarCoolTime = GetTickCount();
 
 };
 

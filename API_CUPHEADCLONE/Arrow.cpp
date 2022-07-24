@@ -23,7 +23,7 @@ void CArrow::Initialize(void)
 	m_tInfo.fCX = 500.f;
 	m_tInfo.fCY = 100.f;
 
-	m_HInfo.fCX = 225.f;
+	m_HInfo.fCX = 100.f;
 	m_HInfo.fCY = 10.f;
 
 	m_HInfo.m_fDamage = 1.f;
@@ -91,7 +91,7 @@ void CArrow::Render(HDC hDC)
 		(int)m_tInfo.fCY,
 		RGB(1, 1, 1));	// 제거할 픽셀의 색상
 
-							//Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
+		Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
 
 }
 

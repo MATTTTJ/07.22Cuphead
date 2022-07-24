@@ -30,7 +30,7 @@ public:
 	void Release(); 
 
 public:
-	void PlaySounD(TCHAR* pSoundKey, CHANNELID eID, float fVolume);
+	void PlaySound(TCHAR* pSoundKey, CHANNELID eID, float fVolume);
 	void PlayBGM(TCHAR* pSoundKey, float fVolume);
 	
 	void StopSound(CHANNELID eID);
