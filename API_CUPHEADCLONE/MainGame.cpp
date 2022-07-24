@@ -33,8 +33,8 @@ void CMainGame::Initialize(void)
 	srand(unsigned(time(NULL)));
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Back/BackGround.bmp", L"Back");
-	CSceneMgr::Get_Instance()->Scene_Change(SC_STAGESECOND);
 	CSoundMgr::Get_Instance()->Initialize();
+	CSceneMgr::Get_Instance()->Scene_Change(SC_STAGESECOND);
 
 #ifdef _DEBUG
 
@@ -118,12 +118,11 @@ void CMainGame::Render(void)
 void CMainGame::Release(void)
 {
 #ifdef _DEBUG
-
-	FreeConsole();
+/*
+	FreeConsole();*/
 
 #endif // _DEBUG
 
-	CSoundMgr::Get_Instance()->Destroy_Instance();
 	/*CTileMgr::Get_Instance()->Destroy_Instance();*/
 	CSceneMgr::Get_Instance()->Destroy_Instance();
 	CBmpMgr::Get_Instance()->Destroy_Instance();
@@ -131,6 +130,7 @@ void CMainGame::Release(void)
 	CKeyMgr::Get_Instance()->Destroy_Instance();
 	CLineMgr::Get_Instance()->Destroy_Instance();
 	CObjMgr::Get_Instance()->Destroy_Instance();
+	CSoundMgr::Get_Instance()->Destroy_Instance();
 
 	ReleaseDC(g_hWnd, m_hDC);
 }

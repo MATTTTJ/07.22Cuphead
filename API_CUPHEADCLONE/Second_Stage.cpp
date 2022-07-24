@@ -54,6 +54,7 @@ void CSecond_Stage::Initialize(void)
 	//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CPotato>::Create());
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Map/Cloud/Cloud_Map_1.bmp", L"Cloud_Map");
 	CLineMgr::Get_Instance()->Load_Line(L"../Data/Line_Second.dat");
+
 }
 
 int CSecond_Stage::Update(void)
@@ -85,7 +86,7 @@ void CSecond_Stage::Late_Update(void)
 			//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CSagittarius>::Create(6500.f, 1500.f));
 			//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CTaurus>::Create(6600.f, 1100.f));
 			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CSagittarius>::Create(6600.f, 1300.f));
-
+			CSoundMgr::Get_Instance()->PlayBGM(L"MUS_Stage_Second.wav", 0.8f);
 			m_bFirst_Sqawn =true;
 		}
 	}
@@ -111,6 +112,7 @@ void CSecond_Stage::Release(void)
 	CObjMgr::Get_Instance()->Release();
 	CLineMgr::Get_Instance()->Destroy_Instance();
 	CSoundMgr::Get_Instance()->StopAll();
+//	CSoundMgr::Get_Instance()->Destroy_Instance();
 }
 
 void CSecond_Stage::CheckCloudDead(CObj* pCloud)

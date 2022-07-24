@@ -59,28 +59,28 @@ bool CLineMgr::Collision_Line(float& fX, float& fY, float* pY)
 
 void CLineMgr::Save_Line(void)
 {
-	HANDLE		hFile = CreateFile(L"../Data/Line.dat",		// 파일의 경로와 이름
-									GENERIC_WRITE,			// 파일 접근 모드 (GENERIC_WRITE : 쓰기 전용, GENERIC_READ : 읽기 전용)
-									NULL,					// 공유 방식(파일이 열려있는 상태에서 다른 프로세스가 오픈할 때 허용할 것인가)	 
-									NULL,					// 보안 속성(NULL을 지정하면 기본값 상태)
-									CREATE_ALWAYS,			// CREATE_ALWAYS : 파일이 없다면 생성, 있다면 덮어쓰기, OPEN_EXISTING  : 파일이 있을 경우에만 열기
-									FILE_ATTRIBUTE_NORMAL,  // 파일 속성(읽기 전용, 숨김 등) : FILE_ATTRIBUTE_NORMAL : 아무런 속성이 없는 파일
-									NULL);					// 생성될 파일의 속성을 제공할 템플릿 파일(안쓰니깐 NULL)
+	//HANDLE		hFile = CreateFile(L"../Data/Line.dat",		// 파일의 경로와 이름
+	//								GENERIC_WRITE,			// 파일 접근 모드 (GENERIC_WRITE : 쓰기 전용, GENERIC_READ : 읽기 전용)
+	//								NULL,					// 공유 방식(파일이 열려있는 상태에서 다른 프로세스가 오픈할 때 허용할 것인가)	 
+	//								NULL,					// 보안 속성(NULL을 지정하면 기본값 상태)
+	//								CREATE_ALWAYS,			// CREATE_ALWAYS : 파일이 없다면 생성, 있다면 덮어쓰기, OPEN_EXISTING  : 파일이 있을 경우에만 열기
+	//								FILE_ATTRIBUTE_NORMAL,  // 파일 속성(읽기 전용, 숨김 등) : FILE_ATTRIBUTE_NORMAL : 아무런 속성이 없는 파일
+	//								NULL);					// 생성될 파일의 속성을 제공할 템플릿 파일(안쓰니깐 NULL)
 
-	if (INVALID_HANDLE_VALUE == hFile)
-	{
-		MessageBox(g_hWnd, _T("Save File"), L"Fail", MB_OK);
-		return;
-	}
+	//if (INVALID_HANDLE_VALUE == hFile)
+	//{
+	//	MessageBox(g_hWnd, _T("Save File"), L"Fail", MB_OK);
+	//	return;
+	//}
 
-	DWORD	dwByte = 0;
+	//DWORD	dwByte = 0;
 
-	for (auto& iter : m_LineList)
-		WriteFile(hFile, &(iter->Get_LineInfo()), sizeof(LINE), &dwByte, nullptr);
+	//for (auto& iter : m_LineList)
+	//	WriteFile(hFile, &(iter->Get_LineInfo()), sizeof(LINE), &dwByte, nullptr);
 
-	CloseHandle(hFile);
+	//CloseHandle(hFile);
 
-	MessageBox(g_hWnd, _T("Save 완료"), L"Success", MB_OK);
+	//MessageBox(g_hWnd, _T("Save 완료"), L"Success", MB_OK);
 }
 
 void CLineMgr::Load_Line(const TCHAR* _szFileName)
@@ -135,35 +135,35 @@ void CLineMgr::Initialize(void)
 
 int CLineMgr::Update(void)
 {
-	POINT	pt{};
-	GetCursorPos(&pt);
-	ScreenToClient(g_hWnd, &pt);
+	//POINT	pt{};
+	//GetCursorPos(&pt);
+	//ScreenToClient(g_hWnd, &pt);
 
-	pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+	//pt.x -= (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 
-	if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
-	{
-		// 마우스 클릭을 처음 했을 때(아예 선이 없을 때)
-		if ((!m_tLinePoint[LEFT].fX) && (!m_tLinePoint[LEFT].fY))
-		{
-			m_tLinePoint[LEFT].fX = (float)pt.x;
-			m_tLinePoint[LEFT].fY = (float)pt.y;
-		}
+	//if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+	//{
+	//	// 마우스 클릭을 처음 했을 때(아예 선이 없을 때)
+	//	if ((!m_tLinePoint[LEFT].fX) && (!m_tLinePoint[LEFT].fY))
+	//	{
+	//		m_tLinePoint[LEFT].fX = (float)pt.x;
+	//		m_tLinePoint[LEFT].fY = (float)pt.y;
+	//	}
 
-		else
-		{
-			m_tLinePoint[RIGHT].fX = (float)pt.x;
-			m_tLinePoint[RIGHT].fY = (float)pt.y;
+	//	else
+	//	{
+	//		m_tLinePoint[RIGHT].fX = (float)pt.x;
+	//		m_tLinePoint[RIGHT].fY = (float)pt.y;
 
-			LINE	tInfo{ m_tLinePoint[0], m_tLinePoint[1] };
-			m_LineList.push_back(new CLine(tInfo));
+	//		LINE	tInfo{ m_tLinePoint[0], m_tLinePoint[1] };
+	//		m_LineList.push_back(new CLine(tInfo));
 
-			m_tLinePoint[LEFT].fX = m_tLinePoint[RIGHT].fX;
-			m_tLinePoint[LEFT].fY = m_tLinePoint[RIGHT].fY;
-		}
+	//		m_tLinePoint[LEFT].fX = m_tLinePoint[RIGHT].fX;
+	//		m_tLinePoint[LEFT].fY = m_tLinePoint[RIGHT].fY;
+	//	}
 
-	}
-	
+	//}
+	//
 	return 0;
 }
 

@@ -182,5 +182,5 @@ void CFirst_Stage::Release(void)
 	CObjMgr::Get_Instance()->Release();
 	CLineMgr::Get_Instance()->Destroy_Instance();
 	CSoundMgr::Get_Instance()->StopAll();
-
+	//CSoundMgr::Get_Instance()->Destroy_Instance();
 }
