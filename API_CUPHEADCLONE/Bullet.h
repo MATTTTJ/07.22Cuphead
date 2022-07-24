@@ -17,6 +17,9 @@ public:
 	virtual void Render(HDC hDC) override;
 	virtual void Release(void) override;
 	virtual	void Collision_Event(CObj* _OtherObj, float _fColX, float _fColY) override;
+	
+
+
 private:
 	CObj* m_pPlayer;
 
@@ -25,8 +28,12 @@ private:
 	float m_fMaxAbsJumpSpeed = 16.f;
 	float m_fInitJumpSpeed = 15.f;
 
+	//Bullet Bounce
 	int  m_iJumpCnt = 0;
 	int  m_iJumpMaxCnt = 3;
 	bool m_bJump = true;
+	//~Bullet Bounce
+
+
 };
 

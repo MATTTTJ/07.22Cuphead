@@ -26,7 +26,7 @@ void CPlayer_Dust::Initialize(void)
 	m_tFrame.dwFrameSpeed = 50;
 	m_tFrame.dwFrameTime = GetTickCount();
 
-	m_eRenderGroup = GAMEOBJECT;
+	m_eRenderGroup = BOSSSTAGE;
 }
 
 int CPlayer_Dust::Update(void)

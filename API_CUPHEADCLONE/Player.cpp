@@ -30,7 +30,7 @@
 #include "Taurus.h"
 #include "Sagittarius.h"
 #include "Arrow.h"
-
+#include "BasicBullet.h"
 CPlayer::CPlayer()
 	: m_eCurState(IDLE), m_ePreState(MOTION_END), m_eLookState(LOOK_RIGHT)
 {
@@ -49,11 +49,11 @@ void CPlayer::Initialize(void)
 
 	m_HInfo = { m_tInfo.fX, m_tInfo.fY, 80.f, 115.f };
 
-	
+
 	m_tStat.fMaxHp = 8.f;
 	m_tStat.fHp = m_tStat.fMaxHp;
-	m_tStat.fDamage = 1.f; 
-	
+	m_tStat.fDamage = 1.f;
+
 	m_fSpeed = 7.f;
 	m_fDiagonal = 100.f;
 	m_iSpecial_Gauge = 0.f;
@@ -74,6 +74,10 @@ void CPlayer::Initialize(void)
 	m_fDashSpeed = m_fSpeed * 1.8f;
 	m_dwDustTime = GetTickCount();
 
+
+	m_bDefault_Bullet = true;
+	m_bBounce_Bullet = false;
+
 	m_bDash = false;
 
 	m_eRenderGroup = GAMEOBJECT;
@@ -84,9 +88,9 @@ void CPlayer::Initialize(void)
 int CPlayer::Update(void)
 {
 	if (m_bDead)
-			return OBJ_DEAD;
+		return OBJ_DEAD;
 
-	
+
 
 	if (m_bIsHit && m_dwHitTime + 500 < GetTickCount())
 	{
@@ -112,8 +116,70 @@ int CPlayer::Update(void)
 
 void CPlayer::Ground_Check(void)
 {
-	m_bLineCol = CLineMgr::Get_Instance()->Collision_Line(m_HInfo.fX,m_HInfo.fY, &m_fFootY);
-	
+
+
+
+
+	m_bLineCol = CLineMgr::Get_Instance()->Collision_Line(m_HInfo.fX, m_HInfo.fY, &m_fFootY);
+
+
+	/*if (m_eLookState == LOOK_RIGHT)
+	{
+		if ((m_fPreFootY < m_fFootY))
+			m_eState = FALL;
+
+	}
+	else if(m_eLookState == LOOK_LEFT)
+	{
+		if ((m_fPreFootY > m_fFootY))
+			m_eState = FALL;
+	}*/
+	if (m_fFootY != m_fPreFootY)
+	{
+		if (m_eState == GROUND && m_fFootY - m_fPreFootY > 10.f)
+		{
+			m_eState = FALL;
+			m_bJump = true;
+			m_fCurJumpSpeed = 0;
+		}
+	}
+
+	m_fPreFootY = m_fFootY;
+	///*if (!m_bLineCol)
+	//{
+	//	
+	//}*/
+
+	//if (m_eState != m_ePreState22)
+	//{
+
+	//	switch (m_eState)
+	//	{
+	//	case AIR:
+	//		cout << "AIR" << endl;
+
+	//		break;
+	//	case GROUND:
+	//		cout << "GROUND " << endl;
+
+	//		break;
+	//	case FALL:
+	//		cout << "FALL :" << endl;
+	//		break;
+	//	}
+	//	m_ePreState22 = m_eState;
+	//}
+
+
+
+
+
+	//if ((m_fPreFootY < m_fFootY && m_eState != GROUND)) //|| m_fPreFootY > m_fFootY))
+	//	m_eState = FALL;
+	//else if (m_fPreFootY > m_fFootY && m_eState != GROUND)
+	//	m_eState = FALL;
+
+
 	float fCurFootY = m_HInfo.fY + m_HInfo.fCY * 0.5f;
 
 	switch (m_eState)
@@ -137,7 +203,6 @@ void CPlayer::Ground_Check(void)
 				m_eCurState = PARRY;
 		}
 		break;
-
 	case GROUND:
 		m_fCurJumpSpeed = 0.f;
 		m_HInfo.fY = m_fFootY - m_HInfo.fCY * 0.5f;
@@ -154,11 +219,15 @@ void CPlayer::Ground_Check(void)
 		if (fabs(m_fCurJumpSpeed) < m_fMaxAbsJumpSpeed) // limit max speed
 		{
 			m_fCurJumpSpeed -= GRAVITY;
+			m_eCurState = JUMP;
 		}
 		break;
+
 	default:
 		break;
 	}
+
+
 
 	if (m_eState == GROUND && m_eCurState == RUN && m_eLookState == LOOK_LEFT)
 	{
@@ -184,7 +253,8 @@ void CPlayer::Ground_Check(void)
 
 	fCurFootY = m_HInfo.fY + m_HInfo.fCY * 0.5f;
 
-	if (m_bLineCol && abs(m_fFootY - fCurFootY) < m_fMaxAbsJumpSpeed * 0.8f)
+
+	if (m_bLineCol && abs(m_fFootY - fCurFootY) < m_fMaxAbsJumpSpeed * 0.5f)
 	{
 		m_eState = GROUND;
 
@@ -193,6 +263,8 @@ void CPlayer::Ground_Check(void)
 			CObj* pLand_Effect = CAbstractFactory<CLand_Effect>::Create(m_HInfo.fX, (float)m_HRect.bottom);
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pLand_Effect);
 			m_bGround = false;
+
+
 		}
 	}
 	else
@@ -269,171 +341,171 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 {
 
 	if (m_bIsHit) return;
-	
-		CBullet* pBullet = dynamic_cast<CBullet*>(_OtherObj);
-		if (pBullet)
+
+	CBullet* pBullet = dynamic_cast<CBullet*>(_OtherObj);
+	if (pBullet)
+	{
+		m_tStat.fHp -= pBullet->Get_Damage();
+
+		m_bIsHit = true;
+		m_dwHitTime = GetTickCount();
+		m_eCurState = HIT;
+	}
+
+	CPotato_Parry_Bullet* pParryBullet = dynamic_cast<CPotato_Parry_Bullet*>(_OtherObj);
+	if (pParryBullet)
+	{
+		if (m_bIsParry)
 		{
-			m_tStat.fHp -= pBullet->Get_Damage();
+			m_iSpecial_Gauge += 1.f;
+			m_fCurJumpSpeed = m_fInitJumpSpeed;
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
+			m_bParryShake = true;
+		}
+		else
+		{
+			m_tStat.fHp -= pParryBullet->Get_Damage();
 
 			m_bIsHit = true;
 			m_dwHitTime = GetTickCount();
 			m_eCurState = HIT;
 		}
+	}
 
-		CPotato_Parry_Bullet* pParryBullet = dynamic_cast<CPotato_Parry_Bullet*>(_OtherObj);
-		if (pParryBullet)
+	CPinkButterFly* pParryBF = dynamic_cast<CPinkButterFly*>(_OtherObj);
+	if (pParryBF)
+	{
+		if (m_bIsParry)
 		{
-			if (m_bIsParry)
-			{
-				m_iSpecial_Gauge += 1.f;
-				m_fCurJumpSpeed = m_fInitJumpSpeed;
-				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
-				m_bParryShake = true;
-			}
-			else
-			{
-				m_tStat.fHp -= pParryBullet->Get_Damage();
-
-				m_bIsHit = true;
-				m_dwHitTime = GetTickCount();
-				m_eCurState = HIT;
-			}
+			m_iSpecial_Gauge += 1.f;
+			m_fCurJumpSpeed = m_fInitJumpSpeed;
+			pParryBF->Kill_Obj();
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
+			m_bParryShake = true;
 		}
+	}
 
-		CPinkButterFly* pParryBF = dynamic_cast<CPinkButterFly*>(_OtherObj);
-		if (pParryBF)
+	CPinkBird* pParryBird = dynamic_cast<CPinkBird*>(_OtherObj);
+	if (pParryBird)
+	{
+		if (m_bIsParry)
 		{
-			if (m_bIsParry)
-			{
-				m_iSpecial_Gauge += 1.f;
-				m_fCurJumpSpeed = m_fInitJumpSpeed;
-				pParryBF->Kill_Obj();
-				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
-				m_bParryShake = true;
-			}
+			m_iSpecial_Gauge += 1.f;
+			m_fCurJumpSpeed = m_fInitJumpSpeed;
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
+			pParryBird->Kill_Obj();
+			m_bParryShake = true;
 		}
-
-		CPinkBird* pParryBird = dynamic_cast<CPinkBird*>(_OtherObj);
-		if (pParryBird)
+		else
 		{
-			if (m_bIsParry)
-			{
-				m_iSpecial_Gauge += 1.f;
-				m_fCurJumpSpeed = m_fInitJumpSpeed;
-				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
-				pParryBird->Kill_Obj();
-				m_bParryShake = true;
-			}
-			else
-			{
-				m_tStat.fHp -= pParryBird->Get_Damage();
-				pParryBird->Kill_Obj();
-				m_bIsHit = true;
-				m_dwHitTime = GetTickCount();
-				m_eCurState = HIT;
-			}
+			m_tStat.fHp -= pParryBird->Get_Damage();
+			pParryBird->Kill_Obj();
+			m_bIsHit = true;
+			m_dwHitTime = GetTickCount();
+			m_eCurState = HIT;
 		}
+	}
 
-		COnion_Parry_Bullet* pOParryBullet = dynamic_cast<COnion_Parry_Bullet*>(_OtherObj);
-		if (pOParryBullet)
+	COnion_Parry_Bullet* pOParryBullet = dynamic_cast<COnion_Parry_Bullet*>(_OtherObj);
+	if (pOParryBullet)
+	{
+		if (m_bIsParry)
 		{
-			if (m_bIsParry)
-			{
-				m_iSpecial_Gauge += 1.f;
-				m_fCurJumpSpeed = m_fInitJumpSpeed;
-				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
-				m_bParryShake = true;
-			}
-			else
-			{
-				m_tStat.fHp -= pOParryBullet->Get_Damage();
-
-				m_bIsHit = true;
-				m_dwHitTime = GetTickCount();
-				m_eCurState = HIT;
-			}
+			m_iSpecial_Gauge += 1.f;
+			m_fCurJumpSpeed = m_fInitJumpSpeed;
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
+			m_bParryShake = true;
 		}
-
-
-		CDotori* pDotori = dynamic_cast<CDotori*>(_OtherObj);
-		
-		if (pDotori)
+		else
 		{
-			m_tStat.fHp -= pDotori->Get_Damage();
+			m_tStat.fHp -= pOParryBullet->Get_Damage();
 
 			m_bIsHit = true;
 			m_dwHitTime = GetTickCount();
 			m_eCurState = HIT;
 		}
+	}
 
-		CFlower* pFlower = dynamic_cast<CFlower*>(_OtherObj);
-		if (pFlower)
+
+	CDotori* pDotori = dynamic_cast<CDotori*>(_OtherObj);
+
+	if (pDotori)
+	{
+		m_tStat.fHp -= pDotori->Get_Damage();
+
+		m_bIsHit = true;
+		m_dwHitTime = GetTickCount();
+		m_eCurState = HIT;
+	}
+
+	CFlower* pFlower = dynamic_cast<CFlower*>(_OtherObj);
+	if (pFlower)
+	{
+		m_tStat.fHp -= pFlower->Get_Damage();
+
+		m_bIsHit = true;
+		m_dwHitTime = GetTickCount();
+		m_eCurState = HIT;
+	}
+
+	CJumpEnemy* pJumpE = dynamic_cast<CJumpEnemy*>(_OtherObj);
+	if (pJumpE)
+	{
+		m_tStat.fHp -= pJumpE->Get_Damage();
+
+		m_bIsHit = true;
+		m_dwHitTime = GetTickCount();
+		m_eCurState = HIT;
+	}
+
+	CFlyingMan* pFlying = dynamic_cast<CFlyingMan*>(_OtherObj);
+	if (pFlying)
+	{
+		m_tStat.fHp -= pFlying->Get_Damage();
+
+		m_bIsHit = true;
+		m_dwHitTime = GetTickCount();
+		m_eCurState = HIT;
+	}
+
+	CTaurus* pTau = dynamic_cast<CTaurus*>(_OtherObj);
+	if (pTau)
+	{
+		if (m_bIsParry)
 		{
-			m_tStat.fHp -= pFlower->Get_Damage();
+			//m_tStat.fHp -= pTau->Get_Damage();
 
-			m_bIsHit = true;
-			m_dwHitTime = GetTickCount();
-			m_eCurState = HIT;
+			//m_bIsHit = true;
+			//m_dwHitTime = GetTickCount();
+			m_fCurJumpSpeed = m_fInitJumpSpeed;
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
+			m_bParryShake = true;
+			pTau->Kill_Obj();
+			//m_eCurState = HIT;
 		}
+	}
 
-		CJumpEnemy* pJumpE = dynamic_cast<CJumpEnemy*>(_OtherObj);
-		if (pJumpE)
-		{
-			m_tStat.fHp -= pJumpE->Get_Damage();
+	CSagittarius* pSa = dynamic_cast<CSagittarius*>(_OtherObj);
+	if (pSa)
+	{
+		m_tStat.fHp -= pSa->Get_Damage();
 
-			m_bIsHit = true;
-			m_dwHitTime = GetTickCount();
-			m_eCurState = HIT;
-		}
+		m_bIsHit = true;
+		m_dwHitTime = GetTickCount();
+		m_eCurState = HIT;
+	}
 
-		CFlyingMan* pFlying = dynamic_cast<CFlyingMan*>(_OtherObj);
-		if (pFlying)
-		{
-			m_tStat.fHp -= pFlying->Get_Damage();
+	CArrow* pArrow = dynamic_cast<CArrow*>(_OtherObj);
+	if (pArrow)
+	{
+		m_tStat.fHp -= pArrow->Get_Damage();
 
-			m_bIsHit = true;
-			m_dwHitTime = GetTickCount();
-			m_eCurState = HIT;
-		}
-		
-		CTaurus* pTau = dynamic_cast<CTaurus*>(_OtherObj);
-		if (pTau)
-		{
-			if (m_bIsParry)
-			{
-				//m_tStat.fHp -= pTau->Get_Damage();
+		m_bIsHit = true;
+		m_dwHitTime = GetTickCount();
+		m_eCurState = HIT;
+	}
 
-				//m_bIsHit = true;
-				//m_dwHitTime = GetTickCount();
-				m_fCurJumpSpeed = m_fInitJumpSpeed;
-				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
-				m_bParryShake = true;
-				pTau->Kill_Obj();
-				//m_eCurState = HIT;
-			}
-		}
 
-		CSagittarius* pSa = dynamic_cast<CSagittarius*>(_OtherObj);
-		if (pSa)
-		{
-			m_tStat.fHp -= pSa->Get_Damage();
-
-			m_bIsHit = true;
-			m_dwHitTime = GetTickCount();
-			m_eCurState = HIT;    
-		}
-
-		CArrow* pArrow = dynamic_cast<CArrow*>(_OtherObj);
-		if (pArrow)
-		{
-			m_tStat.fHp -= pArrow->Get_Damage();
-
-			m_bIsHit = true;
-			m_dwHitTime = GetTickCount();
-			m_eCurState = HIT;
-		}
-
-	
 
 	if (m_tStat.fHp <= EPSILON)
 	{
@@ -458,7 +530,7 @@ void CPlayer::Key_Input(void)
 	//총쏘기 루틴 참고
 	float	fY = 0.f;
 
-	if (m_bIsHit || m_bDead || m_bDash ) return;
+	if (m_bIsHit || m_bDead || m_bDash) return;
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
 	{
@@ -469,7 +541,7 @@ void CPlayer::Key_Input(void)
 		m_eLookState = LOOK_RIGHT;
 
 
-	
+
 
 		if (CKeyMgr::Get_Instance()->Key_Down('C'))
 		{
@@ -493,7 +565,7 @@ void CPlayer::Key_Input(void)
 				}
 			}
 		}
-		
+
 
 		else if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
 		{
@@ -651,11 +723,11 @@ void CPlayer::Key_Input(void)
 		{
 			m_bDash = true;
 		}*/
-	
+
 	else if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
 	{
 		//CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, Create_Bullet<CGuideBullet>((float)m_tPosin.x, (float)m_tPosin.y));
-		
+
 		//CSoundMgr::Get_Instance()->PlaySound(L"Success.wav", SOUND_EFFECT, g_fSound);
 	}
 
@@ -678,8 +750,21 @@ void CPlayer::Key_Input(void)
 
 		CSoundMgr::Get_Instance()->SetChannelVolume(SOUND_EFFECT, g_fSound);
 	}
-	else
 
+	else if (CKeyMgr::Get_Instance()->Key_Down(VK_SHIFT))
+	{
+		if (m_bDefault_Bullet)
+		{
+			m_bBounce_Bullet = true;
+			m_bDefault_Bullet = false;
+		}
+		else
+		{
+			m_bDefault_Bullet = true;
+			m_bBounce_Bullet = false;
+		}
+	}
+	else
 		//if (m_bShoot == true) return;
 
 		m_eCurState = IDLE;
@@ -861,7 +946,7 @@ void CPlayer::Motion_Change(void)
 				m_tFrame.dwFrameTime = GetTickCount();
 			}
 
-			else 
+			else
 			{
 				m_pFrameKey = L"Player_Dash";
 				m_tFrame.iFrameStart = 0;
@@ -1123,21 +1208,39 @@ void CPlayer::Shoot_Hor(void)
 		{
 			if (m_eLookState == LOOK_RIGHT)
 			{
-				CObj* pBullet = CAbstractFactory<CBullet>::Create(m_HInfo.fX + 50, m_HInfo.fY, DIR_RIGHT);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet);
-				CObj* pBullet_Effect = CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX + 55, m_HInfo.fY, DIR_RIGHT);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet_Effect);
-				m_dwAttack = GetTickCount();
-				m_bBulletCnt = false;
+				if (m_bDefault_Bullet)
+				{
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBasicBullet>::Create(m_HInfo.fX + 50, m_HInfo.fY, DIR_RIGHT));
+					//CObj* pBullet_Effect = CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX + 55, m_HInfo.fY, DIR_RIGHT);
+					//CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet_Effect);
+					m_dwAttack = GetTickCount();
+					m_bBulletCnt = false;
+				}
+				else
+				{
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet>::Create(m_HInfo.fX + 50, m_HInfo.fY, DIR_RIGHT));
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX + 55, m_HInfo.fY, DIR_RIGHT));
+					m_dwAttack = GetTickCount();
+					m_bBulletCnt = false;
+				}
 			}
 			else
 			{
-				CObj* pBullet = CAbstractFactory<CBullet>::Create(m_HInfo.fX - 30, m_HInfo.fY, DIR_LEFT);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet);
-				CObj* pBullet_Effect = CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX - 55, m_HInfo.fY, DIR_RIGHT);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet_Effect);
-				m_dwAttack = GetTickCount();
-				m_bBulletCnt = false;
+				if (m_bDefault_Bullet)
+				{
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBasicBullet>::Create(m_HInfo.fX - 30, m_HInfo.fY, DIR_LEFT));
+					//CObj* pBullet_Effect = CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX + 55, m_HInfo.fY, DIR_RIGHT);
+					//CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet_Effect);
+					m_dwAttack = GetTickCount();
+					m_bBulletCnt = false;
+				}
+				else
+				{
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet>::Create(m_HInfo.fX - 30, m_HInfo.fY, DIR_LEFT));
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX - 55, m_HInfo.fY, DIR_RIGHT));
+					m_dwAttack = GetTickCount();
+					m_bBulletCnt = false;
+				}
 			}
 		}
 		m_eCurState = ATTACK;
@@ -1159,23 +1262,42 @@ void CPlayer::Shoot_DIR(void)
 		{
 			if (m_eLookState == LOOK_RIGHT)
 			{
-				CObj* pBullet = CAbstractFactory<CBullet>::Create(m_HInfo.fX + 65, m_HInfo.fY - 65, DIR_RU);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet);
-				CObj* pBullet_Effect = CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX + 65, m_HInfo.fY - 65, DIR_RIGHT);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet_Effect);
-				m_dwAttack = GetTickCount();
-				m_bShoot_Dir = false;
+				if (m_bDefault_Bullet)
+				{
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBasicBullet>::Create(m_HInfo.fX + 65, m_HInfo.fY - 65, DIR_RU));
+					m_dwAttack = GetTickCount();
+					m_bShoot_Dir = false;
+				}
+				else
+				{
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet>::Create(m_HInfo.fX + 65, m_HInfo.fY - 65, DIR_RU));
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX + 65, m_HInfo.fY - 65, DIR_RIGHT));
+					m_dwAttack = GetTickCount();
+					m_bShoot_Dir = false;
+				}
 			}
-			else
+			else 
 			{
-				CObj* pBullet = CAbstractFactory<CBullet>::Create(m_HInfo.fX - 65, m_HInfo.fY - 65, DIR_LU);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet);
-				CObj* pBullet_Effect = CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX - 55, m_HInfo.fY - 65, DIR_RIGHT);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet_Effect);
-				m_dwAttack = GetTickCount();
-				m_bShoot_Dir = false;
+				if (m_bDefault_Bullet && m_eLookState == LOOK_LEFT)
+				{
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBasicBullet>::Create(m_HInfo.fX - 65, m_HInfo.fY - 65, DIR_LU));
+					m_dwAttack = GetTickCount();
+					m_bShoot_Dir = false;
+				}
+				else
+				{
+					if (m_bBounce_Bullet && m_eLookState == LOOK_LEFT)
+					{
+						CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet>::Create(m_HInfo.fX - 65, m_HInfo.fY - 65, DIR_LU));
+						CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX - 55, m_HInfo.fY - 65, DIR_RIGHT));
+						m_dwAttack = GetTickCount();
+						m_bShoot_Dir = false;
+					}
+				}
 			}
 		}
+	
+
 		m_eCurState = ATTACK_DIR;
 		// 프레임 끝나고 false 나오도록
 		if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
@@ -1196,21 +1318,35 @@ void CPlayer::Run_Shoot_Hor(void)
 		{
 			if (m_eLookState == LOOK_RIGHT)
 			{
-				CObj* pBullet = CAbstractFactory<CBullet>::Create(m_HInfo.fX + 80, m_HInfo.fY + 15, DIR_RIGHT);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet);
-				CObj* pBullet_Effect = CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX + 80, m_HInfo.fY + 15, DIR_RIGHT);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet_Effect);
-				m_dwAttack = GetTickCount();
-				m_bBulletCnt = false;
+				if (m_bDefault_Bullet)
+				{
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBasicBullet>::Create(m_HInfo.fX + 80, m_HInfo.fY + 15, DIR_RIGHT));
+					m_dwAttack = GetTickCount();
+					m_bBulletCnt = false;
+				}
+				else
+				{
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet>::Create(m_HInfo.fX + 80, m_HInfo.fY + 15, DIR_RIGHT));
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX + 80, m_HInfo.fY + 15, DIR_RIGHT));
+					m_dwAttack = GetTickCount();
+					m_bBulletCnt = false;
+				}
 			}
 			else
 			{
-				CObj* pBullet = CAbstractFactory<CBullet>::Create(m_HInfo.fX - 80, m_HInfo.fY + 15, DIR_LEFT);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet);
-				CObj* pBullet_Effect = CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX - 80, m_HInfo.fY + 15, DIR_RIGHT);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, pBullet_Effect);
-				m_dwAttack = GetTickCount();
-				m_bBulletCnt = false;
+				if (m_bDefault_Bullet)
+				{
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBasicBullet>::Create(m_HInfo.fX - 80, m_HInfo.fY + 15, DIR_LEFT));
+					m_dwAttack = GetTickCount();
+					m_bBulletCnt = false;
+				}
+				else
+				{
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet>::Create(m_HInfo.fX - 80, m_HInfo.fY + 15, DIR_LEFT));
+					CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CBullet_Effect>::Create(m_HInfo.fX - 80, m_HInfo.fY + 15, DIR_RIGHT));
+					m_dwAttack = GetTickCount();
+					m_bBulletCnt = false;
+				}
 			}
 		}
 		// m_pFrameKey = L"Run_Shoot";

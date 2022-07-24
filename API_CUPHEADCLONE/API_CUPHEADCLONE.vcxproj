@@ -148,6 +148,8 @@
     <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="API_CUPHEADCLONE.h" />
     <ClInclude Include="Arrow.h" />
+    <ClInclude Include="BasicBullet.h" />
+    <ClInclude Include="Basic_Bullet_Dead.h" />
     <ClInclude Include="Bird.h" />
     <ClInclude Include="BitMap.h" />
     <ClInclude Include="BmpMgr.h" />
@@ -239,6 +241,8 @@
   <ItemGroup>
     <ClCompile Include="API_CUPHEADCLONE.cpp" />
     <ClCompile Include="Arrow.cpp" />
+    <ClCompile Include="BasicBullet.cpp" />
+    <ClCompile Include="Basic_Bullet_Dead.cpp" />
     <ClCompile Include="Bird.cpp" />
     <ClCompile Include="BitMap.cpp" />
     <ClCompile Include="BmpMgr.cpp" />

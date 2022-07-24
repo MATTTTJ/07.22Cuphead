@@ -28,7 +28,9 @@ private:
 	float		m_fHp;
 	float		m_fMaxHp;
 
-
+	bool		m_bPhaseOne = false;
+	bool		m_bPhaseTwo = false;
+	bool		m_bPhaseThree = false;
 
 
 	SAGITTARIUSSTATE		m_eCurState;
@@ -36,7 +38,7 @@ private:
 
 	bool			m_bShootState = false;
 	DWORD			m_dwTimer;
-
+	DWORD			m_dwDustTime = GetTickCount();
 
 };
 

@@ -81,13 +81,19 @@ private:
 	DWORD m_dwShaketimer;
 	//~Shake
 
-
+	//BulletType
+	bool	m_bDefault_Bullet;
+	bool	m_bBounce_Bullet;
 	
 
 	float		m_fDashSpeed = 0.f;
 
 	//PLAYERINFO		m_tStat;
 	OBJECTSTATE		m_eState;
+
+//	OBJECTSTATE		m_ePreState22;
+
+
 	STATE			m_ePreState;
 	STATE			m_eCurState;
 	LOOK			m_eLookState;

@@ -10,6 +10,9 @@
 #include "ScrollMgr.h"
 #include "Arrow.h"
 #include "Star.h"
+#include "Player_Dust.h"
+
+
 CSagittarius::CSagittarius()
 	: m_eCurState(INTRO_STAR), m_ePreState(INTRO_STAR)
 {
@@ -30,36 +33,47 @@ void CSagittarius::Initialize(void)
 	m_HInfo.fCY = 200.f;
 
 
-	m_fHp = 3.f;
+	m_fMaxHp = 30.f;
+
+	m_fHp = m_fMaxHp;
 
 	//When the Potato Bullet Create
-	ShootTimer.InitLoop(5.1f);
+	ShootTimer.InitLoop(10.f);
 	//The Potato Bullet Distance 
-	ShootCoolTimer.InitLoop(1.3f);
+	ShootCoolTimer.InitLoop(1.f);
 
 	ShootStateTimer.InitLoop(5.1f);
-	ShootStateCoolTimer.InitLoop(1.1f);
+	ShootStateCoolTimer.InitLoop(1.13f);
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Sagittarius/Sagittarius_Intro.bmp", L"Sagittarius_Intro");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Sagittarius/Sagittarius_Idle.bmp", L"Sagittarius_Idle");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Sagittarius/Sagittarius_Attack_0.bmp", L"Sagittarius_Attack");
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Sagittarius/Taurus_Attack.bmp", L"Taurus_Attack");
 
+	m_fDiagonal = 10.f;
+	m_fSpeed = 2.5f;
 
-	m_pFrameKey = L"Sagittarius_All";
+
+
+	m_pFrameKey = L"Sagittarius_Intro";
 
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 17;
+	m_tFrame.iFrameEnd = 6;
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_dwTimer = GetTickCount();
 
 	m_bIsIntro_First = true;
-	m_iShootFrameCnt = 6;
-	m_iShootFrameMaxCnt = 17;
+	m_iShootFrameCnt = 8;
+	m_iShootFrameMaxCnt = 7;
 	m_iShootCnt = 0;
 	m_iShootMaxCnt = 4;
+
+
+	m_bPhaseOne = true;
+	m_bPhaseTwo = false;
+	m_bPhaseThree = false;
 
 	m_eRenderGroup = GAMEOBJECT;
 }
@@ -72,6 +86,45 @@ int CSagittarius::Update(void)
 
 	Sagittarius_Intro();
 	Sagittarius_Intro_Star();
+	
+	if (m_bPhaseOne)
+	{
+		if (m_eCurState == IDLE || m_eCurState == ATTACK)
+		{
+			m_fAngle += m_fSpeed;
+
+			float fOrgAngle = m_fAngle;
+
+			m_tInfo.fX += m_fDiagonal * cosf(m_fAngle * (PI / 360.f));  //sinf(m_fAngle * (PI / 270.f));
+			m_tInfo.fY -= m_fDiagonal * sinf(m_fAngle * (PI / 270.f)); // cosf(m_fAngle * (PI / 360.f));
+
+			m_HInfo.fX += m_fDiagonal * cosf(m_fAngle * (PI / 360.f));
+			m_HInfo.fY -= m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
+
+			if (m_dwDustTime + 100 < GetTickCount())
+			{
+				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 50.f, m_tInfo.fY + 150.f));
+				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right + 30.f, m_tInfo.fY + 100.f));
+				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 10.f, m_tInfo.fY + 125.f));
+				m_dwDustTime = GetTickCount();
+			}
+		}
+	}
+
+	if (m_bPhaseTwo)
+	{
+
+	}
+	/*else if (m_eCurState == ATTACK)
+	{*/
+		//if (m_dwDashTime + 3000 < GetTickCount())
+		//{
+		//	CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HInfo.fX - 50.f, m_HInfo.fY - 40.f));
+		//	//CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 20.f));
+		//	m_dwDashTime = GetTickCount();
+		//}
+	//}
+
 
 	Update_Controller();
 	Motion_Change();
@@ -116,13 +169,19 @@ void CSagittarius::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 	CBullet*	pBullet = dynamic_cast<CBullet*>(_OtherObj);
 	if (pBullet)
 	{
-		//m_fHp -= pBullet->Get_Damage();
+		m_fHp -= pBullet->Get_Damage();
 
 	}
-
-	if (m_fHp <= EPSILON)
+	if (m_fHp < m_fMaxHp * 0.5f)
 	{
-		m_bDead = true;
+		m_bPhaseOne = false;
+		m_bPhaseTwo = true;
+		m_bPhaseThree = false;
+
+		if (m_fHp <= EPSILON)
+		{
+			m_bDead = true;
+		}
 	}
 }
 
@@ -133,6 +192,7 @@ void CSagittarius::Update_Controller()
 	if (ShootStateTimer.Check())
 	{
 		m_bShootState = !m_bShootState;
+		m_iShootCnt = 0;
 	}
 
 
@@ -140,12 +200,17 @@ void CSagittarius::Update_Controller()
 	{
 		m_eCurState = ATTACK;
 
+		if (m_iShootCnt < m_iShootMaxCnt)
+		{
+			m_iShootFrameCnt = 0;
+			m_iShootCnt++;
+		}
 		if (m_iShootCnt >= m_iShootMaxCnt)
 			m_eCurState = IDLE;
 
 	}
 
-	if (ShootTimer.Check())
+	/*if (ShootTimer.Check())
 	{
 		m_bShoot_Start = !m_bShoot_Start;
 		m_iShootCnt = 0;
@@ -155,31 +220,23 @@ void CSagittarius::Update_Controller()
 	{
 		if (m_iShootCnt < m_iShootMaxCnt)
 		{
-
 			m_iShootFrameCnt = 0;
 			m_iShootCnt++;
-
 		}
-	}
+	}*/
 
 	if (m_iShootFrameCnt <= m_iShootFrameMaxCnt)
 	{
 		if (m_iShootFrameCnt == m_iShootFrameMaxCnt)
 		{
-			if (m_iShootCnt == 4)
-			{
-				/*CObj* pPotato = CAbstractFactory<CArrow>::Create(m_HInfo.fX - 150, m_HInfo.fY + 160, DIR_LEFT);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, pPotato);
-				CObj* pPotato_Effect = CAbstractFactory<CPotato_Bullet_Effect>::Create(m_HInfo.fX - 180, m_HInfo.fY + 100);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pPotato_Effect);*/
-			}
-			else
-			{
-				/*CObj* pPotato = CAbstractFactory<CPotato_Bullet>::Create(m_HInfo.fX - 150, m_HInfo.fY + 160, DIR_LEFT);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, pPotato);
-				CObj* pPotato_Effect = CAbstractFactory<CPotato_Bullet_Effect>::Create(m_HInfo.fX - 180, m_HInfo.fY + 100);
-				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pPotato_Effect);*/
-			}
+				CObjMgr::Get_Instance()->Add_Object(OBJ_BULLET, CAbstractFactory<CArrow>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LEFT));
+
+			// 2페이즈 화살 쏠 때 별도 같이 쏘기
+			//	/*CObj* pPotato = CAbstractFactory<CPotato_Bullet>::Create(m_HInfo.fX - 150, m_HInfo.fY + 160, DIR_LEFT);
+			//	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, pPotato);
+			//	CObj* pPotato_Effect = CAbstractFactory<CPotato_Bullet_Effect>::Create(m_HInfo.fX - 180, m_HInfo.fY + 100);
+			//	CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pPotato_Effect);*/
+			//}
 		}
 		m_iShootFrameCnt++;
 	}
@@ -223,7 +280,7 @@ void CSagittarius::Motion_Change(void)
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 17;
 			m_tFrame.iMotion = 0;
-			m_tFrame.dwFrameSpeed = 70;
+			m_tFrame.dwFrameSpeed = 60;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		}

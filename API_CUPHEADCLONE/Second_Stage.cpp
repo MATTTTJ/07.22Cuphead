@@ -84,7 +84,7 @@ void CSecond_Stage::Late_Update(void)
 		{
 			//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CSagittarius>::Create(6500.f, 1500.f));
 			//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CTaurus>::Create(6600.f, 1100.f));
-			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CSagittarius>::Create(6600.f, 1100.f));
+			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CSagittarius>::Create(6600.f, 1300.f));
 
 			m_bFirst_Sqawn =true;
 		}
