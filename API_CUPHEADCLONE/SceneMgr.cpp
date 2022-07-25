@@ -7,6 +7,7 @@
 #include "Second_Stage.h"
 #include "Stage_End.h"
 #include "Bad_End_Chat.h"
+#include "PlayVideo.h"
 CSceneMgr*		CSceneMgr::m_pInstance = nullptr;
 
 CSceneMgr::CSceneMgr()
@@ -63,7 +64,9 @@ void CSceneMgr::Scene_Change(SCENEID eID)
 		case SC_BADENDCHAT:
 			m_pScene = new CBad_End_Chat;
 			break;
-
+		case SC_INTRO:
+			m_pScene = new CPlayVideo;
+			break;
 
 		}
 

@@ -7,6 +7,9 @@
 #include "SceneMgr.h"
 #include "KeyMgr.h"
 #include "SoundMgr.h"
+
+
+
 CMyMenu::CMyMenu()
 {
 }
@@ -22,7 +25,7 @@ void CMyMenu::Initialize(void)
 	/*CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Button/Start.bmp", L"Start");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Button/Edit.bmp", L"Edit");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Button/Exit.bmp", L"Exit");*/
-
+	//CBmpMgr::Get_Instance();
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Title/Title_Screen_Background.bmp", L"Menu");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Title/title_cuphead_1.bmp", L"title_cuphead");
 	CSoundMgr::Get_Instance()->PlayBGM(L"bgm_title_screen.wav", SOUND_BGM);

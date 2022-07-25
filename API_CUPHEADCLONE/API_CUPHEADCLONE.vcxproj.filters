@@ -196,6 +196,12 @@
     <Filter Include="02.Scene\03.Stage\07.PlayVideo">
       <UniqueIdentifier>{dcabd035-8c5b-4227-a82e-1babb0e033c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Scene\03.Stage\07.PlayVideo\00.INTRO">
+      <UniqueIdentifier>{f0368b7b-32ec-452d-98ba-76d081104cf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Scene\03.Stage\07.PlayVideo\01.OUTRO">
+      <UniqueIdentifier>{d5fa2f6a-26e9-462f-a799-fbb57385594b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -453,9 +459,6 @@
     <ClInclude Include="BasicBullet.h">
       <Filter>01.Obj\01.Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="BigCloud.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Stage_End.h">
       <Filter>02.Scene\03.Stage\05.End_Stage</Filter>
     </ClInclude>
@@ -463,6 +466,12 @@
       <Filter>02.Scene\03.Stage\06.Bad_End_Chat</Filter>
     </ClInclude>
     <ClInclude Include="PlayVideo.h">
+      <Filter>02.Scene\03.Stage\07.PlayVideo\00.INTRO</Filter>
+    </ClInclude>
+    <ClInclude Include="BigCloud.h">
+      <Filter>01.Obj\05.Effect\CloudEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayOutro.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -695,9 +704,6 @@
     <ClCompile Include="BasicBullet.cpp">
       <Filter>01.Obj\01.Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="BigCloud.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Stage_End.cpp">
       <Filter>02.Scene\03.Stage\05.End_Stage</Filter>
     </ClCompile>
@@ -705,6 +711,12 @@
       <Filter>02.Scene\03.Stage\06.Bad_End_Chat</Filter>
     </ClCompile>
     <ClCompile Include="PlayVideo.cpp">
+      <Filter>02.Scene\03.Stage\07.PlayVideo\00.INTRO</Filter>
+    </ClCompile>
+    <ClCompile Include="BigCloud.cpp">
+      <Filter>01.Obj\05.Effect\CloudEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayOutro.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

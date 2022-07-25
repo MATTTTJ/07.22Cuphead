@@ -188,6 +188,7 @@
     <ClInclude Include="PinkButterFly.h" />
     <ClInclude Include="Player_Dust.h" />
     <ClInclude Include="Player_World.h" />
+    <ClInclude Include="PlayOutro.h" />
     <ClInclude Include="PlayVideo.h" />
     <ClInclude Include="Potato_Parry_Bullet.h" />
     <ClInclude Include="Player_UI.h" />
@@ -284,6 +285,7 @@
     <ClCompile Include="PinkButterFly.cpp" />
     <ClCompile Include="Player_Dust.cpp" />
     <ClCompile Include="Player_World.cpp" />
+    <ClCompile Include="PlayOutro.cpp" />
     <ClCompile Include="PlayVideo.cpp" />
     <ClCompile Include="Potato_Parry_Bullet.cpp" />
     <ClCompile Include="Player_UI.cpp" />

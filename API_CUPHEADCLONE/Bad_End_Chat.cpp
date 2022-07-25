@@ -31,22 +31,22 @@ void CBad_End_Chat::Initialize(void)
 int CBad_End_Chat::Update(void)
 {
 	Move_Frame();
-
-	if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
-	{
-		//CSceneMgr::Get_Instance()->Scene_Change(SC_VIDEO);
-		//return;
-	}
 	return 0;
 }
 
 void CBad_End_Chat::Late_Update(void)
 {
+	if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
+	{
+		CSceneMgr::Get_Instance()->Scene_Change(SC_INTRO);
+		return;
+	}
 }
 
 void CBad_End_Chat::Render(HDC hDC)
 {
 	HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(L"BadEnd_Chat");
+
 	GdiTransparentBlt(hDC,
 		0,	// 복사 받을 위치의 좌표 전달(x,y 순서)
 		0,
@@ -62,7 +62,8 @@ void CBad_End_Chat::Render(HDC hDC)
 
 void CBad_End_Chat::Release(void)
 {
-	
+	//CBmpMgr::Get_Instance()->Release();
+	//CObjMgr::Get_Instance()->Destroy_Instance();
 }
 
 void CBad_End_Chat::Move_Frame(void)

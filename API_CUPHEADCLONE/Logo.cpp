@@ -61,4 +61,5 @@ void CLogo::Render(HDC hDC)
 void CLogo::Release(void)
 {
 //	MCIWndClose(m_hVideo);
+	//CBmpMgr::Get_Instance()->Destroy_Instance();
 }
