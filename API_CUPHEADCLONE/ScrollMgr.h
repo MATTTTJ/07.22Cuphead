@@ -16,7 +16,8 @@ public:
 	void		Set_ScrollY(float _fY) { m_fScrollY += _fY; }
 
 	void		Scroll_Lock(void);
-
+	void		Update(void);
+	void		Shake();
 public:
 	static CScrollMgr*		Get_Instance()
 	{
@@ -36,6 +37,12 @@ public:
 
 
 private:
+	bool m_bScrollShake = true;
+	int m_iShakeCnt = 6;
+	int m_iShakeMaxCnt = 6 ;
+	DWORD m_dwShaketimer;
+
+
 	static CScrollMgr*		m_pInstance;
 	float					m_fScrollX;
 	float					m_fScrollY;

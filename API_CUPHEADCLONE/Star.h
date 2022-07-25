@@ -16,6 +16,14 @@ public:
 
 
 private:
+
+	float fCenterX;
+	float fCenterY;
+	float m_fRotAngle = 0.f;
+	float m_fRotSpeed = 30.f;
+		
 	DWORD		m_dwChaserTime = GetTickCount();
+
+	DWORD		m_dwLiveTime = GetTickCount();
 };
 

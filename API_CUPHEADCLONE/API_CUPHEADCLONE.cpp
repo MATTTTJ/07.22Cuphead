@@ -84,7 +84,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,			// 메모리에 할당되는 실체. 즉 
 		{
 			// 1020 + 10     1011
 			if (dwOldTime + 10 < GetTickCount())
-			{
+			{ //느리게 하고싶으면 20으로 바꾸기 (잘못건들면 겟틱카운트망가져버렷)
 				pMainGame->Update();
 				pMainGame->Late_Update();
 				pMainGame->Render();

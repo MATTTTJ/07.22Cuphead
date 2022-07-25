@@ -31,6 +31,8 @@
 #include "Sagittarius.h"
 #include "Arrow.h"
 #include "BasicBullet.h"
+#include "Star.h"
+
 CPlayer::CPlayer()
 	: m_eCurState(IDLE), m_ePreState(MOTION_END), m_eLookState(LOOK_RIGHT)
 {
@@ -610,7 +612,7 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 	CArrow* pArrow = dynamic_cast<CArrow*>(_OtherObj);
 	if (pArrow)
 	{
-		m_tStat.fHp -= pArrow->Get_Damage();
+		//m_tStat.fHp -= pArrow->Get_Damage();
 
 		m_bIsHit = true;
 		m_dwHitTime = GetTickCount();
@@ -628,7 +630,39 @@ void CPlayer::Collision_Event(CObj * _OtherObj, float _fColX, float _fColY)
 			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_05.wav", SOUND_PLAYER, 1.f);
 	}
 
+	CStar* pParryStar = dynamic_cast<CStar*>(_OtherObj);
+	if (pParryStar)
+	{
+		if (m_bIsParry)
+		{
+			m_iSpecial_Gauge += 1.f;
+			m_fCurJumpSpeed = m_fInitJumpSpeed;
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CParry_Effect>::Create(m_tInfo.fX, (float)m_HRect.bottom));
+			m_bParryShake = true;
+			CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_parry_slap_01.wav", SOUND_EFFECT, 1.f);
+			pParryStar->Kill_Obj();
+		}
+		else
+		{
+			m_tStat.fHp -= pParryStar->Get_Damage();
 
+			m_bIsHit = true;
+			m_dwHitTime = GetTickCount();
+			m_eCurState = HIT;
+			CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
+			if (GetTickCount() % 5 == 0)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_01.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 1)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_02.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 2)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_03.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 3)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_04.wav", SOUND_PLAYER, 1.f);
+			else if (GetTickCount() % 5 == 4)
+				CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_hit_05.wav", SOUND_PLAYER, 1.f);
+		}
+	}
 
 	if (m_tStat.fHp <= EPSILON)
 	{
@@ -763,8 +797,7 @@ void CPlayer::Key_Input(void)
 
 		if (m_eState == GROUND && CKeyMgr::Get_Instance()->Key_Down('C'))
 		{
-			m_tInfo.fY -= 5.f;
-			m_HInfo.fY -= 5.f;
+			m_eState = FALL;
 		}
 	}
 
@@ -1150,7 +1183,7 @@ void CPlayer::Motion_Change(void)
 				m_tFrame.iFrameStart = 0;
 				m_tFrame.iFrameEnd = 15;
 				m_tFrame.iMotion = 2;
-				m_tFrame.dwFrameSpeed = 50;
+				m_tFrame.dwFrameSpeed = 40;
 				m_tFrame.dwFrameTime = GetTickCount();
 			}
 			else
@@ -1159,7 +1192,7 @@ void CPlayer::Motion_Change(void)
 				m_tFrame.iFrameStart = 0;
 				m_tFrame.iFrameEnd = 15;
 				m_tFrame.iMotion = 2;
-				m_tFrame.dwFrameSpeed = 50;
+				m_tFrame.dwFrameSpeed = 40;
 				m_tFrame.dwFrameTime = GetTickCount();
 			}
 			break;

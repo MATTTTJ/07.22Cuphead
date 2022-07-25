@@ -60,19 +60,15 @@ int CDotori::Update(void)
 
 	if (m_eDir == DIR_LEFT)
 	{
-		m_tInfo.fX -= m_fSpeed;
-		m_HInfo.fX -= m_fSpeed;
-
-		if (m_fStartX - 500.f == m_tInfo.fX)
-			m_eDir = DIR_RIGHT;
+			m_tFrame.iMotion = 0;
+			m_tInfo.fX -= m_fSpeed;
+			m_HInfo.fX -= m_fSpeed;
 	}
 	else if (m_eDir == DIR_RIGHT)
 	{
+		m_tFrame.iMotion = 1;
 		m_tInfo.fX += m_fSpeed;
 		m_HInfo.fX += m_fSpeed;
-
-		if (m_fStartX + 500.f == m_tInfo.fX)
-			m_eDir = DIR_LEFT;
 	}
 
 	Drop_Dotori();

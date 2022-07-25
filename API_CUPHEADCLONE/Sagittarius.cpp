@@ -76,12 +76,12 @@ void CSagittarius::Initialize(void)
 
 	m_bFisrtTime = true;
 
-	m_bPhaseOne = true;
+	m_bPhaseOne = false;
 	m_bPhaseTwo = false;
-	m_bPhaseThree = false;
+	m_bPhaseThree = true;
 
 	m_iStarCnt = 0;
-	m_iStarMaxCnt = 13;
+	m_iStarMaxCnt = 10;
 
 	m_eRenderGroup = GAMEOBJECT;
 }
@@ -118,76 +118,95 @@ int CSagittarius::Update(void)
 			}
 		}
 	}
-		else if (m_bPhaseTwo && !m_bPhaseOne && !m_bPhaseThree)
-		{
-			
 
+	Check_PhaseTwo();
+
+	if (CObjMgr::Get_Instance()->Get_ObjList(OBJ_PARRY)->size() == 0 && m_bPhaseTwo && m_iStarCnt == 10)
+	{
+		m_bPhaseThree = true;
+		m_bPhaseOne = false;
+		m_bPhaseTwo = false;
+		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBigCloud>::Create(m_tInfo.fX, m_tInfo.fY));
+	}
+
+	if (m_bPhaseThree && !m_bPhaseOne && !m_bPhaseTwo)
+	{
+		m_fAngle += m_fSpeed;
+
+		float fOrgAngle = m_fAngle;
+
+		m_tInfo.fX += m_fDiagonal * cosf(m_fAngle * (PI / 360.f));  //sinf(m_fAngle * (PI / 270.f));
+		m_tInfo.fY -= m_fDiagonal * sinf(m_fAngle * (PI / 270.f)); // cosf(m_fAngle * (PI / 360.f));
+
+		m_HInfo.fX += m_fDiagonal * cosf(m_fAngle * (PI / 360.f));
+		m_HInfo.fY -= m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
+
+		if (m_dwDustTime + 100 < GetTickCount())
+		{
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 50.f, m_tInfo.fY + 150.f));
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right + 30.f, m_tInfo.fY + 100.f));
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 10.f, m_tInfo.fY + 125.f));
+			m_dwDustTime = GetTickCount();
+		}
+	}
+
+	/*if (CObjMgr::Get_Instance()->Get_ObjList(OBJ_PARRY)->size() == 0)
+	{
+		m_bPhaseThree = true;
+		m_bPhaseOne = false;
+		m_bPhaseTwo = false;
+	}*/
+
+	/*else if (m_eCurState == ATTACK)
+	{*/
+	//if (m_dwDashTime + 3000 < GetTickCount())
+	//{
+	//	CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HInfo.fX - 50.f, m_HInfo.fY - 40.f));
+	//	//CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 20.f));
+	//	m_dwDashTime = GetTickCount();
+	//}
+//}
+
+
+	if (m_bPhaseOne || m_bPhaseThree)
+	{
+		Update_Controller();
+	}
+
+	Update_Rect();
+	Motion_Change();
+	Move_Frame();
+
+
+
+	return OBJ_NOEVENT;
+
+}
+
+void CSagittarius::Check_PhaseTwo(void)
+{
+	if (m_bPhaseTwo && !m_bPhaseOne && !m_bPhaseThree)
+	{
+		if (m_dwStarCoolTime + 500 < GetTickCount())
+		{
 			if (m_iStarCnt < m_iStarMaxCnt)
 			{
 				m_iStarCnt++;
-
-				if (m_dwStarCoolTime + 100 < GetTickCount() && m_bPhaseTwo)
-				{
-				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CStar>::Create(m_tInfo.fX + (rand() % 30), m_tInfo.fY + (rand() % 30), DIR_LEFT));
+				
+				if(GetTickCount() % 2 == 0 )
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CStar>::Create(m_tInfo.fX, m_tInfo.fY, DIR_LEFT));
+				if (GetTickCount() % 2 == 1)
+				CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, CAbstractFactory<CStar>::Create(m_tInfo.fX , m_tInfo.fY, DIR_RU));
+				
+				//cout << "STAR" << endl;
 				m_dwStarCoolTime = GetTickCount();
-				}
-			}
-			
-		}
 
-		else if (m_bPhaseThree && !m_bPhaseOne && !m_bPhaseTwo)
-		{
-			m_fAngle += m_fSpeed;
-
-			float fOrgAngle = m_fAngle;
-
-			m_tInfo.fX += m_fDiagonal * cosf(m_fAngle * (PI / 360.f));  //sinf(m_fAngle * (PI / 270.f));
-			m_tInfo.fY -= m_fDiagonal * sinf(m_fAngle * (PI / 270.f)); // cosf(m_fAngle * (PI / 360.f));
-
-			m_HInfo.fX += m_fDiagonal * cosf(m_fAngle * (PI / 360.f));
-			m_HInfo.fY -= m_fDiagonal * sinf(m_fAngle * (PI / 270.f));
-
-			if (m_dwDustTime + 100 < GetTickCount())
-			{
-				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 50.f, m_tInfo.fY + 150.f));
-				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right + 30.f, m_tInfo.fY + 100.f));
-				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CPlayer_Dust>::Create((float)m_HRect.right - 10.f, m_tInfo.fY + 125.f));
-				m_dwDustTime = GetTickCount();
 			}
 		}
 
-		/*if (CObjMgr::Get_Instance()->Get_ObjList(OBJ_PARRY)->size() == 0)
-		{
-			m_bPhaseThree = true;
-			m_bPhaseOne = false;
-			m_bPhaseTwo = false;
-		}*/
-
-		/*else if (m_eCurState == ATTACK)
-		{*/
-		//if (m_dwDashTime + 3000 < GetTickCount())
-		//{
-		//	CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HInfo.fX - 50.f, m_HInfo.fY - 40.f));
-		//	//CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 20.f));
-		//	m_dwDashTime = GetTickCount();
-		//}
-	//}
-
-
-		if (m_bPhaseOne || m_bPhaseThree)
-		{
-			Update_Controller();
-		}
-
-		Update_Rect();
-		Motion_Change();
-		Move_Frame();
-
-
-
-		return OBJ_NOEVENT;
-	
+	}
 }
+
 
 void CSagittarius::Late_Update(void)
 {
@@ -215,7 +234,7 @@ void CSagittarius::Render(HDC hDC)
 			RGB(1, 1, 1));	// 제거할 픽셀의 색상
 
 	}
-		//	Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
+	//	Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
 }
 
 void CSagittarius::Release(void)
@@ -297,8 +316,17 @@ void CSagittarius::Update_Controller()
 	{
 		if (m_iShootFrameCnt == m_iShootFrameMaxCnt)
 		{
-			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CArrow>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LEFT));
-
+			if (m_bPhaseOne)
+			{
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CArrow>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LEFT));
+			}
+			else if (m_bPhaseThree)
+			{
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CArrow>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LEFT));
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CStar>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LU));
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CStar>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LU));
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CStar>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LU));
+			}
 			// 2페이즈 화살 쏠 때 별도 같이 쏘기
 			//	/*CObj* pPotato = CAbstractFactory<CPotato_Bullet>::Create(m_HInfo.fX - 150, m_HInfo.fY + 160, DIR_LEFT);
 			//	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, pPotato);
@@ -309,6 +337,8 @@ void CSagittarius::Update_Controller()
 		m_iShootFrameCnt++;
 	}
 }
+
+
 
 void CSagittarius::Motion_Change(void)
 {

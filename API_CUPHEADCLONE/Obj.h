@@ -84,8 +84,8 @@ protected:
 	list<CObj*>		m_ObjList[OBJ_END];
 
 	bool m_bScrollShake = true;
-	int m_iShakeCnt = 6;
-	int m_iShakeMaxCnt = 6;
+	int m_iShakeCnt = 10;
+	int m_iShakeMaxCnt = 10;
 	DWORD m_dwShaketimer;
 
 };

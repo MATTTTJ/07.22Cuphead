@@ -80,3 +80,20 @@ void CScrollMgr::Scroll_Lock(void)
 		break;
 	}
 }
+
+void CScrollMgr::Update(void)
+{
+	if (m_bScrollShake && m_iShakeCnt < m_iShakeMaxCnt && m_dwShaketimer + 20 < GetTickCount())
+	{
+		float fShakeMount = m_iShakeCnt % 2 == 0 ? -10.f : 10.f;
+		CScrollMgr::Get_Instance()->Set_ScrollX(fShakeMount);
+		m_dwShaketimer = GetTickCount();
+		++m_iShakeCnt;
+	}
+}
+
+void CScrollMgr::Shake()
+{
+	m_dwShaketimer = GetTickCount();
+	m_iShakeCnt = 0;
+}

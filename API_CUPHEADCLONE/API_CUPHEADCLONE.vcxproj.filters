@@ -34,9 +34,6 @@
     <Filter Include="98.Design\01.CollisionMgr">
       <UniqueIdentifier>{17b90396-4b12-43cf-9abf-b9ba8f036792}</UniqueIdentifier>
     </Filter>
-    <Filter Include="98.Design\02.ObjMgr">
-      <UniqueIdentifier>{07b604bc-60f7-40e2-b297-d8711f0638f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="98.Design\03.LineMgr">
       <UniqueIdentifier>{e3ed04d8-41cc-425c-9ab1-24d53ad2d863}</UniqueIdentifier>
     </Filter>
@@ -186,6 +183,9 @@
     </Filter>
     <Filter Include="01.Obj\05.Effect\CloudEffect">
       <UniqueIdentifier>{796ab7f8-7a14-4a2b-8718-04fadc5b87bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Design\02.ObjMgr">
+      <UniqueIdentifier>{07b604bc-60f7-40e2-b297-d8711f0638f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

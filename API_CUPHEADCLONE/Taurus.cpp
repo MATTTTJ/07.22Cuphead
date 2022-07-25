@@ -14,6 +14,8 @@
 #include "Monster_Dead_Effect.h"
 #include "Cloud.h"
 #include "Red_Cloud.h"
+#include "BigCloud.h"
+
 CTaurus::CTaurus()
 	: m_eCurState(INTRO_STAR), m_ePreState(INTRO_STAR)
 {
@@ -71,6 +73,7 @@ int CTaurus::Update(void)
 {
 	if (m_bDead)
 	{
+		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBigCloud>::Create(m_tInfo.fX, m_tInfo.fY));
 		CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CSagittarius>::Create(6500.f, 1500.f));
 		return OBJ_DEAD;
 	}
@@ -185,8 +188,12 @@ void CTaurus::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 		{
 			pCloud->Kill_Obj();
 			m_bIsColl = true;
-		}
 
+			//ShakeWindow
+			m_dwShaketimer = GetTickCount();
+			m_iShakeCnt = 0;
+			//~ShakeWindow
+		}
 	}
 
 	CRed_Cloud*		pRCloud = dynamic_cast<CRed_Cloud*>(_OtherObj);
@@ -264,14 +271,14 @@ void CTaurus::Dash_Attack()
 
 void CTaurus::Shake_Window(void)
 {
-	if (m_bIsColl && m_bScrollShake && m_iShakeCnt < m_iShakeMaxCnt && m_dwShaketimer + 20 < GetTickCount())
+	if (m_bScrollShake && m_iShakeCnt < m_iShakeMaxCnt && m_dwShaketimer + 20 < GetTickCount())
 	{
-		float fShakeMount = m_iShakeCnt % 2 == 0 ? -10.f : 10.f;
+		float fShakeMount = m_iShakeCnt % 2 == 0 ? -20.f : 20.f;
 		CScrollMgr::Get_Instance()->Set_ScrollX(fShakeMount);
 		m_dwShaketimer = GetTickCount();
 		++m_iShakeCnt;
 	}
-	m_bIsColl = false;
+	
 }
 
 void CTaurus::Motion_Change(void)

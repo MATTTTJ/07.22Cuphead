@@ -19,6 +19,7 @@ public:
 	virtual void Release(void) override;
 	virtual void Collision_Event(CObj* _OtherObj, float fColX, float fColY) override;
 	virtual void Update_Controller();
+	void		Shake_Window(void);
 private:
 	void		Motion_Change(void);
 	bool			m_bShootState = false;

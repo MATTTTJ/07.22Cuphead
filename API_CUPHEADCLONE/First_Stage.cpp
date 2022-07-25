@@ -58,8 +58,8 @@ void CFirst_Stage::Initialize(void)
 	CObjMgr::Get_Instance()->Add_Object(OBJ_UI, CAbstractFactory<CButterFly>::Create(4800.f, 400.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, CAbstractFactory<CPinkButterFly>::Create(4800.f, 500.f));
 
-	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CDotori>::Create(1000.f, 500.f));
-	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CDotori>::Create(1500.f, 500.f));
+	//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CDotori>::Create(1000.f, 500.f));
+//	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CDotori>::Create(1500.f, 500.f));
 
 
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlower>::Create(2300.f, 530.f));
@@ -110,6 +110,14 @@ int CFirst_Stage::Update(void)
 		CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CFlyingMan>::Create((float)(rand() % 7500), 0.f));
 		
 		m_FlyingMan_SqawnTimer = GetTickCount();
+	}
+
+	if (m_Dotori_SpawnTimer + 5000 < GetTickCount())
+	{
+		CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CDotori>::Create((float)(rand() % 7500), 200.f, DIR_LEFT));
+		CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CDotori>::Create((float)(rand() % 7500), 200.f, DIR_RIGHT));
+
+		m_Dotori_SpawnTimer = GetTickCount();
 	}
 
 	return 0;

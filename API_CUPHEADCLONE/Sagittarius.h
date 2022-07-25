@@ -19,7 +19,7 @@ public:
 	virtual void Release(void) override;
 	virtual void Collision_Event(CObj* _OtherObj, float fColX, float fColY) override;
 	virtual void Update_Controller();
-
+	void		 Check_PhaseTwo(void);
 private:
 	void		Motion_Change(void);
 	void		Sagittarius_Intro_Star(void);

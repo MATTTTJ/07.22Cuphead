@@ -23,6 +23,8 @@ private:
 	int		m_iUICnt = 0;
 	int		m_iUIMaxCnt = 1;
 
+	DWORD	m_Dotori_SpawnTimer = GetTickCount();
+
 	DWORD	m_JumpE_Sqawn_One = GetTickCount();
 
 	DWORD	m_JumpE_Sqawn_Two = GetTickCount();
