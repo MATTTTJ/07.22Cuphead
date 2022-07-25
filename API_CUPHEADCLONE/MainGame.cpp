@@ -113,8 +113,8 @@ void CMainGame::Render(void)
 		m_dwTime = GetTickCount();
 	}
 
-	//if (SC_LOGO == CSceneMgr::Get_Instance()->Get_SceneID())
-	//	return;
+	if (SC_INTRO == CSceneMgr::Get_Instance()->Get_SceneID())
+		return;
 
 	
 	HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(L"Back");

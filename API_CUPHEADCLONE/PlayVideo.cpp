@@ -22,7 +22,7 @@ void CPlayVideo::Initialize(void)
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Back/BackGround.bmp", L"Back");
 	
 	//BMP 매니저를 지워야만 깔끔하게 나옴, 근데 지우면 다음 맵이 안나옴
-	CBmpMgr::Get_Instance()->Release();
+	//CBmpMgr::Get_Instance()->Release();
 	
 	
 	// MCIWndCreate : 멀티미디어를 재생하기 위한 창을 생성하는 함수
