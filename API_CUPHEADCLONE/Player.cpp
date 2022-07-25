@@ -797,7 +797,7 @@ void CPlayer::Key_Input(void)
 
 		if (m_eState == GROUND && CKeyMgr::Get_Instance()->Key_Down('C'))
 		{
-			m_eState = FALL;
+			//m_eState = FALL;
 		}
 	}
 

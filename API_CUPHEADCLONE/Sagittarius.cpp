@@ -35,7 +35,7 @@ void CSagittarius::Initialize(void)
 	m_HInfo.fCY = 200.f;
 
 
-	m_fMaxHp = 4.f;
+	m_fMaxHp = 10.f;
 
 	m_fHp = m_fMaxHp;
 
@@ -76,9 +76,9 @@ void CSagittarius::Initialize(void)
 
 	m_bFisrtTime = true;
 
-	m_bPhaseOne = false;
+	m_bPhaseOne = true;
 	m_bPhaseTwo = false;
-	m_bPhaseThree = true;
+	m_bPhaseThree = false;
 
 	m_iStarCnt = 0;
 	m_iStarMaxCnt = 10;
@@ -89,7 +89,10 @@ void CSagittarius::Initialize(void)
 int CSagittarius::Update(void)
 {
 	if (m_bDead)
+	{
+		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBigCloud>::Create(m_tInfo.fX, m_tInfo.fY));
 		return OBJ_DEAD;
+	}
 
 
 	Sagittarius_Intro();
@@ -126,6 +129,8 @@ int CSagittarius::Update(void)
 		m_bPhaseThree = true;
 		m_bPhaseOne = false;
 		m_bPhaseTwo = false;
+		m_HInfo.fCX = 100.f;
+		m_HInfo.fCY = 200.f;
 		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBigCloud>::Create(m_tInfo.fX, m_tInfo.fY));
 	}
 
@@ -192,12 +197,12 @@ void CSagittarius::Check_PhaseTwo(void)
 			if (m_iStarCnt < m_iStarMaxCnt)
 			{
 				m_iStarCnt++;
-				
-				if(GetTickCount() % 2 == 0 )
-				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CStar>::Create(m_tInfo.fX, m_tInfo.fY, DIR_LEFT));
+
+				if (GetTickCount() % 2 == 0)
+					CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CStar>::Create(m_tInfo.fX, m_tInfo.fY, DIR_LEFT));
 				if (GetTickCount() % 2 == 1)
-				CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, CAbstractFactory<CStar>::Create(m_tInfo.fX , m_tInfo.fY, DIR_RU));
-				
+					CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, CAbstractFactory<CStar>::Create(m_tInfo.fX, m_tInfo.fY, DIR_RU));
+
 				//cout << "STAR" << endl;
 				m_dwStarCoolTime = GetTickCount();
 
@@ -264,11 +269,11 @@ void CSagittarius::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBigCloud>::Create(m_tInfo.fX, m_tInfo.fY));
 			m_bFisrtTime = false;
 
-			if (m_fHp <= EPSILON)
-			{
-				m_bDead = true;
-			}
 		}
+	}
+	if (m_fHp <= EPSILON)
+	{
+		m_bDead = true;
 	}
 }
 
@@ -322,10 +327,10 @@ void CSagittarius::Update_Controller()
 			}
 			else if (m_bPhaseThree)
 			{
-				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CArrow>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LEFT));
-				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CStar>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LU));
-				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CStar>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LU));
-				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CStar>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LU));
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CArrow>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LEFT));
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CStar>::Create(m_HInfo.fX, m_HInfo.fY, DIR_RIGHT));
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CStar>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LU));
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CStar>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LD));
 			}
 			// 2페이즈 화살 쏠 때 별도 같이 쏘기
 			//	/*CObj* pPotato = CAbstractFactory<CPotato_Bullet>::Create(m_HInfo.fX - 150, m_HInfo.fY + 160, DIR_LEFT);

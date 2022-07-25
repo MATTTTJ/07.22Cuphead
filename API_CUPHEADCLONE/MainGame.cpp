@@ -34,7 +34,7 @@ void CMainGame::Initialize(void)
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Back/BackGround.bmp", L"Back");
 	CSoundMgr::Get_Instance()->Initialize();
-	CSceneMgr::Get_Instance()->Scene_Change(SC_STAGESECOND);
+	CSceneMgr::Get_Instance()->Scene_Change(SC_LOGO);
 
 #ifdef _DEBUG
 
@@ -82,6 +82,14 @@ void CMainGame::Update(void)
 	{
 		CSceneMgr::Get_Instance()->Scene_Change(SC_STAGESECOND);
 	}
+	else if (CKeyMgr::Get_Instance()->Key_Down('6'))
+	{
+		CSceneMgr::Get_Instance()->Scene_Change(SC_STAGEEND);
+	}
+	else if (CKeyMgr::Get_Instance()->Key_Down('0'))
+	{
+		CSceneMgr::Get_Instance()->Scene_Change(SC_BADENDCHAT);
+	}
 }
 
 void CMainGame::Late_Update(void)
@@ -105,8 +113,8 @@ void CMainGame::Render(void)
 		m_dwTime = GetTickCount();
 	}
 
-	if (SC_LOGO == CSceneMgr::Get_Instance()->Get_SceneID())
-		return;
+	//if (SC_LOGO == CSceneMgr::Get_Instance()->Get_SceneID())
+	//	return;
 
 	
 	HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(L"Back");

@@ -148,6 +148,7 @@
     <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="API_CUPHEADCLONE.h" />
     <ClInclude Include="Arrow.h" />
+    <ClInclude Include="Bad_End_Chat.h" />
     <ClInclude Include="BasicBullet.h" />
     <ClInclude Include="BigCloud.h" />
     <ClInclude Include="Bird.h" />
@@ -187,6 +188,7 @@
     <ClInclude Include="PinkButterFly.h" />
     <ClInclude Include="Player_Dust.h" />
     <ClInclude Include="Player_World.h" />
+    <ClInclude Include="PlayVideo.h" />
     <ClInclude Include="Potato_Parry_Bullet.h" />
     <ClInclude Include="Player_UI.h" />
     <ClInclude Include="Potato_Bullet.h" />
@@ -228,6 +230,7 @@
     <ClInclude Include="ScrollMgr.h" />
     <ClInclude Include="Second_Stage.h" />
     <ClInclude Include="SoundMgr.h" />
+    <ClInclude Include="Stage_End.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="Taurus.h" />
     <ClInclude Include="Tears_Splash_Effect.h" />
@@ -241,6 +244,7 @@
   <ItemGroup>
     <ClCompile Include="API_CUPHEADCLONE.cpp" />
     <ClCompile Include="Arrow.cpp" />
+    <ClCompile Include="Bad_End_Chat.cpp" />
     <ClCompile Include="BasicBullet.cpp" />
     <ClCompile Include="BigCloud.cpp" />
     <ClCompile Include="Bird.cpp" />
@@ -280,6 +284,7 @@
     <ClCompile Include="PinkButterFly.cpp" />
     <ClCompile Include="Player_Dust.cpp" />
     <ClCompile Include="Player_World.cpp" />
+    <ClCompile Include="PlayVideo.cpp" />
     <ClCompile Include="Potato_Parry_Bullet.cpp" />
     <ClCompile Include="Player_UI.cpp" />
     <ClCompile Include="Potato_Bullet.cpp" />
@@ -316,6 +321,7 @@
     <ClCompile Include="ScrollMgr.cpp" />
     <ClCompile Include="Second_Stage.cpp" />
     <ClCompile Include="SoundMgr.cpp" />
+    <ClCompile Include="Stage_End.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Taurus.cpp" />
     <ClCompile Include="Tears_Splash_Effect.cpp" />

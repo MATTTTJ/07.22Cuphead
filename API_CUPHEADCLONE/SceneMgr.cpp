@@ -5,7 +5,8 @@
 #include "World_Stage.h"
 #include "First_Stage.h"
 #include "Second_Stage.h"
-
+#include "Stage_End.h"
+#include "Bad_End_Chat.h"
 CSceneMgr*		CSceneMgr::m_pInstance = nullptr;
 
 CSceneMgr::CSceneMgr()
@@ -29,12 +30,12 @@ void CSceneMgr::Scene_Change(SCENEID eID)
 
 		switch (m_eCurScene)
 		{
-		//case SC_LOGO:
-		//	m_pScene = new CLogo;
-		//	break;
+		case SC_LOGO:
+			m_pScene = new CLogo;
+			break;
 
-		case SC_EDIT:
-			/*m_pScene = new CMyEdit;*/
+		case SC_MENU:
+			m_pScene = new CMyMenu;
 			break;
 
 		case SC_STAGEWORLD:
@@ -56,8 +57,12 @@ void CSceneMgr::Scene_Change(SCENEID eID)
 		case SC_STAGESECOND:
 			m_pScene = new CSecond_Stage;
 			break;
-
-
+		case SC_STAGEEND:
+			m_pScene = new CStage_End;
+			break;
+		case SC_BADENDCHAT:
+			m_pScene = new CBad_End_Chat;
+			break;
 
 
 		}
