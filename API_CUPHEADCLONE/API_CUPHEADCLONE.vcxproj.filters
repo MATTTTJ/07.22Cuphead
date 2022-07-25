@@ -472,7 +472,7 @@
       <Filter>01.Obj\05.Effect\CloudEffect</Filter>
     </ClInclude>
     <ClInclude Include="PlayOutro.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>02.Scene\03.Stage\07.PlayVideo\01.OUTRO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -717,7 +717,7 @@
       <Filter>01.Obj\05.Effect\CloudEffect</Filter>
     </ClCompile>
     <ClCompile Include="PlayOutro.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>02.Scene\03.Stage\07.PlayVideo\01.OUTRO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

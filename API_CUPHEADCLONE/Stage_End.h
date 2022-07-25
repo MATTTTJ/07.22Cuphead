@@ -16,5 +16,7 @@ public:
 	void		 Move_Frame(void);
 private:
 	FRAME	m_tFrame;
+
+	DWORD	m_dwEndTime;
 };
 

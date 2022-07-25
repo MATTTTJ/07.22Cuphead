@@ -113,7 +113,7 @@ void CMainGame::Render(void)
 		m_dwTime = GetTickCount();
 	}
 
-	if (SC_INTRO == CSceneMgr::Get_Instance()->Get_SceneID())
+	if (SC_INTRO == CSceneMgr::Get_Instance()->Get_SceneID() || SC_OUTRO == CSceneMgr::Get_Instance()->Get_SceneID())
 		return;
 
 	

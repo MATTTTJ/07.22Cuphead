@@ -25,11 +25,18 @@ void CStage_End::Initialize(void)
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwFrameSpeed = 300;
 	m_tFrame.dwFrameTime = GetTickCount();
+
+	m_dwEndTime = GetTickCount();
 }
 
 int CStage_End::Update(void)
 {
 	Move_Frame();
+
+	if (m_dwEndTime + 8000 < GetTickCount())
+	{
+		CSceneMgr::Get_Instance()->Scene_Change(SC_OUTRO);
+	}
 	return 0;
 }
 
