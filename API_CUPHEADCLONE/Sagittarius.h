@@ -32,6 +32,7 @@ private:
 	bool		m_bPhaseTwo = false;
 	bool		m_bPhaseThree = false;
 
+	bool		m_bFisrtTime = false;
 
 	int			m_iStarCnt = 0;
 	int			m_iStarMaxCnt = 0;

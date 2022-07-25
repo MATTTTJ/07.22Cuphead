@@ -69,7 +69,7 @@ void CObjMgr::Late_Update(void)
 	CCollisionMgr::Collision_HRect(m_ObjList[OBJ_MONSTER_BULLET], m_ObjList[OBJ_PLAYER]);
 	CCollisionMgr::Collision_HRect(m_ObjList[OBJ_PLAYER], m_ObjList[OBJ_PARRY]);
 	CCollisionMgr::Collision_HRect(m_ObjList[OBJ_MONSTER], m_ObjList[OBJ_CLOUD]);
-	CCollisionMgr::Collision_HRect(m_ObjList[OBJ_PLAYER], m_ObjList[OBJ_MONSTER]);
+	CCollisionMgr::Collision_HRect(m_ObjList[OBJ_MONSTER], m_ObjList[OBJ_PLAYER]);
 	//CCollisionMgr::Collision_Sphere(m_ObjList[OBJ_BULLET], m_ObjList[OBJ_MONSTER]);
 
 	//CCollisionMgr::Collision_RectEx(m_ObjList[OBJ_PLAYER], m_ObjList[OBJ_CLOUD]);

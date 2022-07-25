@@ -76,6 +76,7 @@ protected:
 
 	bool		m_bDead;
 	CObj*		m_pTarget;
+	CObj*		m_MTarget;
 	RENDERID	m_eRenderGroup;
 
 	TCHAR*		m_pFrameKey;
