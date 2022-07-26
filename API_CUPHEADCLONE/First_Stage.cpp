@@ -43,7 +43,7 @@ void CFirst_Stage::Initialize(void)
 	//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CPotato>::Create());
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Map/RunandGun/First_Map_1.bmp", L"First_Map");
 	CLineMgr::Get_Instance()->Load_Line(L"../Data/Line_First.dat");
-	CSoundMgr::Get_Instance()->PlayBGM(L"Stage_First.wav", 0.8f);
+	CSoundMgr::Get_Instance()->PlayBGM(L"Stage_First.wav", 0.6f);
 	/*CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CBird>::Create(7600.f, 200.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CBird>::Create(7300.f, 250.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CBird>::Create(6500.f, 250.f));

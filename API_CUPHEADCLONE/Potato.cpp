@@ -29,7 +29,7 @@ void CPotato::Initialize(void)
 	m_tInfo = { 1300.f, 675.f, 557.f, 461.f };
 	m_HInfo = { 1300.f, 685.f, 262.f, 350.f };
 
-	m_fHp = 3.f;
+	m_fHp = 15.f;
 
 	//When the Potato Bullet Create
 	ShootTimer.InitLoop(5.1f);
@@ -45,6 +45,7 @@ void CPotato::Initialize(void)
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Potato/Potato_Spit_Attack.bmp", L"Potato_Attack");// fCX 526 fCY 512
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Potato/Potato_Death.bmp", L"Potato_Death"); // fCX 332 fCY 512
+	CSoundMgr::Get_Instance()->PlaySound(L"veggies_Potato_RiseGround.wav", SOUND_MONSTER, 0.6f);
 
 	m_pFrameKey = L"Boss_Intro_Earth";
 
@@ -75,6 +76,8 @@ int CPotato::Update(void)
 
 		if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
 		{
+			CSoundMgr::Get_Instance()->StopSound(SOUND_MONSTER);
+
 			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<COnion>::Create());
 			return OBJ_DEAD;
 		}
@@ -129,12 +132,16 @@ void CPotato::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 	CBullet*	pBullet = dynamic_cast<CBullet*>(_OtherObj);
 	if (pBullet)
 	{
+		if (pBullet->Get_Dead()) return;
+
 		m_fHp -= pBullet->Get_Damage();
 
 	}
 	
 	if (m_fHp <= EPSILON)
 	{
+		CSoundMgr::Get_Instance()->StopSound(SOUND_MONSTER);
+		CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Die.wav", SOUND_MONSTER, 0.6f);
 		m_bDead = true;
 	}
 	/*CCharging_Bullet*	pChargind_Bullet = dynamic_cast<CCharging_Bullet*>(_OtherObj);
@@ -191,6 +198,11 @@ void CPotato::Update_Controller()
 				CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, pPotato);
 				CObj* pPotato_Effect = CAbstractFactory<CPotato_Bullet_Effect>::Create(m_HInfo.fX - 180, m_HInfo.fY + 100);
 				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pPotato_Effect);
+				CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+				if (GetTickCount() % 2 == 0)
+					CSoundMgr::Get_Instance()->PlaySound(L"veggies_Potato_Spit_Worm_01.wav", SOUND_EFFECT, 0.6f);
+				else if (GetTickCount() % 2 == 1)
+					CSoundMgr::Get_Instance()->PlaySound(L"veggies_Potato_Spit_Worm_02.wav", SOUND_EFFECT, 0.6f);
 			}
 		else
 		{
@@ -198,7 +210,13 @@ void CPotato::Update_Controller()
 			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, pPotato);
 			CObj* pPotato_Effect = CAbstractFactory<CPotato_Bullet_Effect>::Create(m_HInfo.fX - 180, m_HInfo.fY + 100);
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pPotato_Effect);
-
+			CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+			if (GetTickCount() % 3 == 0)
+				CSoundMgr::Get_Instance()->PlaySound(L"veggies_Potato_Spit_01.wav", SOUND_EFFECT, 0.6f);
+			else if (GetTickCount() % 3 == 1)
+				CSoundMgr::Get_Instance()->PlaySound(L"veggies_Potato_Spit_002.wav", SOUND_EFFECT, 0.6f);
+			else if (GetTickCount() % 3 == 2)
+				CSoundMgr::Get_Instance()->PlaySound(L"veggies_Potato_Spit_003.wav", SOUND_EFFECT, 0.6f);
 		}
 		}
 		m_iShootFrameCnt++;

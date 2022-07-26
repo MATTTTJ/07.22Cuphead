@@ -7,7 +7,7 @@
 #include "AbstractFactory.h"
 #include "Cloud_Dead.h"
 #include "DeadEventMgr.h"
-//#include "Red_Cloud.h"
+#include "SoundMgr.h"
 CCloud::CCloud()
 {
 }
@@ -58,6 +58,11 @@ int CCloud::Update(void)
 	
 	if (m_bDead)
 	{
+		if(GetTickCount() % 2 == 0)
+		CSoundMgr::Get_Instance()->PlaySound(L"Boss_thunder1.wav", SOUND_EFFECT, 1.f);
+		else if(GetTickCount() % 2 == 1)
+		CSoundMgr::Get_Instance()->PlaySound(L"Boss_thunder2.wav", SOUND_EFFECT, 1.f);
+
 		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CCloud_Dead>::Create(m_tInfo.fX, m_tInfo.fY));
 		CDeadEventMgr::Get_Instance()->broadcast(this);
 		return OBJ_DEAD;

@@ -56,7 +56,7 @@ private:
 	//Dash
 	bool		m_bDash = false;
 	//~Dash
-
+	bool		m_bIsMusuk = false;
 	//Shoot
 	bool		m_bShoot = false; 
 	bool		m_bDirShoot = false;

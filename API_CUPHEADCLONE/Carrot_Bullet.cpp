@@ -8,7 +8,7 @@
 #include "Bullet_Effect.h"
 #include "AbstractFactory.h"
 #include "Carrot_Splash_Effect.h"
-
+#include "SoundMgr.h"
 CCarrot_Bullet::CCarrot_Bullet()
 {
 }
@@ -33,6 +33,7 @@ void CCarrot_Bullet::Initialize(void)
 	// X축 이동값보다 Y축 이동값이 더 커야 피하기 쉬워진다. 
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Carrot/Carrot_Missile.bmp", L"Carrot_Missile");
+	CSoundMgr::Get_Instance()->PlaySound(L"Carrot_propeller.wav", SOUND_EFFECT, 1.f);
 
 	m_pFrameKey = L"Carrot_Missile";
 	m_tFrame.iFrameStart = 0;
@@ -41,6 +42,7 @@ void CCarrot_Bullet::Initialize(void)
 	m_tFrame.dwFrameSpeed = 40;
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_eRenderGroup = GAMEOBJECT;
+	m_bFirstRender = false;
 }
 
 int CCarrot_Bullet::Update(void)
@@ -85,6 +87,13 @@ void CCarrot_Bullet::Late_Update(void)
 	{
 		m_bDead = true;
 		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CCarrot_Splash_Effect>::Create(m_tInfo.fX, m_tInfo.fY));
+		CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+		if (GetTickCount() % 3 == 0)
+			CSoundMgr::Get_Instance()->PlaySound(L"Carrot_pop1.wav", SOUND_EFFECT, 1.f);
+		else if (GetTickCount() % 3 == 1)
+			CSoundMgr::Get_Instance()->PlaySound(L"Carrot_pop2.wav", SOUND_EFFECT, 1.f);
+		else if (GetTickCount() % 3 == 2)
+			CSoundMgr::Get_Instance()->PlaySound(L"Carrot_pop3.wav", SOUND_EFFECT, 1.f);
 	}
 }
 
@@ -94,18 +103,21 @@ void CCarrot_Bullet::Render(HDC hDC)
 
 	int	iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 	int	iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
-
-	GdiTransparentBlt(hDC,
-		m_tRect.left + iScrollX,	// 복사 받을 위치의 좌표 전달(x,y 순서)
-		m_tRect.top + iScrollY,
-		(int)m_tInfo.fCX,		// 복사 받을 이미지의 길이 전달(가로, 세로순서)
-		(int)m_tInfo.fCY,
-		hMemDC,					// 비트맵을 가지고 있는 dc
-		(int)m_tInfo.fCX * m_tFrame.iFrameStart,						// 출력할 비트맵 시작 좌표(x,y 순서)
-		(int)m_tInfo.fCY * m_tFrame.iMotion,
-		(int)m_tInfo.fCX,			// 복사 할 비트맵 의 가로, 세로 사이즈
-		(int)m_tInfo.fCY,
-		RGB(255, 0, 255));	// 제거할 픽셀의 색상
+	if (m_bFirstRender)
+	{
+		GdiTransparentBlt(hDC,
+			m_tRect.left + iScrollX,	// 복사 받을 위치의 좌표 전달(x,y 순서)
+			m_tRect.top + iScrollY,
+			(int)m_tInfo.fCX,		// 복사 받을 이미지의 길이 전달(가로, 세로순서)
+			(int)m_tInfo.fCY,
+			hMemDC,					// 비트맵을 가지고 있는 dc
+			(int)m_tInfo.fCX * m_tFrame.iFrameStart,						// 출력할 비트맵 시작 좌표(x,y 순서)
+			(int)m_tInfo.fCY * m_tFrame.iMotion,
+			(int)m_tInfo.fCX,			// 복사 할 비트맵 의 가로, 세로 사이즈
+			(int)m_tInfo.fCY,
+			RGB(255, 0, 255));	// 제거할 픽셀의 색상
+	}
+	m_bFirstRender = true;
 }
 
 void CCarrot_Bullet::Release(void)

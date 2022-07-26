@@ -32,6 +32,7 @@ protected:
 	bool			m_bIsIntro_First = false;
 	bool			m_bIsIntro_Second = false;
 	bool			m_bIsReadyAttack = false;
+	bool			m_bFirstRender = false;
 	int				m_iShootFrameCnt;
 	int				m_iShootFrameMaxCnt;
 	int				m_iShootCnt;

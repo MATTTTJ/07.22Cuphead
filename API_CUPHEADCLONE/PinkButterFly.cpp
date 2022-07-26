@@ -26,8 +26,8 @@ void CPinkButterFly::Initialize(void)
 	m_tInfo.fCX = 100.f;
 	m_tInfo.fCY = 100.f;
 
-	m_HInfo.fCX = 70.f;
-	m_HInfo.fCY = 70.f;
+	m_HInfo.fCX = 100.f;
+	m_HInfo.fCY = 100.f;
 
 	m_fDiagonal = 4.f;
 	m_fSpeed = 3.f;

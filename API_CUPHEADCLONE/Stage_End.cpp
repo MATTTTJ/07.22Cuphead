@@ -20,6 +20,8 @@ void CStage_End::Initialize(void)
 {
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/BadEnd/BadEnd_All.bmp", L"BadEnd_All");
 	CSoundMgr::Get_Instance()->PlayBGM(L"devil_fire_hell.wav", SOUND_BGM);
+	//CSoundMgr::Get_Instance()->PlaySound(L"sfx_level_genie_voice_laugh_02.wav", SOUND_EFFECT, 1.f);
+
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 4;
 	m_tFrame.iMotion = 0;
@@ -33,7 +35,7 @@ int CStage_End::Update(void)
 {
 	Move_Frame();
 
-	if (m_dwEndTime + 4000 < GetTickCount())
+	if (m_dwEndTime + 6000 < GetTickCount())
 	{
 		CSceneMgr::Get_Instance()->Scene_Change(SC_OUTRO);
 	}

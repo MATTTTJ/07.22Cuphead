@@ -39,7 +39,7 @@ void CDotori::Initialize(void)
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Potato/Potato_Death.bmp", L"Potato_Death"); // fCX 332 fCY 512
 
 	m_pFrameKey = L"Dotori";
-
+	CSoundMgr::Get_Instance()->PlaySound(L"Acorn_propeller_1.wav", SOUND_EFFECT, 1.f);
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 10;
 	m_tFrame.iMotion = 0;
@@ -50,12 +50,16 @@ void CDotori::Initialize(void)
 	m_fStartX = m_tInfo.fX;
 	m_bIsIntro_First = false;
 	m_eRenderGroup = GAMEOBJECT;
+	m_bFirstRender = false;
 }
 
 int CDotori::Update(void)
 {
 	if (m_bDead)
+	{
+		CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
 		return OBJ_DEAD;
+	}
 	m_pTarget = CObjMgr::Get_Instance()->Get_Target(OBJ_PLAYER, this);
 
 	if (m_eDir == DIR_LEFT)
@@ -100,19 +104,21 @@ int CDotori::Update(void)
 
 		int	iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 		int	iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
-
-		GdiTransparentBlt(hDC,
-			m_tRect.left + iScrollX,	// 복사 받을 위치의 좌표 전달(x,y 순서)
-			m_tRect.top + iScrollY,
-			(int)m_tInfo.fCX,		// 복사 받을 이미지의 길이 전달(가로, 세로순서)
-			(int)m_tInfo.fCY,
-			hMemDC,					// 비트맵을 가지고 있는 dc
-			(int)m_tInfo.fCX * m_tFrame.iFrameStart,						// 출력할 비트맵 시작 좌표(x,y 순서)
-			(int)m_tInfo.fCY * m_tFrame.iMotion,
-			(int)m_tInfo.fCX,			// 복사 할 비트맵 의 가로, 세로 사이즈
-			(int)m_tInfo.fCY,
-			RGB(1, 1, 1));	// 제거할 픽셀의 색상
-
+		if (m_bFirstRender)
+		{
+			GdiTransparentBlt(hDC,
+				m_tRect.left + iScrollX,	// 복사 받을 위치의 좌표 전달(x,y 순서)
+				m_tRect.top + iScrollY,
+				(int)m_tInfo.fCX,		// 복사 받을 이미지의 길이 전달(가로, 세로순서)
+				(int)m_tInfo.fCY,
+				hMemDC,					// 비트맵을 가지고 있는 dc
+				(int)m_tInfo.fCX * m_tFrame.iFrameStart,						// 출력할 비트맵 시작 좌표(x,y 순서)
+				(int)m_tInfo.fCY * m_tFrame.iMotion,
+				(int)m_tInfo.fCX,			// 복사 할 비트맵 의 가로, 세로 사이즈
+				(int)m_tInfo.fCY,
+				RGB(1, 1, 1));	// 제거할 픽셀의 색상
+		}
+		m_bFirstRender = true;
 		//Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
 	}
 
@@ -143,6 +149,11 @@ int CDotori::Update(void)
 				m_eCurState = ATTACK;
 				m_eDir = DIR_DOWN;
 				m_bIsIntro_First = true;
+
+				CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+				CSoundMgr::Get_Instance()->PlaySound(L"Acorn_drop.wav", SOUND_EFFECT, 1.f);
+
+
 			}
 		}
 	}

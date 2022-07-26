@@ -32,6 +32,7 @@ void CFlyingMan::Initialize(void)
 	m_HInfo.fCY = 140.f;
 	m_fSpeed = 4.f;
 	m_fHp = 1.f;
+	CSoundMgr::Get_Instance()->PlaySound(L"Flowerman_drop.wav", SOUND_EFFECT, 1.f);
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Enemy/Flying_Man/Flying_Man.bmp", L"Flying_Man"); 
 	
@@ -44,7 +45,7 @@ void CFlyingMan::Initialize(void)
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_dwTimer = GetTickCount();
 
-
+	m_bFirstRender = false;
 	m_bIsIntro_First = true;
 	m_eRenderGroup = GAMEOBJECT;
 }
@@ -90,19 +91,21 @@ void CFlyingMan::Render(HDC hDC)
 
 	int	iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 	int	iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
-
-	GdiTransparentBlt(hDC,
-		m_tRect.left + iScrollX,	// 복사 받을 위치의 좌표 전달(x,y 순서)
-		m_tRect.top + iScrollY,
-		(int)m_tInfo.fCX,		// 복사 받을 이미지의 길이 전달(가로, 세로순서)
-		(int)m_tInfo.fCY,
-		hMemDC,					// 비트맵을 가지고 있는 dc
-		(int)m_tInfo.fCX * m_tFrame.iFrameStart,						// 출력할 비트맵 시작 좌표(x,y 순서)
-		(int)m_tInfo.fCY * m_tFrame.iMotion,
-		(int)m_tInfo.fCX,			// 복사 할 비트맵 의 가로, 세로 사이즈
-		(int)m_tInfo.fCY,
-		RGB(250, 250, 250));	// 제거할 픽셀의 색상
-
+	if (m_bFirstRender)
+	{
+		GdiTransparentBlt(hDC,
+			m_tRect.left + iScrollX,	// 복사 받을 위치의 좌표 전달(x,y 순서)
+			m_tRect.top + iScrollY,
+			(int)m_tInfo.fCX,		// 복사 받을 이미지의 길이 전달(가로, 세로순서)
+			(int)m_tInfo.fCY,
+			hMemDC,					// 비트맵을 가지고 있는 dc
+			(int)m_tInfo.fCX * m_tFrame.iFrameStart,						// 출력할 비트맵 시작 좌표(x,y 순서)
+			(int)m_tInfo.fCY * m_tFrame.iMotion,
+			(int)m_tInfo.fCX,			// 복사 할 비트맵 의 가로, 세로 사이즈
+			(int)m_tInfo.fCY,
+			RGB(250, 250, 250));	// 제거할 픽셀의 색상
+	}
+	m_bFirstRender = true;
 	//Rectangle(hDC, m_HRect.left + iScrollX, m_HRect.top + iScrollY, m_HRect.right + iScrollX, m_HRect.bottom + iScrollY);
 }
 
@@ -122,6 +125,8 @@ void CFlyingMan::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 	if (m_fHp <= EPSILON)
 	{
 		m_bDead = true;
+		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HInfo.fX - 50.f, m_HInfo.fY - 40.f));
+
 	}
 }
 
@@ -209,6 +214,9 @@ void CFlyingMan::Ground_Check(void)
 		{
 			m_eCurState = LAND;
 			m_bIsIntro_First = false;
+			CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+			CSoundMgr::Get_Instance()->PlaySound(L"Flowerman_landing.wav", SOUND_EFFECT, 1.f);
+
 		}
 	}
 	else

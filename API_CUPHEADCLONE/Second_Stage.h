@@ -30,6 +30,7 @@ public:
 private:
 	bool	m_bFirst_Sqawn = false;
 
+	float	m_fWallaVol;
 	tagFPoint m_CloudPoints[3];
 	bool m_bCloudAlive[3];
 	DWORD m_dwCloudTimer[3];

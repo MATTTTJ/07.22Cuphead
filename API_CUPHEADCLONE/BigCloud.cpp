@@ -5,7 +5,7 @@
 #include "Cloud.h"
 #include "ObjMgr.h"
 #include "AbstractFactory.h"
-
+#include "SoundMgr.h"
 CBigCloud::CBigCloud()
 {
 }
@@ -28,7 +28,8 @@ void CBigCloud::Initialize(void)
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwFrameSpeed = 40;
 	m_tFrame.dwFrameTime = GetTickCount();
-
+	//CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+	
 	m_eRenderGroup = GAMEOBJECT;
 }
 

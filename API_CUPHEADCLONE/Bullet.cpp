@@ -122,16 +122,16 @@ int CBullet::Update(void)
 		m_fCurJumpSpeed = m_fInitJumpSpeed;
 		m_iJumpCnt++;
 		CSoundMgr::Get_Instance()->StopSound(SOUND_PLAYER);
-		if (GetTickCount() % 5 == 0)
-			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_001.wav", SOUND_PLAYER, 1.f);
-		else if (GetTickCount() % 5 == 1)
-			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_002.wav", SOUND_PLAYER, 1.f);
-		else if (GetTickCount() % 5 == 2)
-			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_003.wav", SOUND_PLAYER, 1.f);
-		else if (GetTickCount() % 5 == 3)
+		if (GetTickCount() % 3 == 0)
+			CSoundMgr::Get_Instance()->PlaySound(L"Bounceball_bounce1.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 3 == 1)
+			CSoundMgr::Get_Instance()->PlaySound(L"Bounceball_bounce2.wav", SOUND_PLAYER, 1.f);
+		else if (GetTickCount() % 3 == 2)
+			CSoundMgr::Get_Instance()->PlaySound(L"Bounceball_bounce3.wav", SOUND_PLAYER, 1.f);
+	/*	else if (GetTickCount() % 5 == 3)
 			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_004.wav", SOUND_PLAYER, 1.f);
 		else if (GetTickCount() % 5 == 4)
-			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_005.wav", SOUND_PLAYER, 1.f);
+			CSoundMgr::Get_Instance()->PlaySound(L"sfx_player_weapon_bouncer_005.wav", SOUND_PLAYER, 1.f);*/
 		if (m_iJumpCnt >= m_iJumpMaxCnt)
 		{
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBullet_Death>::Create(m_tInfo.fX, m_tInfo.fY));

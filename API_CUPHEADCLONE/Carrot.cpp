@@ -31,7 +31,7 @@ void CCarrot::Initialize(void)
 	m_tInfo = { 950.f, 350.f, 557.f, 461.f };
 	m_HInfo = { 950.f, 350.f, 262.f, 350.f };
 
-	m_fHp = 3.f;
+	m_fHp = 30.f;
 
 	////When the Potato Bullet Create
 	ShootTimer.InitLoop(2.5f);
@@ -46,12 +46,13 @@ void CCarrot::Initialize(void)
 	BeamTimer.InitLoop(7.9f);
 	BeamCoolTimer.InitLoop(0.2f);
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Carrot/Carrot_Intro_Earth.bmp", L"Carrot_Intro_Earth"); 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Carrot/Carrot_Intro.bmp", L"Carrot_Intro"); 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Carrot/Carrot_Attack.bmp", L"Carrot_Attack"); 
-														  
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Carrot/Carrot_Intro_Earth.bmp", L"Carrot_Intro_Earth");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Carrot/Carrot_Intro.bmp", L"Carrot_Intro");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Carrot/Carrot_Attack.bmp", L"Carrot_Attack");
+
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Carrot/Carrot_Beam.bmp", L"Carrot_Beam");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Carrot/Carrot_Death.bmp", L"Carrot_Death");
+	CSoundMgr::Get_Instance()->PlaySound(L"veggies_Carrot_Rise.wav", SOUND_MONSTER, 0.6f);
 
 
 	m_pFrameKey = L"Carrot_Intro_Earth";
@@ -65,7 +66,7 @@ void CCarrot::Initialize(void)
 
 	m_bIsIntro_First = true;
 
-	m_iShootFrameCnt =22;
+	m_iShootFrameCnt = 22;
 	m_iShootFrameMaxCnt = 21;
 	m_iBeamCnt = 0;
 	m_iBeamMaxCnt = 6;
@@ -83,7 +84,7 @@ int CCarrot::Update(void)
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create(m_tInfo.fX + (rand() % 300), m_tInfo.fY + (rand() % 300)));
 		if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
 		{
-			
+			CSoundMgr::Get_Instance()->StopSound(SOUND_MONSTER);
 			return OBJ_DEAD;
 		}
 	}
@@ -140,12 +141,17 @@ void CCarrot::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 	CBullet*	pBullet = dynamic_cast<CBullet*>(_OtherObj);
 	if (pBullet)
 	{
+		if (pBullet->Get_Dead()) return;
+
 		m_fHp -= pBullet->Get_Damage();
 
 	}
 
 	if (m_fHp <= EPSILON)
 	{
+		//CSoundMgr::Get_Instance()->StopSound(SOUND_MONSTER);
+		CSoundMgr::Get_Instance()->PlaySound(L"veggies_Carrot_Die.wav", SOUND_INTRO, 0.6f);
+
 		m_bDead = true;
 	}
 }
@@ -183,7 +189,7 @@ void CCarrot::Update_Controller()
 			m_bIsBeamStart = true;
 		}
 		m_iShootFrameCnt++;
-	
+
 	}
 
 	if (m_bIsBeamStart && BeamStateTimer.Check())
@@ -194,10 +200,11 @@ void CCarrot::Update_Controller()
 	if (m_bBeamState && BeamStateCoolTimer.Check())
 	{
 		m_eCurState = BEAM;
-
+		CSoundMgr::Get_Instance()->PlaySound(L"veggies_Carrot_MindMeld_Loop.wav", SOUND_MONSTER, 0.6f);
 		if (m_iBeamCnt >= m_iBeamMaxCnt)
 		{
 			m_eCurState = ATTACK;
+			CSoundMgr::Get_Instance()->StopSound(SOUND_MONSTER);
 		}
 	}
 
@@ -205,27 +212,35 @@ void CCarrot::Update_Controller()
 	{
 		m_bBeam_Start = !m_bBeam_Start;
 		m_iBeamCnt = 0;
-		
+
 	}
 
 	if (m_bBeam_Start && BeamCoolTimer.Check())
 	{
-			if (m_iBeamCnt < m_iBeamMaxCnt)
+		if (m_iBeamCnt < m_iBeamMaxCnt)
+		{
+			if (m_dwTimer + 5 < GetTickCount())
 			{
-					if (m_dwTimer + 5 < GetTickCount())
-				{
-					CObj* pBeam = CAbstractFactory<CCarrot_Beam>::Create(m_HInfo.fX, m_HInfo.fY);
-					CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, pBeam);
-					
-				}
-			
-			}
-			m_iBeamCnt++;
-			m_dwTimer = GetTickCount();
-		}
-	}
+				CObj* pBeam = CAbstractFactory<CCarrot_Beam>::Create(m_HInfo.fX, m_HInfo.fY);
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, pBeam);
+				/*if (GetTickCount() % 2 == 0)
+				CSoundMgr::Get_Instance()->StopSound(SOUND_MONSTER);
 
-	// Beam_Control
+				else if (GetTickCount() % 2 == 0)
+					CSoundMgr::Get_Instance()->PlaySound(L"veggies_Carrot_MindMeld_Loop.wav", SOUND_MONSTER, 0.6f);*/
+			}
+
+		}
+		m_iBeamCnt++;
+		m_dwTimer = GetTickCount();
+	}
+	/*if (m_iBeamCnt >= m_iBeamMaxCnt)
+	{
+		CSoundMgr::Get_Instance()->StopSound(SOUND_MONSTER);
+	}*/
+}
+
+// Beam_Control
 
 
 void CCarrot::Motion_Change(void)
@@ -246,7 +261,7 @@ void CCarrot::Motion_Change(void)
 		case INTRO:
 			m_tInfo.fCX = 592.f;
 			m_tInfo.fCY = 549.f;
-			m_pFrameKey = L"Carrot_Intro";   
+			m_pFrameKey = L"Carrot_Intro";
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 24;
 			m_tFrame.iMotion = 0;

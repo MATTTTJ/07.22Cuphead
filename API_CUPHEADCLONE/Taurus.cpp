@@ -49,7 +49,8 @@ void CTaurus::Initialize(void)
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Attack_Pink.bmp", L"Taurus_Attack_Pink");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Idle.bmp", L"Taurus_Idle");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Taurus/Taurus_Attack.bmp", L"Taurus_Attack");
-
+	//CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+	CSoundMgr::Get_Instance()->PlaySound(L"Boss_horn.wav", SOUND_EFFECT, 1.f);
 	m_fDiagonal = 7.f;
 	m_fSpeed = 2.5f;
 
@@ -73,6 +74,8 @@ int CTaurus::Update(void)
 {
 	if (m_bDead)
 	{
+		//CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+		CSoundMgr::Get_Instance()->PlaySound(L"Boss_spawn.wav", SOUND_MONSTER, 1.f);
 		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBigCloud>::Create(m_tInfo.fX, m_tInfo.fY));
 		CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CSagittarius>::Create(6500.f, 1500.f));
 		return OBJ_DEAD;
@@ -252,8 +255,11 @@ void CTaurus::Dash_Attack()
 		if (m_bShootState)
 		{
 			m_eCurState = ATTACK;
-			/*CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 40.f));
-			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 20.f));*/
+			if(GetTickCount() % 2 ==0)
+			CSoundMgr::Get_Instance()->PlaySound(L"Boss_Tau_Attack_1.wav", SOUND_MONSTER, 0.6f);
+			else if (GetTickCount() % 2 == 0)
+			CSoundMgr::Get_Instance()->PlaySound(L"Boss_Tau_Attack_2.wav", SOUND_MONSTER, 0.6f);
+
 		}
 	}
 	if (m_eCurState == ATTACK && m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)

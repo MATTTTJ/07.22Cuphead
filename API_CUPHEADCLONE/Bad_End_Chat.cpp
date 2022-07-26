@@ -26,6 +26,9 @@ void CBad_End_Chat::Initialize(void)
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwFrameSpeed = 3000;
 	m_tFrame.dwFrameTime = GetTickCount();
+
+	CSoundMgr::Get_Instance()->PlaySound(L"Intro_devil_audio_1.wav", SOUND_MONSTER, 1.f);
+
 }
 
 int CBad_End_Chat::Update(void)

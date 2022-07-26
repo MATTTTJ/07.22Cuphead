@@ -20,6 +20,9 @@ void CPlayOutro::Initialize(void)
 	// MCIWndCreate : 멀티미디어를 재생하기 위한 창을 생성하는 함수
 	// MCIWndCreate(부모 핸들, mci윈도우를 사용하는 인스턴스 핸들, 윈도우 모양(자식 창의 형태 | 그 즉시 출력 | 플레이바 생성을 안함), 재생할 파일의 경로)
 	m_hVideo = MCIWndCreate(g_hWnd, nullptr, WS_CHILD | WS_VISIBLE | MCIWNDF_NOPLAYBAR, L"../Resource/Video/Outro.wmv");
+	CSoundMgr::Get_Instance()->StopAll();
+	CSoundMgr::Get_Instance()->PlaySound(L"Ourtro_audio.wav", SOUND_OUTRO, 1.f);
+	CSoundMgr::Get_Instance()->PlaySound(L"sfx_level_genie_voice_laugh_02.wav", SOUND_EFFECT, 1.f);
 
 	// MoveWindow : 동영상을 재생할 크기를 설정
 

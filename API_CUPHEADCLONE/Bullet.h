@@ -33,7 +33,9 @@ private:
 	int  m_iJumpMaxCnt = 3;
 	bool m_bJump = true;
 	//~Bullet Bounce
+protected:
 
+	bool	m_bFirstRender;
 
 };
 

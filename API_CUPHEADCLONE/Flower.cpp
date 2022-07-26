@@ -60,7 +60,7 @@ int CFlower::Update(void)
 {
 	if (m_bDead)
 	{
-			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create(m_tInfo.fX + (rand() % 300), m_tInfo.fY + (rand() % 300)));
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create(m_tInfo.fX, m_tInfo.fY));
 		return OBJ_DEAD;
 	}
 	
@@ -156,6 +156,8 @@ void CFlower::Update_Controller()
 		{
 			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CFlower_Bullet>::Create(m_tInfo.fX, (float)m_tRect.top + 20.f, DIR_RIGHT));
 			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CFlower_Bullet>::Create(m_tInfo.fX, (float)m_tRect.top + 20.f, DIR_LEFT));
+			CSoundMgr::Get_Instance()->PlaySound(L"Flower_shot.wav", SOUND_EFFECT, 1.f);
+
 		}
 		m_iShootFrameCnt++;
 	}

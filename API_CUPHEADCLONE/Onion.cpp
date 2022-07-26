@@ -30,7 +30,7 @@ void COnion::Initialize(void)
 	m_tInfo = { 950.f, 450.f, 557.f, 461.f };
 	m_HInfo = { 950.f, 450.f, 370.f, 450.f };
 
-	m_fHp = 3.f;
+	m_fHp = 30.f;
 
 	//When the Potato Bullet Create
 	ShootTimer.InitLoop(5.1f);
@@ -51,6 +51,7 @@ void COnion::Initialize(void)
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Boss/Onion/Onion_Death.bmp", L"Onion_Death"); 
 
 	m_pFrameKey = L"Onion_Intro_Earth";
+	CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Rise.wav", SOUND_MONSTER, 0.6f);
 
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 17;
@@ -84,6 +85,7 @@ int COnion::Update(void)
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create(m_tInfo.fX + (rand() % 300), m_tInfo.fY + (rand() % 300)));
 		if (m_eCurState == DEAD && m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
 		{
+			CSoundMgr::Get_Instance()->StopSound(SOUND_MONSTER);
 			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CCarrot>::Create());
 			return OBJ_DEAD;
 		}
@@ -143,11 +145,16 @@ void COnion::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 	CBullet*	pBullet = dynamic_cast<CBullet*>(_OtherObj);
 	if (pBullet)
 	{
+		if (pBullet->Get_Dead()) return;
+
 		m_fHp -= pBullet->Get_Damage();
 	}
 
 	if (m_fHp <= EPSILON)
 	{
+		CSoundMgr::Get_Instance()->StopSound(SOUND_MONSTER);
+		CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Die.wav", SOUND_MONSTER, 0.6f);
+
 		m_bDead = true;
 	}
 	/*CCharging_Bullet*	pChargind_Bullet = dynamic_cast<CCharging_Bullet*>(_OtherObj);
@@ -171,10 +178,12 @@ void COnion::Update_Controller()
 	{
 	
 		m_eCurState = ATTACK;
+		CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Crying.wav", SOUND_MONSTER, 0.6f);
 
 		if (m_iShootCnt >= m_iShootMaxCnt)
 		{
 			m_eCurState = IDLE;
+		CSoundMgr::Get_Instance()->StopSound(SOUND_MONSTER);
 		}
 	}
 
@@ -204,6 +213,19 @@ void COnion::Update_Controller()
 				CObjMgr::Get_Instance()->Add_Object(OBJ_PARRY, pOnion_Parry);
 				CObj* pOnion_Effect = CAbstractFactory<COnion_Bullet_Effect>::Create(m_tInfo.fX - 5.f, (float)m_HRect.top - 50.f);
 				CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pOnion_Effect);
+				if (GetTickCount() % 6 == 0)
+					CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Teardrop_01.wav", SOUND_EFFECT, 0.6f);
+				else if (GetTickCount() % 6 == 1)
+					CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Teardrop_02.wav", SOUND_EFFECT, 0.6f);
+				else if (GetTickCount() % 6 == 2)
+					CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Teardrop_03.wav", SOUND_EFFECT, 0.6f);
+				else if (GetTickCount() % 6 == 3)
+					CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Teardrop_04.wav", SOUND_EFFECT, 0.6f);
+				else if (GetTickCount() % 6 == 4)
+					CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Teardrop_05.wav", SOUND_EFFECT, 0.6f);
+				else if (GetTickCount() % 6 == 5)
+					CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Teardrop_06.wav", SOUND_EFFECT, 0.6f);
+				
 			}
 			else
 			{
@@ -211,6 +233,24 @@ void COnion::Update_Controller()
 			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, pOnion);
 			CObj* pOnion_Effect = CAbstractFactory<COnion_Bullet_Effect>::Create(m_tInfo.fX - 5.f, (float)m_HRect.top - 50.f);
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, pOnion_Effect);
+			if (GetTickCount() % 6 == 0)
+				CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Teardrop_01.wav", SOUND_EFFECT, 0.6f);
+			else if (GetTickCount() % 6 == 1)
+				CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Teardrop_02.wav", SOUND_EFFECT, 0.6f);
+			else if (GetTickCount() % 6 == 2)
+				CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Teardrop_03.wav", SOUND_EFFECT, 0.6f);
+			else if (GetTickCount() % 6 == 3)
+				CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Teardrop_04.wav", SOUND_EFFECT, 0.6f);
+			else if (GetTickCount() % 6 == 4)
+				CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Teardrop_05.wav", SOUND_EFFECT, 0.6f);
+			else if (GetTickCount() % 6 == 5)
+				CSoundMgr::Get_Instance()->PlaySound(L"veggies_Onion_Teardrop_06.wav", SOUND_EFFECT, 0.6f);
+
+			/*if (GetTickCount() % 2 == 0)
+			CSoundMgr::Get_Instance()->StopSound(SOUND_MONSTER);
+
+			else if (GetTickCount() % 2 == 0)
+			CSoundMgr::Get_Instance()->PlaySound(L"veggies_Carrot_MindMeld_Loop.wav", SOUND_MONSTER, 0.6f);*/
 
 			}
 		}
@@ -361,6 +401,7 @@ void COnion::Onion_Intro_Earth(void)
 		if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
 		{
 			m_eCurState = INTRO;
+			
 
 
 

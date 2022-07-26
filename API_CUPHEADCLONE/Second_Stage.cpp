@@ -50,8 +50,9 @@ void CSecond_Stage::Initialize(void)
 	CObjMgr::Get_Instance()->Add_Object(OBJ_CLOUD, CAbstractFactory<CCloud>::Create(m_CloudPoints[0].fX, m_CloudPoints[0].fY));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_CLOUD, CAbstractFactory<CCloud>::Create(m_CloudPoints[1].fX, m_CloudPoints[1].fY));
 	CObjMgr::Get_Instance()->Add_Object(OBJ_CLOUD, CAbstractFactory<CCloud>::Create(m_CloudPoints[2].fX, m_CloudPoints[2].fY));
+	m_fWallaVol = 0.5f;
 
-
+	CSoundMgr::Get_Instance()->PlayBGM(L"Bossstage_walla.wav", m_fWallaVol);
 	//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CPotato>::Create());
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Map/Cloud/Cloud_Map_1.bmp", L"Cloud_Map");
 	CLineMgr::Get_Instance()->Load_Line(L"../Data/Line_Second.dat");
@@ -71,7 +72,27 @@ int CSecond_Stage::Update(void)
 			m_bCloudAlive[i] = true;
 		}
 	}
+	
 
+	if (CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX >= 0.f &&
+		CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX <= 2000.f)
+	{
+		m_fWallaVol = 0.1f;
+	}
+	else if (CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX >= 2000.f &&
+		CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX <= 4000.f)
+	{
+		m_fWallaVol = 0.25f;
+	}
+	else if (CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX >= 4000.f &&
+		CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX <= 6000.f)
+	{
+		m_fWallaVol = 0.35f;
+	}
+	else if (CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX >= 7000.f)
+	{
+		m_fWallaVol = 0.5f;
+	}
 	return 0;
 }
 
@@ -80,6 +101,10 @@ void CSecond_Stage::Late_Update(void)
 
 	CObjMgr::Get_Instance()->Late_Update();
 	CLineMgr::Get_Instance()->Late_Update();
+	
+
+
+
 
 	if (CObjMgr::Get_Instance()->Get_Player()->Get_HInfo().fX > 6000.f )
 	{
@@ -88,7 +113,7 @@ void CSecond_Stage::Late_Update(void)
 			//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CSagittarius>::Create(6500.f, 1500.f));
 			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CTaurus>::Create(6600.f, 1100.f));
 			//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CSagittarius>::Create(6600.f, 1300.f));
-			CSoundMgr::Get_Instance()->PlayBGM(L"MUS_Stage_Second.wav", 0.8f);
+			CSoundMgr::Get_Instance()->PlayBGM(L"MUS_Stage_Second.wav", 0.4f);
 			m_bFirst_Sqawn =true;
 		}
 	}

@@ -48,7 +48,7 @@ void CPinkBird::Initialize(void)
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_dwTimer = GetTickCount();
-
+	m_bFirstRender = false;
 	m_eRenderGroup = GAMEOBJECT;
 }
 
@@ -88,17 +88,21 @@ void CPinkBird::Render(HDC hDC)
 	int	iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 	int	iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-	GdiTransparentBlt(hDC,
-		m_tRect.left + iScrollX,	// 복사 받을 위치의 좌표 전달(x,y 순서)
-		m_tRect.top + iScrollY,
-		(int)m_tInfo.fCX,		// 복사 받을 이미지의 길이 전달(가로, 세로순서)
-		(int)m_tInfo.fCY,
-		hMemDC,					// 비트맵을 가지고 있는 dc
-		(int)m_tInfo.fCX * m_tFrame.iFrameStart,						// 출력할 비트맵 시작 좌표(x,y 순서)
-		(int)m_tInfo.fCY * m_tFrame.iMotion,
-		(int)m_tInfo.fCX,			// 복사 할 비트맵 의 가로, 세로 사이즈
-		(int)m_tInfo.fCY,
-		RGB(1, 1, 1));	// 제거할 픽셀의 색상
+	if (m_bFirstRender)
+	{
+		GdiTransparentBlt(hDC,
+			m_tRect.left + iScrollX,	// 복사 받을 위치의 좌표 전달(x,y 순서)
+			m_tRect.top + iScrollY,
+			(int)m_tInfo.fCX,		// 복사 받을 이미지의 길이 전달(가로, 세로순서)
+			(int)m_tInfo.fCY,
+			hMemDC,					// 비트맵을 가지고 있는 dc
+			(int)m_tInfo.fCX * m_tFrame.iFrameStart,						// 출력할 비트맵 시작 좌표(x,y 순서)
+			(int)m_tInfo.fCY * m_tFrame.iMotion,
+			(int)m_tInfo.fCX,			// 복사 할 비트맵 의 가로, 세로 사이즈
+			(int)m_tInfo.fCY,
+			RGB(1, 1, 1));	// 제거할 픽셀의 색상
+	}
+	m_bFirstRender = true;
 }
 
 void CPinkBird::Release(void)

@@ -35,7 +35,7 @@ void CSagittarius::Initialize(void)
 	m_HInfo.fCY = 200.f;
 
 	
-	m_fMaxHp = 1.f;
+	m_fMaxHp = 30.f;
 
 	m_fHp = m_fMaxHp;
 
@@ -74,14 +74,14 @@ void CSagittarius::Initialize(void)
 
 	m_dwStarCoolTime = GetTickCount();
 
-	m_bFisrtTime = true;
+	m_bFisrtTime = false;
 
 	m_bPhaseOne = true;
 	m_bPhaseTwo = false;
 	m_bPhaseThree = false;
 
 	m_iStarCnt = 0;
-	m_iStarMaxCnt = 10;
+	m_iStarMaxCnt = 11;
 
 	m_eRenderGroup = GAMEOBJECT;
 }
@@ -90,8 +90,10 @@ int CSagittarius::Update(void)
 {
 	if (m_bDead)
 	{
-		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBigCloud>::Create(m_tInfo.fX, m_tInfo.fY));
-		return OBJ_NOEVENT;
+		//if(m_eCurState == DEAD && m_tFrame.iFrameStart>= m_tFrame.iFrameEnd)
+	//	CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBigCloud>::Create(m_tInfo.fX, m_tInfo.fY));
+		
+		return OBJ_DEAD;
 	}
 
 
@@ -124,7 +126,7 @@ int CSagittarius::Update(void)
 
 	Check_PhaseTwo();
 
-	if (CObjMgr::Get_Instance()->Get_ObjList(OBJ_PARRY)->size() == 0 && m_bPhaseTwo && m_iStarCnt == 10)
+	if (CObjMgr::Get_Instance()->Get_ObjList(OBJ_PARRY)->size() == 0 && m_bPhaseTwo && m_iStarCnt == 11)
 	{
 		m_bPhaseThree = true;
 		m_bPhaseOne = false;
@@ -155,22 +157,6 @@ int CSagittarius::Update(void)
 		}
 	}
 
-	/*if (CObjMgr::Get_Instance()->Get_ObjList(OBJ_PARRY)->size() == 0)
-	{
-		m_bPhaseThree = true;
-		m_bPhaseOne = false;
-		m_bPhaseTwo = false;
-	}*/
-
-	/*else if (m_eCurState == ATTACK)
-	{*/
-	//if (m_dwDashTime + 3000 < GetTickCount())
-	//{
-	//	CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HInfo.fX - 50.f, m_HInfo.fY - 40.f));
-	//	//CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create((float)m_HRect.right - 50.f, m_tInfo.fY - 20.f));
-	//	m_dwDashTime = GetTickCount();
-	//}
-//}
 
 
 	if (m_bPhaseOne || m_bPhaseThree)
@@ -256,7 +242,7 @@ void CSagittarius::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 		m_fHp -= pBullet->Get_Damage();
 
 	}
-	if (m_bFisrtTime)
+	if (!m_bFisrtTime)
 	{
 		if (m_fHp < m_fMaxHp * 0.5f)
 		{
@@ -267,13 +253,17 @@ void CSagittarius::Collision_Event(CObj * _OtherObj, float fColX, float fColY)
 			m_bPhaseTwo = true;
 			m_bPhaseThree = false;
 			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBigCloud>::Create(m_tInfo.fX, m_tInfo.fY));
-			m_bFisrtTime = false;
+			m_bFisrtTime = true;
 
 		}
 	}
-	if (m_fHp <= EPSILON)
+	else if (m_fHp <= EPSILON)
 	{
+		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBigCloud>::Create(m_tInfo.fX, m_tInfo.fY));
 		m_bDead = true;
+		//CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBigCloud>::Create(m_tInfo.fX, m_tInfo.fY));
+
+	//	this->Kill_Obj();
 	}
 }
 
@@ -321,12 +311,27 @@ void CSagittarius::Update_Controller()
 	{
 		if (m_iShootFrameCnt == m_iShootFrameMaxCnt)
 		{
+		//	CSoundMgr::Get_Instance()->PlaySound(L"blimp_sagittarius_attack_loop.wav", SOUND_MONSTER, 1.f);
+
 			if (m_bPhaseOne)
 			{
+				CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+				if(GetTickCount() % 2 == 0)
+				CSoundMgr::Get_Instance()->PlaySound(L"Boss_arrow1.wav", SOUND_EFFECT, 1.f);
+				else if(GetTickCount() % 2 == 1)
+				CSoundMgr::Get_Instance()->PlaySound(L"Boss_arrow2.wav", SOUND_EFFECT, 1.f);
+
 				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CArrow>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LEFT));
 			}
 			else if (m_bPhaseThree)
 			{
+				CSoundMgr::Get_Instance()->StopSound(SOUND_EFFECT);
+				if (GetTickCount() % 2 == 0)
+					CSoundMgr::Get_Instance()->PlaySound(L"Boss_arrow1.wav", SOUND_EFFECT, 1.f);
+				else if (GetTickCount() % 2 == 1)
+					CSoundMgr::Get_Instance()->PlaySound(L"Boss_arrow2.wav", SOUND_EFFECT, 1.f);
+
+				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER_BULLET, CAbstractFactory<CArrow>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LEFT));
 				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CArrow>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LEFT));
 				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CStar>::Create(m_HInfo.fX, m_HInfo.fY, DIR_RIGHT));
 				CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CStar>::Create(m_HInfo.fX, m_HInfo.fY, DIR_LU));
@@ -340,6 +345,10 @@ void CSagittarius::Update_Controller()
 			//}
 		}
 		m_iShootFrameCnt++;
+	}
+	if (!(m_iShootFrameCnt <= m_iShootFrameMaxCnt))
+	{
+	//	CSoundMgr::Get_Instance()->StopSound(SOUND_MONSTER);
 	}
 }
 
