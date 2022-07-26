@@ -12,6 +12,8 @@
 #include "Onion_Bullet_Effect.h"
 #include "Carrot.h"
 #include"Onion_Parry_Bullet.h"
+#include "Monster_Dead_Effect.h"
+
 COnion::COnion()
 	:m_eCurState(INTRO_EARTH), m_ePreState(INTRO_EARTH)
 {
@@ -78,6 +80,8 @@ int COnion::Update(void)
 	//	Sleep(100);
 		m_eCurState = DEAD;
 
+		if (m_tFrame.iFrameStart == 0)
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create(m_tInfo.fX + (rand() % 300), m_tInfo.fY + (rand() % 300)));
 		if (m_eCurState == DEAD && m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
 		{
 			CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<CCarrot>::Create());

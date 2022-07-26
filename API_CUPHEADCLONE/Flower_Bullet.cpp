@@ -54,7 +54,7 @@ int CFlower_Bullet::Update(void)
 {
 	if (m_bDead)
 	{
-		CScrollMgr::Get_Instance()->Shake();
+		//CScrollMgr::Get_Instance()->Shake();
 		return OBJ_DEAD;
 	}
 

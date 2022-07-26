@@ -12,6 +12,7 @@
 #include "Carrot_Splash_Effect.h"
 #include "Carrot_Beam.h"
 #include "SceneMgr.h"
+#include "Monster_Dead_Effect.h"
 
 
 CCarrot::CCarrot()
@@ -78,7 +79,8 @@ int CCarrot::Update(void)
 	{
 		//Sleep(140);
 		m_eCurState = DEAD;
-
+		if (m_tFrame.iFrameStart == 0)
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create(m_tInfo.fX + (rand() % 300), m_tInfo.fY + (rand() % 300)));
 		if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
 		{
 			

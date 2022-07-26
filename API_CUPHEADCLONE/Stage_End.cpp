@@ -33,7 +33,7 @@ int CStage_End::Update(void)
 {
 	Move_Frame();
 
-	if (m_dwEndTime + 8000 < GetTickCount())
+	if (m_dwEndTime + 4000 < GetTickCount())
 	{
 		CSceneMgr::Get_Instance()->Scene_Change(SC_OUTRO);
 	}

@@ -8,7 +8,7 @@
 #include "SoundMgr.h"
 #include "BmpMgr.h"
 #include "ScrollMgr.h"
-
+#include "Monster_Dead_Effect.h"
 
 CBird::CBird()
 {
@@ -56,6 +56,8 @@ int CBird::Update(void)
 {
 	if (m_bDead)
 	{
+		if (m_tFrame.iFrameStart == 0)
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create(m_tInfo.fX + (rand() % 300), m_tInfo.fY + (rand() % 300)));
 			//CObjMgr::Get_Instance()->Add_Object(OBJ_MONSTER, CAbstractFactory<COnion>::Create());
 			return OBJ_DEAD;
 	}

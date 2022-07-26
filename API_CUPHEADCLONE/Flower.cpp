@@ -10,7 +10,7 @@
 #include "ScrollMgr.h"
 #include "Player.h"
 #include "Flower_Bullet.h"
-
+#include "Monster_Dead_Effect.h"
 CFlower::CFlower()
 	: m_eCurState(IDLE), m_ePreState(MOTION_END)
 {
@@ -59,8 +59,10 @@ void CFlower::Initialize(void)
 int CFlower::Update(void)
 {
 	if (m_bDead)
+	{
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create(m_tInfo.fX + (rand() % 300), m_tInfo.fY + (rand() % 300)));
 		return OBJ_DEAD;
-
+	}
 	
 	Update_Controller();
 	Motion_Change();

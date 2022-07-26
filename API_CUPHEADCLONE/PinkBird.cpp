@@ -11,7 +11,7 @@
 #include "Player.h"
 #include "Parry_Splash_Effect.h"
 #include "Parry_Effect.h"
-
+#include "Monster_Dead_Effect.h"
 CPinkBird::CPinkBird()
 {
 }
@@ -55,7 +55,12 @@ void CPinkBird::Initialize(void)
 int CPinkBird::Update(void)
 {
 	if (m_bDead)
+	{
+		if (m_tFrame.iFrameStart == 0)
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create(m_tInfo.fX + (rand() % 300), m_tInfo.fY + (rand() % 300)));
 		return OBJ_DEAD;
+
+	}
 
 	m_fAngle += m_fSpeed;
 

@@ -10,7 +10,7 @@
 #include "ScrollMgr.h"
 #include "Player.h"
 #include "LineMgr.h"
-
+#include "Monster_Dead_Effect.h"
 
 CFlyingMan::CFlyingMan()
 	:m_eCurState(INTRO_AIR), m_ePreState(MOTION_END), m_eState(AIR)
@@ -31,7 +31,7 @@ void CFlyingMan::Initialize(void)
 	m_HInfo.fCX = 80.f;
 	m_HInfo.fCY = 140.f;
 	m_fSpeed = 4.f;
-	m_fHp = 3.f;
+	m_fHp = 1.f;
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Resource/Enemy/Flying_Man/Flying_Man.bmp", L"Flying_Man"); 
 	
@@ -51,6 +51,12 @@ void CFlyingMan::Initialize(void)
 
 int CFlyingMan::Update(void)
 {
+	if (m_bDead)
+	{
+		if (m_tFrame.iFrameStart == 0)
+			CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CMonster_Dead_Effect>::Create(m_tInfo.fX + (rand() % 300), m_tInfo.fY + (rand() % 300)));
+		return OBJ_DEAD;
+	}
 	if (m_eCurState == WALK)
 	{
 		m_tInfo.fX -= m_fSpeed;

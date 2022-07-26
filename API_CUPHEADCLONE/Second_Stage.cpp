@@ -77,6 +77,7 @@ int CSecond_Stage::Update(void)
 
 void CSecond_Stage::Late_Update(void)
 {
+
 	CObjMgr::Get_Instance()->Late_Update();
 	CLineMgr::Get_Instance()->Late_Update();
 
@@ -103,7 +104,7 @@ void CSecond_Stage::Render(HDC hDC)
 
 	BitBlt(hDC, iScrollX, iScrollY, 7500, 2000, hMemDC, 0, 0, SRCCOPY);
 	CObjMgr::Get_Instance()->Render(hDC);
-	CLineMgr::Get_Instance()->Render(hDC);
+	//CLineMgr::Get_Instance()->Render(hDC);
 }
 
 void CSecond_Stage::Release(void)

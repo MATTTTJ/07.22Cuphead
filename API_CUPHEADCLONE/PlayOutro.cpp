@@ -39,7 +39,7 @@ void CPlayOutro::Late_Update(void)
 	if (MCIWndGetLength(m_hVideo) <= MCIWndGetPosition(m_hVideo) ||
 		CKeyMgr::Get_Instance()->Key_Down(VK_RETURN))
 	{
-		//CSceneMgr::Get_Instance()->Scene_Change(SC_MENU);
+		PostQuitMessage(0);
 		return;
 	}
 }

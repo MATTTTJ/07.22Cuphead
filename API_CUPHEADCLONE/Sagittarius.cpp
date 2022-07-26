@@ -13,7 +13,7 @@
 #include "Player_Dust.h"
 #include "BasicBullet.h"
 #include "BigCloud.h"
-
+#include "SceneMgr.h"
 
 CSagittarius::CSagittarius()
 	: m_eCurState(INTRO_STAR), m_ePreState(INTRO_STAR)
@@ -34,8 +34,8 @@ void CSagittarius::Initialize(void)
 	m_HInfo.fCX = 100.f;
 	m_HInfo.fCY = 200.f;
 
-
-	m_fMaxHp = 10.f;
+	
+	m_fMaxHp = 1.f;
 
 	m_fHp = m_fMaxHp;
 
@@ -91,7 +91,7 @@ int CSagittarius::Update(void)
 	if (m_bDead)
 	{
 		CObjMgr::Get_Instance()->Add_Object(OBJ_EFFECT, CAbstractFactory<CBigCloud>::Create(m_tInfo.fX, m_tInfo.fY));
-		return OBJ_DEAD;
+		return OBJ_NOEVENT;
 	}
 
 
